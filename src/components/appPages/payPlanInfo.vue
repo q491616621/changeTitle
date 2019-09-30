@@ -6,9 +6,9 @@
 			<div class="payPlanInfo">
 				<div class="flx-r top-title">
 					<button class="return-btn" @click="returnBack">
-						<img src="../../assets/img/return_white.png" alt="返回按钮">
+						<!-- <img src="../../assets/img/return_white.png" alt="返回按钮"> -->
 					</button>
-					<div class="title-name">{{titleName}}</div>
+					<!-- <div class="title-name">{{titleName}}</div> -->
 				</div>
 				<div class="amount medium">{{planInfo.totalRepayMoney}}</div>
 				<!-- <div class="amount medium">500.00</div> -->
@@ -88,7 +88,7 @@
 	import {
 		server
 	} from '@/api/server.js';
-	// import tool from '../../../public/tool/tool.js';
+	import tool from '../../../public/tool/tool.js';
 	export default {
 		components: {
 			commomLoading
@@ -117,6 +117,7 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
+			tool.setAppTitle('还款总金额(元)')
 			if (!this.$route.meta.isBack||this.isFirstEnter) {
 				this.getPlanInfo()
 			}
@@ -206,36 +207,10 @@
 </script>
 <style scoped="scoped" lang="less">
 	// 顶部标题栏
-	// .top-title {
-	// 	width: 100%;
-	// 	height: 88px;
-	// 	box-sizing: border-box;
-	// 	padding: 0px 30px;
-	// 	position: relative;
-	// 	background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
-	// 	.return-btn {
-	// 		position: absolute;
-	// 		top: 22px;
-	// 		left: 30px;
-	// 		width: 50px;
-	// 		height: 50px;
-	// 		text-align: left;
-	// 		img {
-	// 			width: 18px;
-	// 			height: 32px;
-	// 		}
-	// 	}
-	// 	.title-name {
-	// 		font-size: 30px;
-	// 		color: #C1E1FF;
-	// 	}
-	// }
 	.top-title {
 		width: 100%;
-		height: 88px;
+		// height: 88px;
 		box-sizing: border-box;
-		// padding: 28px 30px;
-		// border-bottom: 1px solid #EDEDED;
 		position: relative;
 		background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
 
@@ -243,7 +218,6 @@
 			position: absolute;
 			top: 0px;
 			left: 0px;
-			// width: 100px;
 			height: 100%;
 
 			img {
@@ -268,10 +242,12 @@
 		top: 0px;
 		left: 0px;
 		width: 100%;
-		height: 293px;
+		// height: 293px;
+		height: 245px;
 		background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
 
 		.amount {
+			padding-top: 40px;
 			font-size: 42px;
 			color: #fff;
 		}
@@ -296,7 +272,8 @@
 
 	// 还款信息列表
 	.repayInfo-list {
-		margin-top: 293px;
+		// margin-top: 293px;
+		margin-top: 245px;
 		padding: 20px 0px;
 		margin-bottom: 100px;
 

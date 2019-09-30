@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- ...................................................... -->
 		<!-- 顶部总信息 -->
 		<div class="planDetail-top flx-cas">
@@ -170,15 +170,15 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import {
 		server
 	} from '@/api/server.js';
 	import tool from '../../../public/tool/tool.js';
 	export default {
-		components: {
-			topTitle
-		},
+		// components: {
+		// 	topTitle
+		// },
 		data() {
 			return {
 				isFirstEnter: false, //是否是第一次进入这个页面
@@ -203,6 +203,7 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
+			tool.setAppTitle('计划详情')
 			if (!this.$route.meta.isBack || this.isFirstEnter) {
 				// 获取上个页面传递过来的卡片信息
 				this.getCardPlanInfo() //执行获取卡计划信息函数
@@ -218,7 +219,6 @@
 					planOrderId
 				}).then(res => {
 					if (res == null) return;
-					console.log(res)
 					let cardPlanInfo = res.data;
 					// 格式化数据
 					// cardPlanInfo.hasRepayMoney = tool.centTurnSmacker(cardPlanInfo.hasRepayMoney); //已还款金额

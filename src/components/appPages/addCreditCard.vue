@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+	<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<!-- 信息栏列表 -->
 		<div class="addCreditCard-bottom flx-c">
 			<van-cell-group class="addInfo-box">
@@ -77,7 +77,7 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import cardTips from '@/components/common/cardTips.vue';
 	import {
 		server
@@ -88,7 +88,7 @@
 	import tool from '../../../public/tool/tool.js';
 	export default {
 		components: {
-			topTitle,
+			// topTitle,
 			cardTips
 		},
 		data() {
@@ -128,6 +128,7 @@
 		},
 		created() {
 			this.getUserInfo(); //获取用户身份信息函数
+			tool.setAppTitle('添加信用卡');
 		},
 		methods: {
 			// aaa(){
@@ -548,7 +549,7 @@
 <style scoped="scoped" lang="less">
 	// 信息栏列表
 	.addCreditCard-bottom {
-		margin-top: 88px;
+		// margin-top: 88px;
 		width: 100%;
 		box-sizing: border-box;
 		padding: 20px 30px;

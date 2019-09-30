@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+		<!-- <div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<!-- 收益总览 -->
 		<div class="incomeAll-box flx-c">
 			<div class="bar"></div>
@@ -49,16 +49,16 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import {
 		server
 	} from '@/api/server.js';
 	import tool from '../../../public/tool/tool.js';
 	import switchServer from '../../../public/tool/switchServer.js';
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '收益明细', //标题栏标题
@@ -72,31 +72,34 @@
 				pageSize: 20, //每页个数
 			};
 		},
-		beforeRouteEnter(to,from,next){
-			if(from.name == 'withdrawal'){
+		beforeRouteEnter(to, from, next) {
+			if (from.name == 'withdrawal') {
 				to.params.page = 'withdrawal'
 			}
 			next();
 		},
 		created() {
 			// 判断上个页面是否是withdrawal 页面
-			if(this.$route.params.page == 'withdrawal'){
+			if (this.$route.params.page == 'withdrawal') {
 				this.getAllIncome();
 				this.onLoad();
-				return;
-			}
-			// 设置app调用的方法
-			let me = this;
-			window['getSessionId'] = (url) => {
-				me.getSessionId(url)
+				tool.setAppTitle('收益明细')
+			} else {
+				// 设置app调用的方法
+				let me = this;
+				window['getSessionId'] = (url) => {
+					me.getSessionId(url)
+				}
+				tool.setAppTitle('收益明细')
 			}
 		},
 		methods: {
 			// 获取app页面传过来的参数
 			getSessionId(e) {
+				// 这行代码用来判断用户是否是从app端进来当前页面的,如果不是的app端进来的或者处于非incomeDetails页面,不执行下面的操作(这个是为了优化安卓不多次调用接口)
+				if (this.$route.name != 'incomeDetails' || this.$route.params.page == 'withdrawal') return;
 				let sessionId = JSON.parse(e).sessionId;
 				switchServer.setCookie(sessionId)
-				// document.cookie = `productSessionId=${sessionId};path=/;domain=47.112.10.80;`;
 				this.getAllIncome();
 				this.onLoad();
 			},
@@ -175,7 +178,7 @@
 				let type = ''
 				if (value == 1) {
 					type = '代还返佣'
-				}else if(value == 2){
+				} else if (value == 2) {
 					type = '直推会员返现'
 				}
 				return type;
@@ -190,7 +193,7 @@
 		width: 100%;
 		position: fixed;
 		z-index: 9999;
-		top: 88px;
+		// top: 88px;
 		left: 0;
 		// padding-bottom: 20px;
 		border-bottom: 20px solid #f6f6f6;
@@ -260,7 +263,8 @@
 
 	// 收益明细列表
 	.income-list-box {
-		margin-top: 458px;
+		// margin-top: 458px;
+		margin-top: 370px;
 		padding-bottom: 30px;
 
 		.income-list {

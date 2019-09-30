@@ -1,13 +1,13 @@
 <template>
 	<div style="width: 100%;">
-		<div class="return-top">
+<!-- 		<div class="return-top">
 			<div class="flx-r top-title">
 				<button class="return-btn" @click="returnBack">
 					<img src="../../../assets/img/return_white.png" alt="返回按钮">
 				</button>
 				<div class="title-name">{{titleName}}</div>
 			</div>
-		</div>
+		</div> -->
 		<div class="background-box" @click="goMerChantDetails(list[0].userLevel)">
 			<div class="information-box position">
 				<div class="title">累积推广（人）：{{totalAccount}}</div>
@@ -108,11 +108,13 @@
 		created() {
 			if(this.$route.params.type == 'next'){
 				this.getData()
+				tool.setAppTitle('我的商户')
 			}else{
 				let me = this;
 				window['getMyMerchantData'] = (url) => {
 					me.getMyMerchantData(url)
 				}
+				tool.setAppTitle('我的商户')
 				// -----------------------------
 				// this.getData()
 			}
@@ -208,12 +210,11 @@
 	.background-box {
 		position: relative;
 		width: 100%;
-		height: 150px;
+		height: 238px;
 		background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
-
 		.position {
 			position: absolute;
-			top: 20px;
+			top: 108px;
 			left: 50%;
 			margin-left: -345px;
 		}

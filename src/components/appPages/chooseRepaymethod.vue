@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+	<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<div class="methods-list flx-cas medium">
 			<div class="methods-li flx-r" v-for="(item,index) in methodsList" :key='index' @click="chooseMethods(index)">
 				<div class="left flx-cas">
@@ -20,11 +20,12 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../public/tool/tool.js';
 	export default {
-		components: {
-			topTitle
-		},
+		// components: {
+		// 	topTitle
+		// },
 		data() {
 			return {
 				isFirstEnter: false, //是否是第一次进入这个页面
@@ -67,6 +68,7 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
+			tool.setAppTitle('选择还款方式')
 			// 判断用户非回退回到该页面或者是第一次进入这个页面,重置选项
 			if (!this.$route.meta.isBack || this.isFirstEnter) {
 				this.methodsList = this.methodsList.map(cur => {
@@ -124,7 +126,7 @@
 </script>
 <style scoped="scoped" lang="less">
 	.methods-list {
-		margin-top: 88px;
+		// margin-top: 88px;
 		padding: 20px 0;
 		box-sizing: border-box;
 

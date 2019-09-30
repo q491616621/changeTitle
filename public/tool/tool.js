@@ -80,6 +80,18 @@ let tool = {
 			duration:0,
 			forbidClick:true
 		})
+	},
+	// ---------------------------------------------------------------------------------------------------------
+	// 设置app的title的方法
+	setAppTitle(navTittle){
+		return
+		// 检查平台 0为安卓，1为ios，2为PC
+		let platFlag = this.testPlat();
+		let init = {};
+		init.navTittle = navTittle||'安安卡管家'
+		if(platFlag == 1){
+			window.webkit.messageHandlers.changeTittle.postMessage(init);
+		}
 	}
 }
 export default tool;

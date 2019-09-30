@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+		<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<div class="box flx-cas">
 			<div class="content">
 				<p>“安安卡管家”客户端用户服务协议 </p>
@@ -105,23 +105,26 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../../public/tool/tool.js'
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '注册协议', //标题栏标题
 				pageType: 'app', //上个页面是什么h5还是app?
 			};
-
 		},
+		created() {
+			tool.setAppTitle('注册协议')
+		}
 	};
 </script>
 <style scoped="scoped" lang="less">
 	.box {
-		margin-top: 88px;
+		// margin-top: 88px;
 	}
 
 	.content {

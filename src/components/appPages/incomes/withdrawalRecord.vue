@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- 提现记录列表 -->
 		<van-list class='record-list flx-cas' v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
 			<div class="record-li flx-r" v-for="(item,index) in list" :key='index' :title="item">
@@ -20,15 +20,15 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../../public/tool/tool.js';
 	import {
 		server
 	} from '@/api/server.js';
-	import tool from '../../../../public/tool/tool.js';
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '提现记录', //标题栏标题
@@ -38,6 +38,9 @@
 				page: 1, //页数
 				pageSize: 20, //每页的数量
 			};
+		},
+		created() {
+			tool.setAppTitle('提现记录')
 		},
 		methods: {
 			onLoad() {
@@ -71,7 +74,7 @@
 							return cur;
 						});
 						this.list = this.list.concat(arr);
-						let loading = false;
+						this.loading = false;
 						this.page += 1;
 						if (res.data.length < this.pageSize) {
 							this.loading = false;
@@ -97,7 +100,7 @@
 </script>
 <style scoped="scoped" lang="less">
 	.record-list {
-		margin-top: 88px;
+		// margin-top: 88px;
 	}
 
 	.record-li {

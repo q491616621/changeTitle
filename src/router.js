@@ -54,16 +54,23 @@ const router = new Router({
 		{
 			path: '/test2',
 			name: 'test2', //测试用的
+			
 			component: resolve => require(['@/components/common/test2.vue'], resolve)
 		},
 		{
 			path: '/addCreditCard',
 			name: 'addCreditCard', // addCreditCard //添加信用卡页面
+			meta:{
+				title:'添加信用卡'
+			},
 			component: resolve => require(['@/components/appPages/addCreditCard.vue'], resolve)
 		},
 		{
 			path: '/contactServer',
 			name: 'contactServer', // contactServer //联系客服页面
+			meta:{
+				title:'联系客服'
+			},
 			component: resolve => require(['@/components/appPages/contactServer.vue'], resolve)
 		},
 		{
@@ -71,6 +78,7 @@ const router = new Router({
 			name: 'cardManagement', // cardManagement //信用卡管理页面
 			meta: {
 				// index:0,
+				title:'新增还款计划'
 			},
 			component: resolve => require(['@/components/appPages/cardManagement.vue'], resolve)
 		},
@@ -79,6 +87,7 @@ const router = new Router({
 			name: 'addrePayPlan', // addrePayPlan //新增还款计划页面
 			meta: {
 				// index:2,
+				title:'新增还款计划',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -89,6 +98,7 @@ const router = new Router({
 			name: 'payPlanInfo', // payPlanInfo //新增的还款计划详情页面
 			meta: {
 				// index:3,
+				title:'还款总金额(元)',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -99,6 +109,7 @@ const router = new Router({
 			name: 'surePlan', // surePlan //执行计划(确认计划)
 			meta: {
 				// index:4,
+				title:'执行计划',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -109,6 +120,7 @@ const router = new Router({
 			name: 'planDetail', // planDetail //计划详情
 			meta: {
 				// index:1,
+				title:'计划详情',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -119,6 +131,7 @@ const router = new Router({
 			name: 'chooseRepaymethod', // chooseRepaymethod //选择还款方式
 			meta: {
 				// index:1,
+				title:'选择还款方式',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -128,48 +141,69 @@ const router = new Router({
 			path: '/myMessage',
 			name: 'myMessage', // myMessage //我的消息
 			meta: {
-				// index:0,
+				title: '我的消息'
 			},
 			component: resolve => require(['@/components/appPages/myMessage.vue'], resolve)
 		},
 		{
 			path: '/incomeDetails',
 			name: 'incomeDetails', // incomeDetails //收益明细
+			meta: {
+				title: '收益明细'
+			},
 			component: resolve => require(['@/components/appPages/incomeDetails.vue'], resolve)
 		},
 		{
 			path: '/withdrawal',
-			name: 'withdrawal', // incomeDetails //提现
+			name: 'withdrawal', // withdrawal //提现
+			meta: {
+				title: '提现'
+			},
 			component: resolve => require(['@/components/appPages/incomes/withdrawal.vue'], resolve)
 		},
 		{
 			path: '/withdrawalRecord',
-			name: 'withdrawalRecord', // incomeDetails //提现记录
+			name: 'withdrawalRecord', // withdrawalRecord //提现记录
+			meta: {
+				title: '提现记录'
+			},
 			component: resolve => require(['@/components/appPages/incomes/withdrawalRecord.vue'], resolve)
 		},
 		{
 			path: '/bindAtmCard',
-			name: 'bindAtmCard', // incomeDetails //绑定银行卡
+			name: 'bindAtmCard', // bindAtmCard //绑定银行卡
+			meta: {
+				title: '绑定提现银行卡'
+			},
 			component: resolve => require(['@/components/appPages/incomes/bindAtmCard.vue'], resolve)
 		},
 		{
 			path: '/updateMember',
-			name: 'updateMember', // incomeDetails //购买升级会员
+			name: 'updateMember', // updateMember //购买升级会员
+			meta: {
+				title: '会员升级'
+			},
 			component: resolve => require(['@/components/appPages/payment/updateMember.vue'], resolve)
 		},
 		{
 			path: '/updateMember2',
-			name: 'updateMember2', // incomeDetails //购买升级会员
+			name: 'updateMember2', // updateMember2 //购买升级会员
 			component: resolve => require(['@/components/appPages/payment/updateMember2.vue'], resolve)
 		},
 		{
 			path: '/registerProtocol',
-			name: 'registerProtocol', // incomeDetails //注册协议
+			name: 'registerProtocol', // registerProtocol //注册协议
+			meta: {
+				title: '注册协议'
+			},
 			component: resolve => require(['@/components/appPages/protocol/registerProtocol.vue'], resolve)
 		},
 		{
 			path: '/privacyProtocol',
-			name: 'privacyProtocol', // incomeDetails //隐私协议
+			name: 'privacyProtocol', // privacyProtocol //隐私协议
+			meta: {
+				title: '隐私协议'
+			},
 			component: resolve => require(['@/components/appPages/protocol/privacyProtocol.vue'], resolve)
 		},
 		{
@@ -190,6 +224,9 @@ const router = new Router({
 		{
 			path: '/sharePostersTwo',
 			name: 'sharePostersTwo', // sharePostersTwo //分享海报2
+			meta: {
+				title: '分享海报'
+			},
 			component: resolve => require(['@/components/appPages/share/sharePostersTwo.vue'], resolve)
 		},
 		{
@@ -206,12 +243,12 @@ const router = new Router({
 			path: '/channelIntroduce',
 			name: 'channelIntroduce', // channelIntroduce //信用卡刷卡
 			component: resolve => require(['@/components/appPages/UnionpayQuick/channelIntroduce.vue'], resolve)
-		}, 
+		},
 		{
 			path: '/chooseQuickCard',
 			name: 'chooseQuickCard', // chooseQuickCard //选择快捷支付银行卡
 			component: resolve => require(['@/components/appPages/UnionpayQuick/chooseQuickCard.vue'], resolve)
-		},	
+		},
 		{
 			path: '/addQuickCard',
 			name: 'addQuickCard', // addQuickCard //添加快捷信用卡
@@ -220,21 +257,33 @@ const router = new Router({
 		{
 			path: '/bindChannel',
 			name: 'bindChannel', // bindChannel //绑定通道
+			meta: {
+				title: '通道绑定'
+			},
 			component: resolve => require(['@/components/appPages/bindChannel.vue'], resolve)
 		},
 		{
 			path: '/myMerchant',
 			name: 'myMerchant', // myMerchant //我的商户
+			meta: {
+				title: '我的商户'
+			},
 			component: resolve => require(['@/components/appPages/myMerchant/myMerchant.vue'], resolve)
 		},
 		{
 			path: '/merchantDetails',
 			name: 'merchantDetails', // merchantDetails //我的商户详情
+			meta: {
+				title: '我的商户'
+			},
 			component: resolve => require(['@/components/appPages/myMerchant/merchantDetails.vue'], resolve)
 		},
 		{
 			path: '/companyIntroduction',
 			name: 'companyIntroduction', // companyIntroduction //公司简介
+			meta: {
+				title: '公司简介'
+			},
 			component: resolve => require(['@/components/appPages/companyIntroduction/companyIntroduction.vue'], resolve)
 		},
 	]
@@ -254,6 +303,9 @@ const router = new Router({
 // })
 // 
 router.beforeEach((to, from, next) => {
+	if (to.meta.title) {
+		document.title = to.meta.title;
+	}
 	window.scrollTo(0, 0);
 	next();
 });

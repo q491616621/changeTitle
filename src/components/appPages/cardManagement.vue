@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+	<!-- 	<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<!-- 正在加载中 -->
 		<commomLoading v-if='commonLoading'></commomLoading>
 		<!-- 加载失败，重新加载 -->
@@ -141,7 +141,7 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import commomLoading from '@/components/common/loading.vue';
 	import loadFail from '@/components/common/loadFail.vue';
 	import tool from '../../../public/tool/tool.js';
@@ -151,7 +151,7 @@
 	} from '@/api/server.js';
 	export default {
 		components: {
-			topTitle,
+			// topTitle,
 			commomLoading,
 			loadFail
 		},
@@ -179,11 +179,14 @@
 			// this.getCardList(); //执行获取已绑定卡列表
 			if (this.$route.params.type == 'next') {
 				this.getCardList() //执行获取已绑定卡列表
+				tool.setAppTitle('信用卡管理')
 			} else {
 				let me = this;
 				window['getAppData'] = (url) => {
 					me.getAppData(url)
 				}
+				tool.setAppTitle('信用卡管理')
+				// // ----------------------------------------------------
 				// let appData =
 				// 	// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
 				// 	// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "231084199508103628","userName": "刘昭茜"}';
@@ -194,6 +197,7 @@
 				// // 1000000001 1000010002 1000020002
 				// this.$store.commit('setCardManagement', JSON.parse(appData))
 				// // this.getAppData(appData)
+				// // --------------------------------------------------------
 			}
 		},
 		mounted() {
@@ -372,7 +376,7 @@
 <style scoped="scoped" lang="less">
 	// 信用卡列表
 	.card-list {
-		margin-top: 88px;
+		// margin-top: 88px;
 		width: 100%;
 		padding-bottom: 150px;
 

@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+		<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<div class="wueui-content content">
 			<div class="div_vip_list">
 				<div class="div_vip_li" v-if="payMembInfo.memberRoute == 2||payMembInfo.memberLevel == 1">
@@ -377,12 +377,12 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../../public/tool/tool.js'
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '购买会员', //标题栏标题
@@ -416,103 +416,95 @@
 				me.AlipayPayFinish(url)
 			}
 		},
-		// created() {
-		// 	let me = this;
-		// 	window['getUserLevel'] = (url) => {
-		// 		me.getUserLevel(url)
-		// 	}
-		// 	window['weChatPayFinish'] = (url) => {
-		// 		me.weChatPayFinish(url)
-		// 	}
-		// 	window['AlipayPayFinish'] = (url) => {
-		// 		me.AlipayPayFinish(url)
-		// 	}
-		// 	
-		// 	// console.log(this.$route.query)
-		// 	
-		// 	// 下面是自己测试代码
-		// 	// let a = {'highMemberName':'中级会员','highPayAmount':'2','midMemberName':'初级会员','midPayAmount':'1','memberLevel':'0'}
-		// 	// this.getUserLevel(a)
-		// 	// this.payMembInfo = {'highMemberName':'中级会员','highPayAmount':'2','midMemberName':'初级会员','midPayAmount':'1','memberLevel':'1'};
-		// },
-		methods: {
-			// 用户已经是会员了
-			alreadyPurchased() {
-				this.$toast({
-					message: '您已经是会员了，请勿重复购买',
-					duration: 2000,
-				})
+		created() {
+				tool.setAppTitle('会员升级')
 			},
-			// 获取app页面传递过来的数据的方法
-			getUserLevel(e) {
-				// e = JSON.stringify(e)
-				let payMembInfo = JSON.parse(e);
-				// ----------------------------
-				// this.$toast({
-				// 	message: `highMemberName:${payMembInfo.highMemberName},highPayAmount:${payMembInfo.highPayAmount},midMemberName:${payMembInfo.midMemberName},midPayAmount:${payMembInfo.midPayAmount},userLevel:${payMembInfo.memberLevel},memberRoute:${payMembInfo.memberRoute}`,
-				// 	duration: 1000
-				// })
-				// -------------------------------
-				this.payMembInfo = payMembInfo;
-			},
-			// 拉起支付选择框
-			payMember(level) {
-				// -----------------------
-				// let payMembInfo = this.payMembInfo;
-				// this.$toast({
-				// 	message:`highMemberName:${payMembInfo.highMemberName},highPayAmount:${payMembInfo.highPayAmount},midMemberName:${payMembInfo.midMemberName},midPayAmount:${payMembInfo.midPayAmount},userLevel:${payMembInfo.memberLevel},memberRoute:${payMembInfo.memberRoute}`,
-				// 	duration:1000
-				// })
-				// ------------------------
-				if (this.payMembInfo.memberLevel > 1) {
+			// 	
+			// 	// console.log(this.$route.query)
+			// 	
+			// 	// 下面是自己测试代码
+			// 	// let a = {'highMemberName':'中级会员','highPayAmount':'2','midMemberName':'初级会员','midPayAmount':'1','memberLevel':'0'}
+			// 	// this.getUserLevel(a)
+			// 	// this.payMembInfo = {'highMemberName':'中级会员','highPayAmount':'2','midMemberName':'初级会员','midPayAmount':'1','memberLevel':'1'};
+			// },
+			methods: {
+				// 用户已经是会员了
+				alreadyPurchased() {
 					this.$toast({
-						message: '您已经是会员了，请勿重复购买'
+						message: '您已经是会员了，请勿重复购买',
+						duration: 2000,
 					})
-					return;
+				},
+				// 获取app页面传递过来的数据的方法
+				getUserLevel(e) {
+					// e = JSON.stringify(e)
+					let payMembInfo = JSON.parse(e);
+					// ----------------------------
+					// this.$toast({
+					// 	message: `highMemberName:${payMembInfo.highMemberName},highPayAmount:${payMembInfo.highPayAmount},midMemberName:${payMembInfo.midMemberName},midPayAmount:${payMembInfo.midPayAmount},userLevel:${payMembInfo.memberLevel},memberRoute:${payMembInfo.memberRoute}`,
+					// 	duration: 1000
+					// })
+					// -------------------------------
+					this.payMembInfo = payMembInfo;
+				},
+				// 拉起支付选择框
+				payMember(level) {
+					// -----------------------
+					// let payMembInfo = this.payMembInfo;
+					// this.$toast({
+					// 	message:`highMemberName:${payMembInfo.highMemberName},highPayAmount:${payMembInfo.highPayAmount},midMemberName:${payMembInfo.midMemberName},midPayAmount:${payMembInfo.midPayAmount},userLevel:${payMembInfo.memberLevel},memberRoute:${payMembInfo.memberRoute}`,
+					// 	duration:1000
+					// })
+					// ------------------------
+					if (this.payMembInfo.memberLevel > 1) {
+						this.$toast({
+							message: '您已经是会员了，请勿重复购买'
+						})
+						return;
+					}
+					if (level == 'levelOne') {
+						let highPayAmount = this.payMembInfo.highPayAmount;
+						this.price = parseInt(highPayAmount) / 100;
+						this.goodsname = this.payMembInfo.highMemberName;
+					} else {
+						let midPayAmount = this.payMembInfo.midPayAmount;
+						this.price = parseInt(midPayAmount) / 100;
+						this.goodsname = this.payMembInfo.midMemberName;
+					}
+					// 拉起支付弹窗
+					this.show = true;
+				},
+				// 确认支付
+				surePay() {
+					let platFlag = tool.testPlat(); //获取平台类型 0为安卓 1为ios
+					let init = {};
+					init.goodsname = this.goodsname; //开通的会员等级 0初级会员 1中级会员
+					init.chanelTpye = this.radio; //0是支付宝 1是微信
+					init.price = this.price; //要支付的价格
+					// 根据平台类型的不同调用不同平台的支付方法
+					if (platFlag == 0) {
+						// 调用安卓支付的方法
+						window.android.updateMember(JSON.stringify(init));
+					} else {
+						// 调用ios支付的方法
+						window.webkit.messageHandlers.updateMember.postMessage(init);
+					}
+				},
+				// ------------------------------------------------------------------------安卓端支付完成后调用的方法
+				// 微信支付完成
+				weChatPayFinish(value) {
+					let payMembInfo = JSON.parse(value);
+					this.payMembInfo = payMembInfo;
+					this.show = false;
+				},
+				// 支付宝支付完成
+				AlipayPayFinish(value) {
+					let payMembInfo = JSON.parse(value);
+					this.payMembInfo = payMembInfo;
+					this.show = false;
 				}
-				if (level == 'levelOne') {
-					let highPayAmount = this.payMembInfo.highPayAmount;
-					this.price = parseInt(highPayAmount) / 100;
-					this.goodsname = this.payMembInfo.highMemberName;
-				} else {
-					let midPayAmount = this.payMembInfo.midPayAmount;
-					this.price = parseInt(midPayAmount) / 100;
-					this.goodsname = this.payMembInfo.midMemberName;
-				}
-				// 拉起支付弹窗
-				this.show = true;
 			},
-			// 确认支付
-			surePay() {
-				let platFlag = tool.testPlat(); //获取平台类型 0为安卓 1为ios
-				let init = {};
-				init.goodsname = this.goodsname; //开通的会员等级 0初级会员 1中级会员
-				init.chanelTpye = this.radio; //0是支付宝 1是微信
-				init.price = this.price; //要支付的价格
-				// 根据平台类型的不同调用不同平台的支付方法
-				if (platFlag == 0) {
-					// 调用安卓支付的方法
-					window.android.updateMember(JSON.stringify(init));
-				} else {
-					// 调用ios支付的方法
-					window.webkit.messageHandlers.updateMember.postMessage(init);
-				}
-			},
-			// ------------------------------------------------------------------------安卓端支付完成后调用的方法
-			// 微信支付完成
-			weChatPayFinish(value) {
-				let payMembInfo = JSON.parse(value);
-				this.payMembInfo = payMembInfo;
-				this.show = false;
-			},
-			// 支付宝支付完成
-			AlipayPayFinish(value) {
-				let payMembInfo = JSON.parse(value);
-				this.payMembInfo = payMembInfo;
-				this.show = false;
-			}
-		},
-	};
+		};
 </script>
 <style lang="less">
 	.updateMember-pay {
@@ -535,7 +527,7 @@
 	}
 
 	.content {
-		margin-top: 88px;
+		// margin-top: 88px;
 	}
 
 	.div_vip_li_img {

@@ -1,9 +1,9 @@
 <template>
 	<div style="width: 100%;">
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+	<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- 标题 -->
 		<!-- 	<div class="title flx-r">
 			<span>我的推荐</span>
@@ -28,15 +28,15 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../../public/tool/tool.js';
 	import {
 		server
 	} from '@/api/server.js';
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '我的商户', //标题栏标题
@@ -50,6 +50,7 @@
 		},
 		created() {
 			// console.log(this.$route.params)
+			tool.setAppTitle('我的商户')
 			this.userLevel = this.$route.params.userLevel;
 			this.onLoad()
 		},
@@ -141,7 +142,7 @@
 	// }
 
 	.people-list {
-		margin-top: 88px;
+		// margin-top: 88px;
 
 		.people-li {
 			width: 100%;

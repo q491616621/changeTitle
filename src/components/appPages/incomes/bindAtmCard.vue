@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- 信息栏列表 -->
 		<div class="addCreditCard-bottom flx-c">
 			<van-cell-group class="addInfo-box">
@@ -60,8 +60,9 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
-	import citys from '../../../../public/tool/city.json'
+	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../../public/tool/tool.js';
+	import citys from '../../../../public/tool/city.json';
 	import {
 		server
 	} from '@/api/server.js';
@@ -69,9 +70,9 @@
 		Toast
 	} from 'vant';
 	export default {
-		components: {
-			topTitle
-		},
+		// components: {
+		// 	topTitle
+		// },
 		data() {
 			return {
 				titleName: '绑定提现银行卡', //标题栏标题
@@ -108,8 +109,8 @@
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
 		created() {
+			tool.setAppTitle('绑定提现银行卡')
 			let arr = Object.keys(this.$route.params)
-			console.log(arr)
 			if (arr.length > 0) {
 				this.cardInfo.id = this.$route.params.id
 			}
@@ -208,10 +209,8 @@
 						}
 					}
 				}
-				console.log(value)
 				// 如果value 为true 的话,进行下一步绑定卡片，否则提示用户哪些信息未填写
 				if (value === true) {
-					console.log(cardInfo)
 					// 先发请求查询银行卡信息的请求确认用户的卡片是否支持
 					server.queryBankcardInfo({
 							bankcardNumb: cardInfo.bankCardNumb
@@ -224,7 +223,6 @@
 								return;
 							}
 							cardInfo.bankName = res.data.bankName;
-							console.log(cardInfo)
 							server.bindSettleCard(cardInfo)
 								.then(res => {
 									if (res == null) return;
@@ -232,12 +230,18 @@
 										message: '绑定成功',
 										duration: 2000,
 										forbidClick: true,
-										onClose: () => {
-											this.$router.push({
-												name: 'withdrawal'
-											})
-										}
+										// onClose: () => {
+										// 	this.$router.push({
+										// 		name: 'withdrawal'
+										// 	})
+										// }
 									})
+									//使用定时器跳转，是为了修复跳转回去
+									setTimeout(()=>{
+										this.$router.push({
+											name:'withdrawal'
+										})
+									},2000)
 								})
 						})
 				} else {
@@ -279,7 +283,7 @@
 <style scoped="scoped" lang="less">
 	// 信息栏列表
 	.addCreditCard-bottom {
-		margin-top: 88px;
+		// margin-top: 88px;
 		width: 100%;
 		box-sizing: border-box;
 		padding: 20px 30px;

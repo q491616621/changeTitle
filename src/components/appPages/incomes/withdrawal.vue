@@ -1,8 +1,8 @@
 <template>
 	<div class="container">
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
-			<top-title :titleName="titleName" :pageType='pageType'></top-title>
+		<div class="title-bar border-bottom">
+			<!-- <top-title :titleName="titleName" :pageType='pageType'></top-title> -->
 			<div class="record" @click="goWithdrawalRecord">提现记录</div>
 		</div>
 		<!-- 没有绑定提现卡背景 -->
@@ -50,16 +50,16 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../../public/tool/tool.js';
 	import switchServer from '../../../../public/tool/switchServer.js';
 	import {
 		server
 	} from '@/api/server.js';
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '提现', //标题栏标题
@@ -86,13 +86,13 @@
 			if (this.$route.params.from == 'incomeDetails') {
 				this.$store.commit('setWithdrawalType')
 			}
+			tool.setAppTitle('提现')
 			this.pageType = this.$store.state.withdrawalType;
 			// 如果上个页面是h5页面中任意一个，不是app的话,直接执行获取银行卡信息
 			if (this.$route.params.type == 'h5') {
 				// 获取用户绑定了的银行卡信息
 				this.getBankCard();
 			} else {
-				// console.log(111)
 				let me = this;
 				window['getSessionId'] = (url) => {
 					me.getSessionId(url)
@@ -230,6 +230,9 @@
 	}
 </style>
 <style scoped="scoped" lang="less">
+	.border-bottom{
+		border-bottom: 1px solid #EDEDED;
+	}
 	.container {
 		width: 100%;
 	}

@@ -1,9 +1,9 @@
 <template>
   <div>
     <!-- 顶部标题栏 -->
-    <div class="title-bar">
+<!--    <div class="title-bar">
       <top-title :titleName="titleName" :pageType='pageType'></top-title>
-    </div>
+    </div> -->
     <div class="message-list flx-cas medium">
       <div class="message-li flx-cas" v-for="(item,index) in messageList" :key='index' @click="viewDetails">
         <div class="message-title">欢迎新用户注册</div>
@@ -14,12 +14,13 @@
   </div>
 </template>
 <script>
-  import topTitle from '@/components/common/topTitle.vue';
+  // import topTitle from '@/components/common/topTitle.vue';
+  import tool from '../../../public/tool/tool.js';
   import { Dialog } from 'vant';
   export default {
-    components: {
-      topTitle
-    },
+    // components: {
+    //   topTitle
+    // },
     data() {
       return {
         titleName: '我的消息',
@@ -29,16 +30,11 @@
       };
     },
 	created() {
-		// this.$toast({
-		// 	message:`width:${document.documentElement.clientWidth},height:${document.documentElement.clientHeight}`,
-		// 	duration:0
-		// })
 		let me = this;
 		window['getAppData'] = (url) => {
 			me.getAppData(url)
 		}
-		// let b = this.$store.state;
-		// console.log(b)
+		tool.setAppTitle('我的消息')
 	},
     methods: {
 		getAppData(e){
@@ -62,7 +58,7 @@
 </script>
 <style scoped="scoped" lang="less">
   .message-list {
-    margin-top: 88px;
+    // margin-top: 88px;
     box-sizing: border-box;
     width: 100%;
     padding: 0px 30px 30px;

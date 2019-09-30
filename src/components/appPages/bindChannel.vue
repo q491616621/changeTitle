@@ -1,9 +1,9 @@
 <template>
 	<div class="flx-cas">
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+	<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<!-- 通道列表 -->
 		<div class="topBar flx-cas">
 			<div class="title bold">绑定所有通道,可以避免还款失败,丰富商户类型</div>
@@ -53,7 +53,7 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../public/tool/tool.js';
 	import switchServer from '../../../public/tool/switchServer.js';
 	import {
@@ -76,9 +76,9 @@
 		'中信银行': require('../../assets/img/bankLogo/bank14.png'),
 	};
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '通道绑定', //标题栏标题
@@ -109,12 +109,14 @@
 				this.pageType = 'h5';
 				this.surePlanData = params;
 				this.getChannelList(params)
+				tool.setAppTitle('通道绑定')
 			} else {
 				this.pageType = 'app';
 				let me = this;
 				window['appEnter'] = (url) => {
 					me.appEnter(url)
 				}
+				tool.setAppTitle('通道绑定')
 				// let a =
 				// 	'{"repayChannelCode": "1000020002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
 				// 	this.appEnter(a)
@@ -486,7 +488,7 @@
 		width: 100%;
 		position: fixed;
 		left: 0;
-		top: 88px;
+		// top: 88px;
 		// margin-top: 88px;
 
 		.title {
@@ -561,7 +563,8 @@
 
 	// 未绑定卡列表
 	.card-list {
-		margin-top: 280px;
+		// margin-top: 280px;
+		margin-top: 192px;
 		padding-bottom: 50px;
 
 		.card {

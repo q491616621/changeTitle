@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- 确认信息栏 -->
 		<div class="surePlan-box flx-cas">
 			<div class="surePlan-info">
@@ -42,15 +42,15 @@
 	</div>
 </template>
 <script>
+	// import topTitle from '@/components/common/topTitle.vue';
 	import {
 		server
 	} from '@/api/server.js';
-	import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../public/tool/tool.js';
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				isFirstEnter: false, //是否是第一次进入这个页面
@@ -78,6 +78,7 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
+			tool.setAppTitle('执行计划')
 			if (!this.$route.meta.isBack || this.isFirstEnter) {
 				this.getPlanInfo() //获取上个页面传过来的数据
 			}
@@ -139,7 +140,7 @@
 </script>
 <style scoped="scoped" lang="less">
 	.surePlan-box {
-		margin-top: 88px;
+		// margin-top: 88px;
 		padding: 20px 0;
 	}
 

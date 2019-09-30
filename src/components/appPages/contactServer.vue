@@ -1,8 +1,8 @@
 <template>
 	<div class="container">
-		<div class="title-bar">
+		<!-- <div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
+		</div> -->
 		<div class="server-box flx-c">
 			<div class="app-name flx-cas">
 				<div class="bold">安安卡管家</div>
@@ -36,12 +36,12 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../public/tool/tool.js';
 	export default {
-		components: {
-			topTitle
-		},
+		// components: {
+		// 	topTitle
+		// },
 		data() {
 			return {
 				titleName: '联系客服',
@@ -49,6 +49,9 @@
 				copyBtn: null ,//存储初始化复制按钮事件
 				n:0
 			};
+		},
+		created() {
+			tool.setAppTitle('联系客服')
 		},
 		mounted() {
 			this.copyBtn = new this.clipboard(this.$refs.copy);
@@ -108,7 +111,7 @@
 		height: 100%;
 	}
 	.server-box {
-		margin-top: 88px;
+		// margin-top: 88px;
 		width: 100%;
 		height: 1246px;
 		background: url(../../assets/img/contactServer_bg.png) no-repeat center center;

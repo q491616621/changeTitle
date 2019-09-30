@@ -1,9 +1,9 @@
 <template>
 	<div style="width: 100%;">
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+	<!-- 	<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType' :returnBtn='returnBtn'></top-title>
-		</div>
+		</div> -->
 		<div class="container flx-cas">
 			<div class="switch-bar flx-r">
 				<div :class="bar?'left':'left2'" @click="switchBar('left')">
@@ -52,14 +52,14 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import sharePosters from '@/components/appPages/share/sharePosters.vue'
 	import switchServer from '../../../../public/tool/switchServer.js';
 	import tool from '../../../../public/tool/tool.js';
 	import QRCode from "qrcode";
 	export default {
 		components: {
-			topTitle,
+			// topTitle,
 			sharePosters
 		},
 		data() {
@@ -136,6 +136,7 @@
 			window['setPostersData'] = (url) => {
 				me.setPostersData(url)
 			}
+			tool.setAppTitle('分享海报')
 		},
 		methods: {
 			// 切换海报页面
@@ -348,7 +349,7 @@
 
 		.switch-bar {
 			position: fixed;
-			top: 88px;
+			// top: 88px;
 			left: 0;
 			z-index: 1500;
 			width: 750px;
@@ -403,11 +404,10 @@
 		}
 
 		.posters-list {
-			margin-top: 218px;
-			// padding-bottom: 30px;
+			// margin-top: 218px;
+			margin-top: 130px;
 			margin-bottom: 30px;
 			width: 690px;
-			// height: 1000px;
 			background: #fff;
 			border-radius: 10px;
 			flex-wrap: wrap;
@@ -415,9 +415,6 @@
 			align-items: flex-start;
 
 			.posters-li {
-				// width: 200px;
-				// height: 360px;
-				// background: pink;
 				margin-top: 30px;
 				margin-left: 15px;
 				margin-right: 15px;
@@ -593,6 +590,7 @@
 	// 朋友圈
 	.friends-list {
 		width: 100%;
-		margin-top: 190px;
+		// margin-top: 190px;
+		margin-top: 102px;
 	}
 </style>

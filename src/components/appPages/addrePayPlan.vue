@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- 信用卡列表 -->
 		<div class="card-box flx-cas">
 			<!-- <div class="bg0 no-card"> -->
@@ -117,15 +117,15 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import {
 		server
 	} from '@/api/server.js';
 	import tool from '../../../public/tool/tool.js';
 	export default {
-		components: {
-			topTitle
-		},
+		// components: {
+		// 	topTitle
+		// },
 		data() {
 			return {
 				isFirstEnter: false, //是否是第一次进入这个页面
@@ -205,6 +205,7 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
+			tool.setAppTitle('新增还款计划');
 			if (!this.$route.meta.isBack || this.isFirstEnter) {
 				this.planInfo = {
 					bindcardUniqueId: null, //绑卡标识id
@@ -557,7 +558,7 @@
 <style scoped="scoped" lang="less">
 	// 信用卡
 	.card-box {
-		margin-top: 88px;
+		// margin-top: 88px;
 		box-sizing: border-box;
 		padding-top: 20px;
 
