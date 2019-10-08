@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-<!-- 		<div class="title-bar">
+		<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
 		</div> -->
 		<!-- 信息栏列表 -->
@@ -209,8 +209,10 @@
 						}
 					}
 				}
+				console.log(value)
 				// 如果value 为true 的话,进行下一步绑定卡片，否则提示用户哪些信息未填写
 				if (value === true) {
+					console.log(cardInfo)
 					// 先发请求查询银行卡信息的请求确认用户的卡片是否支持
 					server.queryBankcardInfo({
 							bankcardNumb: cardInfo.bankCardNumb
@@ -223,6 +225,7 @@
 								return;
 							}
 							cardInfo.bankName = res.data.bankName;
+							console.log(cardInfo)
 							server.bindSettleCard(cardInfo)
 								.then(res => {
 									if (res == null) return;
@@ -236,12 +239,11 @@
 										// 	})
 										// }
 									})
-									//使用定时器跳转，是为了修复跳转回去
-									setTimeout(()=>{
+									setTimeout(() => {
 										this.$router.push({
-											name:'withdrawal'
+											name: 'withdrawal'
 										})
-									},2000)
+									}, 3000)
 								})
 						})
 				} else {

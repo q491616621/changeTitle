@@ -78,7 +78,7 @@ const router = new Router({
 			name: 'cardManagement', // cardManagement //信用卡管理页面
 			meta: {
 				// index:0,
-				title:'新增还款计划'
+				title:'信用卡管理'
 			},
 			component: resolve => require(['@/components/appPages/cardManagement.vue'], resolve)
 		},

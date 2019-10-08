@@ -74,6 +74,7 @@
 		'招商银行': require('../../assets/img/bankLogo/bank12.png'),
 		'中国银行': require('../../assets/img/bankLogo/bank13.png'),
 		'中信银行': require('../../assets/img/bankLogo/bank14.png'),
+		'上海银行': require('../../assets/img/bankLogo/bank16.png'),
 	};
 	export default {
 		// components: {
@@ -127,26 +128,26 @@
 		},
 		mounted() {
 			// 监控安卓回退按钮,设置返回事件
-			if (window.history && window.history.pushState) {
-				history.pushState(null, null, document.URL);
-				window.addEventListener('popstate', this.goBack, false)
-			}
+			// if (window.history && window.history.pushState) {
+			// 	history.pushState(null, null, document.URL);
+			// 	window.addEventListener('popstate', this.goBack, false)
+			// }
 		},
 		destroyed() {
 			// 组件销毁时,移除事件,避免其他页面触发
-			window.removeEventListener('popstate', this.goBack, false)
+			// window.removeEventListener('popstate', this.goBack, false)
 		},
 		methods: {
 			// 返回事件(安卓手机返回按钮)
-			goBack() {
-				if (this.pageType == 'app') {
-					window.android.btnBack()
-				} else {
-					this.$router.replace({
-						name: 'cardManagement'
-					})
-				}
-			},
+			// goBack() {
+			// 	if (this.pageType == 'app') {
+			// 		window.android.btnBack()
+			// 	} else {
+			// 		this.$router.replace({
+			// 			name: 'cardManagement'
+			// 		})
+			// 	}
+			// },
 			// 从App端进入该页面
 			appEnter(e) {
 				// 获取app传过来的sessionId并设置给cookie,再执行getChannelList函数

@@ -79,7 +79,7 @@
 				</div>
 			</div>
 			<!-- 添加信用卡按钮 -->
-			<div class="flx-c btn-box">
+			<div class="flx-c btn-box" v-if="!loadFail">
 				<button class="flx-r add-btn" @click="goAddCreditCard">
 					<img src="../../assets/img/cardManagement_add.png" alt="添加信用卡" />
 					<div class="bold">添加信用卡</div>
@@ -187,35 +187,35 @@
 				}
 				tool.setAppTitle('信用卡管理')
 				// // ----------------------------------------------------
-				// let appData =
-				// 	// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
-				// 	// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "231084199508103628","userName": "刘昭茜"}';
-				// 	// 正式服务器
-				// 	// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "36062219910910705X","userName": "黄国桥"}';
-				// 	'{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "441823199308235917","userName": "何守卫"}';
-				// this.getCardList()
-				// // 1000000001 1000010002 1000020002
-				// this.$store.commit('setCardManagement', JSON.parse(appData))
-				// // this.getAppData(appData)
+				let appData =
+					// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
+					// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "231084199508103628","userName": "刘昭茜"}';
+					// 正式服务器
+					// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "36062219910910705X","userName": "黄国桥"}';
+					'{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "441823199308235917","userName": "何守卫"}';
+				this.getCardList()
+				// 1000000001 1000010002 1000020002
+				this.$store.commit('setCardManagement', JSON.parse(appData))
+				// this.getAppData(appData)
 				// // --------------------------------------------------------
 			}
 		},
 		mounted() {
 			// 监控安卓回退按钮,设置返回事件
-			if (window.history && window.history.pushState) {
-				history.pushState(null, null, document.URL);
-				window.addEventListener('popstate', this.goBack, false)
-			}
+			// if (window.history && window.history.pushState) {
+			// 	history.pushState(null, null, document.URL);
+			// 	window.addEventListener('popstate', this.goBack, false)
+			// }
 		},
 		destroyed() {
 			// 组件销毁时,移除事件,避免其他页面触发
-			window.removeEventListener('popstate', this.goBack, false)
+			// window.removeEventListener('popstate', this.goBack, false)
 		},
 		methods: {
 			// 返回事件(安卓手机返回按钮)
-			goBack() {
-				window.android.btnBack()
-			},
+			// goBack() {
+			// 	window.android.btnBack()
+			// },
 			// 重新刷新
 			reload() {
 				this.loadFail = false;
@@ -318,6 +318,15 @@
 						this.cardList = cardList;
 						this.commonLoading = false;
 					})
+					.catch(error=>{
+						// 超时处理
+						this.$toast({
+							message:'请求超时了,若网络不稳定请稍后再试!',
+							forbidClick:true,
+						}),
+						this.commonLoading = false;
+						this.loadFail = true;
+					})
 			}
 		},
 		filters: {
@@ -384,8 +393,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			// background: url(http://px45uxsff.bkt.clouddn.com/bg1.jpg) no-repeat center center;
-			background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
+			background: url(http://qiniuimg.kfmanager.com/bg1.jpg) no-repeat center center;
+			// background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -396,8 +405,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			// background: url(https://px45uxsff.bkt.clouddn.com/bg2.jpg) no-repeat center center;
-			background: url(../../assets/img/cardManagement/bg2.jpg) no-repeat center center;
+			background: url(http://qiniuimg.kfmanager.com/bg2.jpg) no-repeat center center;
+			// background: url(../../assets/img/cardManagement/bg2.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -408,8 +417,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			// background: url(https://px45uxsff.bkt.clouddn.com/bg3.jpg) no-repeat center center;
-			background: url(../../assets/img/cardManagement/bg3.jpg) no-repeat center center;
+			background: url(http://qiniuimg.kfmanager.com/bg3.jpg) no-repeat center center;
+			// background: url(../../assets/img/cardManagement/bg3.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -420,8 +429,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			// background: url(https://px45uxsff.bkt.clouddn.com/bg4.jpg) no-repeat center center;
-			background: url(../../assets/img/cardManagement/bg4.jpg) no-repeat center center;
+			background: url(http://qiniuimg.kfmanager.com/bg4.jpg) no-repeat center center;
+			// background: url(../../assets/img/cardManagement/bg4.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -432,8 +441,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			// background: url(https://px45uxsff.bkt.clouddn.com/bg5.jpg) no-repeat center center;
-			background: url(../../assets/img/cardManagement/bg5.jpg) no-repeat center center;
+			background: url(http://qiniuimg.kfmanager.com/bg5.jpg) no-repeat center center;
+			// background: url(../../assets/img/cardManagement/bg5.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -444,8 +453,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			// background: url(https://px45uxsff.bkt.clouddn.com/bg1.jpg) no-repeat center center;
-			background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
+			background: url(http://qiniuimg.kfmanager.com/bg1.jpg) no-repeat center center;
+			// background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;

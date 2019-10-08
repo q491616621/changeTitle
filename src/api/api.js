@@ -29,6 +29,10 @@ axios.interceptors.response.use(response => {
 	Toast.clear()
 	return response
 }, error => {
+	//请求超时判断处理
+	if(error.code == 'ECONNABORTED'){
+		return Promise.reject(error.code)
+	}
 	if (error && error.response) {
 		switch (error.response.status) {
 			case 400:

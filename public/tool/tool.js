@@ -84,7 +84,7 @@ let tool = {
 	// ---------------------------------------------------------------------------------------------------------
 	// 设置app的title的方法
 	setAppTitle(navTittle){
-		return
+		// return
 		// 检查平台 0为安卓，1为ios，2为PC
 		let platFlag = this.testPlat();
 		let init = {};

@@ -334,7 +334,8 @@
 		// margin-top: 88px;
 		position: fixed;
 		width: 100%;
-		top: 88px;
+		// top: 88px;
+		top: 0px;
 		left: 0px;
 		background: #fff;
 		padding-bottom: 10px;
@@ -545,12 +546,13 @@
 
 	// ---------------------------------------------------
 	.margin-top755 {
-		// margin-top: 695px;
-		margin-top: 625px;
+		// margin-top: 625px;
+		margin-top: 537px;
 	}
 
 	.margin-top655 {
-		margin-top: 515px;
+		// margin-top: 515px;
+		margin-top: 427px;
 	}
 
 	// .planDetail-box {

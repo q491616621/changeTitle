@@ -50,7 +50,32 @@
 		props: ['platFlag'],
 		data() {
 			return {
-				articleList: [{
+				articleList: [ {
+						name: '唯独钟情于你',
+						userImg: require('../../../assets/img/posters/head8.jpeg'), //头像图片
+						contentImg: require('../../../assets/img/posters/articleImg8.jpg'), //发圈图片
+						content: '捷报频传，提额连连！安安卡管家，养卡首选！', //发圈内容
+					}, {
+						name: '超越梦想',
+						userImg: require('../../../assets/img/posters/head7.jpg'), //头像图片
+						contentImg: require('../../../assets/img/posters/articleImg7.jpg'), //发圈图片
+						content: '使用安安卡管家还款，收获双重惊喜：安全、稳定的还款体验和健康养卡的提额效果！', //发圈内容
+					}, {
+						name: '纯洁的半烟',
+						userImg: require('../../../assets/img/posters/head6.jpeg'), //头像图片
+						contentImg: require('../../../assets/img/posters/articleImg6.jpg'), //发圈图片
+						content: '一个小例子告诉你，安安卡管家的裂变效果有多惊人！推广了8个人，一直没有管过，转头一看，团队裂变了上千人，推广奖励加分润收益已经过万了！', //发圈内容
+					}, {
+						name: '思静',
+						userImg: require('../../../assets/img/posters/head5.jpg'), //头像图片
+						contentImg: require('../../../assets/img/posters/articleImg5.jpg'), //发圈图片
+						content: '优秀的平台，提额效果看得见！信用卡刷卡代还-养卡提额，尽在安安卡管家！', //发圈内容
+					}, {
+						name: '海阔天空',
+						userImg: require('../../../assets/img/posters/head4.jpeg'), //头像图片
+						contentImg: require('../../../assets/img/posters/articleImg4.jpg'), //发圈图片
+						content: '安安卡管家小伙伴又提额了！安安卡管家每笔消费都使用落地商户类通道，提额更快！想要提早预留备用金的朋友，千万不要错过！', //发圈内容
+					}, {
 						name: '努力靠自己',
 						userImg: require('../../../assets/img/posters/head1.jpg'), //头像图片
 						contentImg: require('../../../assets/img/posters/articleImg1.png'), //发圈图片
@@ -64,7 +89,7 @@
 					},
 					{
 						name: '李本群',
-						userImg: require('../../../assets/img/posters/head4.jpg'), //头像图片
+						userImg: require('../../../assets/img/posters/head3.jpg'), //头像图片
 						contentImg: require('../../../assets/img/posters/articleImg3.jpg'), //发圈图片
 						content: '如果你看懂这个趋势，就不要在磨叽了。加入安安卡管家是你最好的选择。', //发圈内容
 					},
