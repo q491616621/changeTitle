@@ -393,15 +393,15 @@
 				radio: '1',
 				price: '', //选择会员的价格
 				goodsname: '', //会员类型 0初级会员 1中级会员
-				payMembInfo: '', //储存的app传过来的
-				// payMembInfo: {
-				// 	'highMemberName': '中级会员',
-				// 	'highPayAmount': '2',
-				// 	'midMemberName': '初级会员',
-				// 	'midPayAmount': '1',
-				// 	'memberLevel': '1',
-				// 	'memberRoute': null
-				// }
+				// payMembInfo: '', //储存的app传过来的
+				payMembInfo: {
+					'highMemberName': '中级会员',
+					'highPayAmount': '2',
+					'midMemberName': '初级会员',
+					'midPayAmount': '1',
+					'memberLevel': '1',
+					'memberRoute': null
+				}
 			};
 		},
 		beforeCreate() {
