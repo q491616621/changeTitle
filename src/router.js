@@ -32,6 +32,7 @@ Vue.use(Router)
 //myMerchant //我的商户
 //merchantDetails //我的商户详情
 //companyIntroduction //公司简介
+//videoTutorials //适配教程
 const router = new Router({
 	base: process.env.BASE_URL,
 	// mode: 'history',
@@ -264,17 +265,17 @@ const router = new Router({
 		},
 		{
 			path: '/myMerchant',
-			name: 'myMerchant', // myMerchant //我的商户
+			name: 'myMerchant', // myMerchant //我的客户
 			meta: {
-				title: '我的商户'
+				title: '我的客户'
 			},
 			component: resolve => require(['@/components/appPages/myMerchant/myMerchant.vue'], resolve)
 		},
 		{
 			path: '/merchantDetails',
-			name: 'merchantDetails', // merchantDetails //我的商户详情
+			name: 'merchantDetails', // merchantDetails //我的客户详情
 			meta: {
-				title: '我的商户'
+				title: '我的客户'
 			},
 			component: resolve => require(['@/components/appPages/myMerchant/merchantDetails.vue'], resolve)
 		},
@@ -285,6 +286,14 @@ const router = new Router({
 				title: '公司简介'
 			},
 			component: resolve => require(['@/components/appPages/companyIntroduction/companyIntroduction.vue'], resolve)
+		},
+		{
+			path: '/videoTutorials',
+			name: 'videoTutorials', // videoTutorials //视频教程
+			meta: {
+				title: '视频教程'
+			},
+			component: resolve => require(['@/components/appPages/videoTutorials/videoTutorials.vue'], resolve)
 		},
 	]
 })

@@ -4,13 +4,13 @@
 		<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
-		<div class="wueui-content content">
+		<div class="wueui-content content" v-if="memberListShow">
 			<div class="div_vip_list">
-				<div class="div_vip_li" v-if="payMembInfo.memberRoute == 2||payMembInfo.memberLevel == 1">
+				<div class="div_vip_li" v-if="payMembInfo.memberRoute == 3||payMembInfo.memberLevel == 1">
 					<div class="div_vip_li_img">
-						<img src="../../../assets/img/images/icon003.png" />
+						<img src="../../../assets/img/images/icon017.png" />
 					</div>
-					<div class="div_vip_li_title">金卡会员</div>
+					<div class="div_vip_li_title">城市合伙人</div>
 					<div class="div_evaluate">
 						<span>购买率：95%</span>
 						<span>
@@ -22,15 +22,15 @@
 							<img src="../../../assets/img/images/icon005.png" />
 						</span>
 					</div>
-
+				
 					<div class="div_function">
 						<!-- <span>授信还款额度</span>
 						<span>授权实习会员资格</span> -->
-						<span>智能还款分润万20</span>
+						<span>智能还款分润万27</span>
 					</div>
 					<div class="div_vip_li_content">
 						<a href="javascript:;" :class="contentOne?'btn_title active':'btn_title'" @click="contentOne=!contentOne">
-							金卡会员 自用省钱*推广赚钱
+							城市合伙人 自用省钱*推广赚钱
 						</a>
 						<div class="div_vip_li_info">
 							<p style="text-align: left;">
@@ -55,9 +55,9 @@
 										<th>
 											会员等级
 										</th>
-										<th>
+									<!-- 	<th>
 											尊享分红
-										</th>
+										</th> -->
 										<th>
 											还款收益
 										</th>
@@ -65,38 +65,34 @@
 											推荐收益
 										</th>
 										<th>
-											推荐付费人数
+											<!-- 推荐付费人数 -->
+											升级条件
 										</th>
 									</tr>
 									<tr>
 										<td>
-											黑卡会员
+											联合创始人
 										</td>
-										<td>
-											<!-- 增加万2 -->
+									<!-- 	<td>
 											会员10%加还款万1分红
-										</td>
+										</td> -->
 										<td>
 											万31
 										</td>
-										<!-- 	<td rowspan="5">
-											还款一万收益有20元，一年就有240元
-										</td> -->
 										<td>
 											60%
 										</td>
 										<td>
-											累计推荐40个会员
+											直推5个运营中心
 										</td>
 									</tr>
 									<tr>
 										<td>
-											钻石会员
+											运营中心
 										</td>
-										<td>
-											<!-- 增加万2 -->
+									<!-- 	<td>
 											会员8%分红
-										</td>
+										</td> -->
 										<td>
 											万29
 										</td>
@@ -104,17 +100,16 @@
 											55%
 										</td>
 										<td>
-											累计推荐25个会员
+											直推10个城市合伙人
 										</td>
 									</tr>
 									<tr>
 										<td>
-											铂金会员
+											城市合伙人
 										</td>
-										<td>
-											<!-- 增加万4 -->
+									<!-- 	<td>
 											会员5%分红
-										</td>
+										</td> -->
 										<td>
 											万27
 										</td>
@@ -122,16 +117,16 @@
 											50%
 										</td>
 										<td>
-											累计推荐13个会员
+											998元或直推10个钻石会员
 										</td>
 									</tr>
 									<tr>
 										<td>
-											白金会员
+											钻石会员
 										</td>
-										<td>
+									<!-- 	<td>
 											增加万3
-										</td>
+										</td> -->
 										<td>
 											万23
 										</td>
@@ -139,38 +134,38 @@
 											45%
 										</td>
 										<td>
-											累计推荐3个会员
+											298元或直推5个金卡会员
 										</td>
 									</tr>
 									<tr>
 										<td>
 											金卡会员
 										</td>
+									<!-- 	<td>
+											万20
+										</td> -->
 										<td>
 											万20
 										</td>
 										<td>
-											万20
+											30%
 										</td>
 										<td>
-											40%
-										</td>
-										<td>
-											付费升级
+											98元
 										</td>
 									</tr>
 									<tr>
 										<td>
-											普通会员
+											VIP会员
 										</td>
-										<td>
+									<!-- 	<td>
 											75+1
-										</td>
+										</td> -->
 										<td>
 											万10
 										</td>
 										<td>
-											0
+											10%
 										</td>
 										<td>
 											免费
@@ -181,17 +176,192 @@
 						</div>
 					</div>
 					<div class="div_pay">
-						¥298.00/年
-						<span>¥598.00</span>
+						¥{{parseInt(payMembInfo.maxPayAmount)/100}}/年
+						<span>¥598</span>
 						<button class="btn_pay" @click="payMember('levelOne')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
+						<button class="btn_pay" @click="alreadyPurchased" v-if="payMembInfo.memberLevel >1">您已是会员</button>
+					</div>
+				</div>
+				<div class="div_vip_li" v-if="payMembInfo.memberRoute == 2||payMembInfo.memberLevel == 1">
+					<div class="div_vip_li_img">
+						<img src="../../../assets/img/images/icon006.png" />
+					</div>
+					<div class="div_vip_li_title">钻石会员</div>
+					<div class="div_evaluate">
+						<span>购买率：95%</span>
+						<span>
+							<label>推荐指数：</label>
+							<img src="../../../assets/img/images/icon005.png" />
+							<img src="../../../assets/img/images/icon005.png" />
+							<img src="../../../assets/img/images/icon005.png" />
+							<img src="../../../assets/img/images/icon005.png" />
+						</span>
+					</div>
+
+					<div class="div_function">
+						<!-- <span>授信还款额度</span>	
+						<span>授权实习会员资格</span> -->
+						<span>智能还款分润万20</span>
+					</div>
+					<div class="div_vip_li_content">
+						<a href="javascript:;" :class="contentTwo?'btn_title active':'btn_title'" @click="contentTwo=!contentTwo">
+							钻石会员 自用省钱*推广赚钱
+						</a>
+						<div class="div_vip_li_info">
+							<p style="text-align: left;">
+								1. 自用省钱，还款1万最高省31元。
+							</p>
+							<p style="text-align: left;">
+								2. 成人达己，招募团队合伙人。
+							</p>
+							<p style="text-align: left;">
+								3. 卡测评、查征信持续上线，敬请期待。
+							</p>
+							<p style="text-align: left;">
+								4. 尊享分红，同级别共享奖励。
+							</p>
+							<div class="div_vip_li_title02">
+								分享赚钱
+							</div>
+							<div class="div_table">
+								<!--表格可直接放图片-->
+								<table cellspacing="0" cellpadding="0">
+									<tr>
+										<th>
+											会员等级
+										</th>
+									<!-- 	<th>
+											尊享分红
+										</th> -->
+										<th>
+											还款收益
+										</th>
+										<th>
+											推荐收益
+										</th>
+										<th>
+											<!-- 推荐付费人数 -->
+											升级条件
+										</th>
+									</tr>
+									<tr>
+										<td>
+											联合创始人
+										</td>
+									<!-- 	<td>
+											会员10%加还款万1分红
+										</td> -->
+										<td>
+											万31
+										</td>
+										<td>
+											60%
+										</td>
+										<td>
+											直推5个运营中心
+										</td>
+									</tr>
+									<tr>
+										<td>
+											运营中心
+										</td>
+									<!-- 	<td>
+											会员8%分红
+										</td> -->
+										<td>
+											万29
+										</td>
+										<td>
+											55%
+										</td>
+										<td>
+											直推10个城市合伙人
+										</td>
+									</tr>
+									<tr>
+										<td>
+											城市合伙人
+										</td>
+									<!-- 	<td>
+											会员5%分红
+										</td> -->
+										<td>
+											万27
+										</td>
+										<td>
+											50%
+										</td>
+										<td>
+											998元或直推10个钻石会员
+										</td>
+									</tr>
+									<tr>
+										<td>
+											钻石会员
+										</td>
+									<!-- 	<td>
+											增加万3
+										</td> -->
+										<td>
+											万23
+										</td>
+										<td>
+											45%
+										</td>
+										<td>
+											298元或直推5个金卡会员
+										</td>
+									</tr>
+									<tr>
+										<td>
+											金卡会员
+										</td>
+									<!-- 	<td>
+											万20
+										</td> -->
+										<td>
+											万20
+										</td>
+										<td>
+											30%
+										</td>
+										<td>
+											98元
+										</td>
+									</tr>
+									<tr>
+										<td>
+											VIP会员
+										</td>
+									<!-- 	<td>
+											75+1
+										</td> -->
+										<td>
+											万10
+										</td>
+										<td>
+											10%
+										</td>
+										<td>
+											免费
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class="div_pay">
+						¥{{parseInt(payMembInfo.highPayAmount)/100}}/年
+						<span>¥598</span>
+						<button class="btn_pay" @click="payMember('levelTwo')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
 						<button class="btn_pay" @click="alreadyPurchased" v-if="payMembInfo.memberLevel >1">您已是会员</button>
 					</div>
 				</div>
 				<div class="div_vip_li" v-if="payMembInfo.memberRoute == 1||payMembInfo.memberLevel == 1">
 					<div class="div_vip_li_img">
-						<img src="../../../assets/img/images/icon006.png" />
+						<img src="../../../assets/img/images/icon003.png" />
 					</div>
-					<div class="div_vip_li_title">银卡会员</div>
+					<div class="div_vip_li_title">金卡会员</div>
 					<div class="div_evaluate">
 						<span>购买率：5%</span>
 						<span>
@@ -207,8 +377,8 @@
 						<span>智能还款分润万16</span>
 					</div>
 					<div class="div_vip_li_content">
-						<a href="javascript:;" :class="contentTwo?'btn_title active':'btn_title'" @click="contentTwo=!contentTwo">
-							银卡会员 自用省钱*推广赚钱
+						<a href="javascript:;" :class="contentThree?'btn_title active':'btn_title'" @click="contentThree=!contentThree">
+							金卡会员 自用省钱*推广赚钱
 						</a>
 						<div class="div_vip_li_info">
 							<p style="text-align: left;">
@@ -224,14 +394,15 @@
 								分享赚钱
 							</div>
 							<div class="div_table">
+								<!--表格可直接放图片-->
 								<table cellspacing="0" cellpadding="0">
 									<tr>
 										<th>
 											会员等级
 										</th>
-										<th>
-											分润增加
-										</th>
+									<!-- 	<th>
+											尊享分红
+										</th> -->
 										<th>
 											还款收益
 										</th>
@@ -239,109 +410,107 @@
 											推荐收益
 										</th>
 										<th>
-											推荐付费人数
+											<!-- 推荐付费人数 -->
+											升级条件
 										</th>
 									</tr>
 									<tr>
 										<td>
-											黑卡会员
+											联合创始人
 										</td>
-										<td>
-											增加万2
-										</td>
-										<td>
-											万27
-										</td>
-										<!-- 	<td rowspan="5">
-											还款一万收益有16元，一年就有192元
+									<!-- 	<td>
+											会员10%加还款万1分红
 										</td> -->
+										<td>
+											万31
+										</td>
 										<td>
 											60%
 										</td>
 										<td>
-											累计推荐40个会员
+											直推5个运营中心
+										</td>
+									</tr>
+									<tr>
+										<td>
+											运营中心
+										</td>
+									<!-- 	<td>
+											会员8%分红
+										</td> -->
+										<td>
+											万29
+										</td>
+										<td>
+											55%
+										</td>
+										<td>
+											直推10个城市合伙人
+										</td>
+									</tr>
+									<tr>
+										<td>
+											城市合伙人
+										</td>
+									<!-- 	<td>
+											会员5%分红
+										</td> -->
+										<td>
+											万27
+										</td>
+										<td>
+											50%
+										</td>
+										<td>
+											998元或直推10个钻石会员
 										</td>
 									</tr>
 									<tr>
 										<td>
 											钻石会员
 										</td>
-										<td>
-											增加万2
-										</td>
-										<td>
-											万25
-										</td>
-										<td>
-											55%
-										</td>
-										<td>
-											累计推荐25个会员
-										</td>
-									</tr>
-									<tr>
-										<td>
-											铂金会员
-										</td>
-										<td>
-											增加万4
-										</td>
+									<!-- 	<td>
+											增加万3
+										</td> -->
 										<td>
 											万23
-										</td>
-										<td>
-											50%
-										</td>
-										<td>
-											累计推荐13个会员
-										</td>
-									</tr>
-									<tr>
-										<td>
-											白金会员
-										</td>
-										<td>
-											增加万3
-										</td>
-										<td>
-											万19
 										</td>
 										<td>
 											45%
 										</td>
 										<td>
-											累计推荐3个会员
+											298元或直推5个金卡会员
 										</td>
 									</tr>
 									<tr>
 										<td>
-											银卡会员
+											金卡会员
 										</td>
+									<!-- 	<td>
+											万20
+										</td> -->
 										<td>
-											万16
-										</td>
-										<td>
-											万16
+											万20
 										</td>
 										<td>
 											30%
 										</td>
 										<td>
-											付费升级
+											98元
 										</td>
 									</tr>
 									<tr>
 										<td>
-											普通会员
+											VIP会员
 										</td>
-										<td>
+									<!-- 	<td>
 											75+1
-										</td>
+										</td> -->
 										<td>
 											万10
 										</td>
 										<td>
-											0
+											10%
 										</td>
 										<td>
 											免费
@@ -352,9 +521,9 @@
 						</div>
 					</div>
 					<div class="div_pay">
-						¥98.00/年
-						<span>¥298.00</span>
-						<button class="btn_pay" @click="payMember('levelTwo')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
+						¥{{parseInt(payMembInfo.midPayAmount)/100}}/年
+						<span>¥298</span>
+						<button class="btn_pay" @click="payMember('levelThree')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
 						<button class="btn_pay" @click="alreadyPurchased" v-if="payMembInfo.memberLevel >1">您已是会员</button>
 					</div>
 				</div>
@@ -387,21 +556,15 @@
 			return {
 				titleName: '购买会员', //标题栏标题
 				pageType: 'app', //上个页面是什么h5还是app?
+				memberListShow:false,//会员付费列表是否显示
 				contentOne: false, //第一个下拉窗状态
 				contentTwo: false, //第二个下拉窗状态
+				contentThree:false,//第三个下拉窗状态
 				show: false, //支付弹窗状态
 				radio: '1',
 				price: '', //选择会员的价格
 				goodsname: '', //会员类型 0初级会员 1中级会员
-				// payMembInfo: '', //储存的app传过来的
-				payMembInfo: {
-					'highMemberName': '中级会员',
-					'highPayAmount': '2',
-					'midMemberName': '初级会员',
-					'midPayAmount': '1',
-					'memberLevel': '1',
-					'memberRoute': null
-				}
+				payMembInfo: '', //储存的app传过来的
 			};
 		},
 		beforeCreate() {
@@ -418,15 +581,21 @@
 		},
 		created() {
 			tool.setAppTitle('会员升级')
+			// ------------------------------------
+			// 模拟测试的数据
+			// let init = {
+			// 		'maxMemberName':'铂金会员',
+			// 		'maxPayAmount':'3',
+			// 		'highMemberName': '中级会员',
+			// 		'highPayAmount': '2',
+			// 		'midMemberName': '初级会员',
+			// 		'midPayAmount': '1',
+			// 		'memberLevel': '1',//会员等级
+			// 		'memberRoute': null,
+			// 	}
+			// this.getUserLevel(JSON.stringify(init))
+			// ------------------------------------
 		},
-		// 	
-		// 	// console.log(this.$route.query)
-		// 	
-		// 	// 下面是自己测试代码
-		// 	// let a = {'highMemberName':'中级会员','highPayAmount':'2','midMemberName':'初级会员','midPayAmount':'1','memberLevel':'0'}
-		// 	// this.getUserLevel(a)
-		// 	// this.payMembInfo = {'highMemberName':'中级会员','highPayAmount':'2','midMemberName':'初级会员','midPayAmount':'1','memberLevel':'1'};
-		// },
 		methods: {
 			// 用户已经是会员了
 			alreadyPurchased() {
@@ -437,40 +606,38 @@
 			},
 			// 获取app页面传递过来的数据的方法
 			getUserLevel(e) {
-				// e = JSON.stringify(e)
 				let payMembInfo = JSON.parse(e);
-				// ----------------------------
-				// this.$toast({
-				// 	message: `highMemberName:${payMembInfo.highMemberName},highPayAmount:${payMembInfo.highPayAmount},midMemberName:${payMembInfo.midMemberName},midPayAmount:${payMembInfo.midPayAmount},userLevel:${payMembInfo.memberLevel},memberRoute:${payMembInfo.memberRoute}`,
-				// 	duration: 1000
-				// })
-				// -------------------------------
 				this.payMembInfo = payMembInfo;
+				this.memberListShow = true;
 			},
 			// 拉起支付选择框
 			payMember(level) {
-				// -----------------------
-				// let payMembInfo = this.payMembInfo;
-				// this.$toast({
-				// 	message:`highMemberName:${payMembInfo.highMemberName},highPayAmount:${payMembInfo.highPayAmount},midMemberName:${payMembInfo.midMemberName},midPayAmount:${payMembInfo.midPayAmount},userLevel:${payMembInfo.memberLevel},memberRoute:${payMembInfo.memberRoute}`,
-				// 	duration:1000
-				// })
-				// ------------------------
 				if (this.payMembInfo.memberLevel > 1) {
 					this.$toast({
 						message: '您已经是会员了，请勿重复购买'
 					})
 					return;
 				}
-				if (level == 'levelOne') {
-					let highPayAmount = this.payMembInfo.highPayAmount;
-					this.price = parseInt(highPayAmount) / 100;
+				if(level == 'levelOne'){
+					this.price = parseInt(this.payMembInfo.maxPayAmount)/100;
+					this.goodsname = this.payMembInfo.maxMemberName;
+				}else if(level == 'levelTwo'){
+					this.price = parseInt(this.payMembInfo.highPayAmount)/100;
 					this.goodsname = this.payMembInfo.highMemberName;
-				} else {
-					let midPayAmount = this.payMembInfo.midPayAmount;
-					this.price = parseInt(midPayAmount) / 100;
+				}else if(level == 'levelThree'){
+					this.price = parseInt(this.payMembInfo.midPayAmount)/100;
 					this.goodsname = this.payMembInfo.midMemberName;
 				}
+				// return
+				// if (level == 'levelOne') {
+				// 	let highPayAmount = this.payMembInfo.highPayAmount;
+				// 	this.price = parseInt(highPayAmount) / 100;
+				// 	this.goodsname = this.payMembInfo.highMemberName;
+				// } else {
+				// 	let midPayAmount = this.payMembInfo.midPayAmount;
+				// 	this.price = parseInt(midPayAmount) / 100;
+				// 	this.goodsname = this.payMembInfo.midMemberName;
+				// }
 				// 拉起支付弹窗
 				this.show = true;
 			},
@@ -487,17 +654,19 @@
 					window.webkit.messageHandlers.updateMember.postMessage(init);
 				} else {
 					// 调用安卓支付的方法
-					window.android.updateMember(JSON.stringify(init));
+					// window.AliPay.updateMember(JSON.stringify(init));
+					// 判断安卓的方法是否有定义了,没有定义的话进行提示
+					try{
+						window.AliPay.updateMember(JSON.stringify(init));
+					}catch(e){
+						this.$toast({
+							message:'方法调用异常，请稍后重新进入该页面再做尝试',
+							forbidClick:true
+						})
+					}
 				}
-				// if (platFlag == 0) {
-				// 	// 调用安卓支付的方法
-				// 	window.android.updateMember(JSON.stringify(init));
-				// } else {
-				// 	// 调用ios支付的方法
-				// 	window.webkit.messageHandlers.updateMember.postMessage(init);
-				// }
 			},
-			// ------------------------------------------------------------------------安卓端支付完成后调用的方法
+			// ------------------------------------------------------------------------安卓端支付完成后调用的方法这个是单独写给安卓的，苹果不用
 			// 微信支付完成
 			weChatPayFinish(value) {
 				let payMembInfo = JSON.parse(value);
@@ -524,7 +693,10 @@
 </style>
 <style scoped="scoped" lang="less">
 	@import url("../../../../public/css/other.css");
-
+	.div_table{
+		display: flex;
+		justify-content: center;
+	}
 	table {
 		border-collapse: separate;
 	}
@@ -536,7 +708,9 @@
 	.content {
 		// margin-top: 88px;
 	}
-
+	// .div_table th{
+	// 	padding: 20px;
+	// }
 	.div_vip_li_img {
 		img {
 			border-radius: 10px;

@@ -50,7 +50,7 @@
 		},
 		created() {
 			// console.log(this.$route.params)
-			tool.setAppTitle('我的商户')
+			tool.setAppTitle('我的客户')
 			this.userLevel = this.$route.params.userLevel;
 			this.onLoad()
 		},

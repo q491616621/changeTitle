@@ -15,12 +15,12 @@
 		// },
 		data() {
 			return {
-				titleName: '公司简介', //标题栏标题
+				titleName: '视频教程', //标题栏标题
 				pageType: 'app', //上个页面是什么h5还是app?
 			};
 		},
 		created(){
-			tool.setAppTitle('公司简介')
+			tool.setAppTitle('视频教程')
 		}
 	};
 </script>

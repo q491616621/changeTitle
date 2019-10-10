@@ -108,13 +108,13 @@
 		created() {
 			if(this.$route.params.type == 'next'){
 				this.getData()
-				tool.setAppTitle('我的商户')
+				tool.setAppTitle('我的客户')
 			}else{
 				let me = this;
 				window['getMyMerchantData'] = (url) => {
 					me.getMyMerchantData(url)
 				}
-				tool.setAppTitle('我的商户')
+				tool.setAppTitle('我的客户')
 				// -----------------------------
 				// this.getData()
 			}
