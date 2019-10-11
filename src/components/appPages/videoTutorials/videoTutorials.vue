@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="video-box">
+<!-- 		<div class="video-box">
 			<div class="video-title">
 				教学视频
 			</div>
@@ -9,7 +9,7 @@
 				<div class="video-li">还款使用说明</div>
 				<div class="video-li">完美账单还款使用说明</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 </template>
 <script>

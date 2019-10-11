@@ -55,9 +55,9 @@
 										<th>
 											会员等级
 										</th>
-									<!-- 	<th>
+										<th>
 											尊享分红
-										</th> -->
+										</th>
 										<th>
 											还款收益
 										</th>
@@ -73,9 +73,11 @@
 										<td>
 											联合创始人
 										</td>
-									<!-- 	<td>
-											会员10%加还款万1分红
-										</td> -->
+										<td>
+											会员10%分红
+											还款万2分红
+											收款万2分红
+										</td>
 										<td>
 											万31
 										</td>
@@ -90,9 +92,11 @@
 										<td>
 											运营中心
 										</td>
-									<!-- 	<td>
+										<td>
 											会员8%分红
-										</td> -->
+											还款万1分红
+											收款万1分红
+										</td>
 										<td>
 											万29
 										</td>
@@ -107,9 +111,9 @@
 										<td>
 											城市合伙人
 										</td>
-									<!-- 	<td>
+										<td>
 											会员5%分红
-										</td> -->
+										</td>
 										<td>
 											万27
 										</td>
@@ -124,9 +128,9 @@
 										<td>
 											钻石会员
 										</td>
-									<!-- 	<td>
+										<td>
 											增加万3
-										</td> -->
+										</td>
 										<td>
 											万23
 										</td>
@@ -141,9 +145,9 @@
 										<td>
 											金卡会员
 										</td>
-									<!-- 	<td>
+										<td>
 											万20
-										</td> -->
+										</td>
 										<td>
 											万20
 										</td>
@@ -158,9 +162,9 @@
 										<td>
 											VIP会员
 										</td>
-									<!-- 	<td>
+										<td>
 											75+1
-										</td> -->
+										</td>
 										<td>
 											万10
 										</td>
@@ -177,7 +181,7 @@
 					</div>
 					<div class="div_pay">
 						¥{{parseInt(payMembInfo.maxPayAmount)/100}}/年
-						<span>¥598</span>
+						<span>¥2980</span>
 						<button class="btn_pay" @click="payMember('levelOne')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
 						<button class="btn_pay" @click="alreadyPurchased" v-if="payMembInfo.memberLevel >1">您已是会员</button>
 					</div>
@@ -230,9 +234,9 @@
 										<th>
 											会员等级
 										</th>
-									<!-- 	<th>
+										<th>
 											尊享分红
-										</th> -->
+										</th>
 										<th>
 											还款收益
 										</th>
@@ -248,9 +252,11 @@
 										<td>
 											联合创始人
 										</td>
-									<!-- 	<td>
-											会员10%加还款万1分红
-										</td> -->
+										<td>
+											会员10%分红
+											还款万2分红
+											收款万2分红
+										</td>
 										<td>
 											万31
 										</td>
@@ -265,9 +271,11 @@
 										<td>
 											运营中心
 										</td>
-									<!-- 	<td>
+										<td>
 											会员8%分红
-										</td> -->
+											还款万1分红
+											收款万1分红
+										</td>
 										<td>
 											万29
 										</td>
@@ -282,9 +290,9 @@
 										<td>
 											城市合伙人
 										</td>
-									<!-- 	<td>
+										<td>
 											会员5%分红
-										</td> -->
+										</td>
 										<td>
 											万27
 										</td>
@@ -299,9 +307,9 @@
 										<td>
 											钻石会员
 										</td>
-									<!-- 	<td>
+										<td>
 											增加万3
-										</td> -->
+										</td>
 										<td>
 											万23
 										</td>
@@ -316,9 +324,9 @@
 										<td>
 											金卡会员
 										</td>
-									<!-- 	<td>
+										<td>
 											万20
-										</td> -->
+										</td>
 										<td>
 											万20
 										</td>
@@ -333,9 +341,9 @@
 										<td>
 											VIP会员
 										</td>
-									<!-- 	<td>
+										<td>
 											75+1
-										</td> -->
+										</td>
 										<td>
 											万10
 										</td>
@@ -352,7 +360,7 @@
 					</div>
 					<div class="div_pay">
 						¥{{parseInt(payMembInfo.highPayAmount)/100}}/年
-						<span>¥598</span>
+						<span>¥490</span>
 						<button class="btn_pay" @click="payMember('levelTwo')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
 						<button class="btn_pay" @click="alreadyPurchased" v-if="payMembInfo.memberLevel >1">您已是会员</button>
 					</div>
@@ -382,7 +390,7 @@
 						</a>
 						<div class="div_vip_li_info">
 							<p style="text-align: left;">
-								1. 自用省钱，还款1万最高省27元。
+								1. 自用省钱，还款1万最高省31元。
 							</p>
 							<p style="text-align: left;">
 								2. 成人达己，招募团队合伙人。
@@ -394,135 +402,139 @@
 								分享赚钱
 							</div>
 							<div class="div_table">
-								<!--表格可直接放图片-->
-								<table cellspacing="0" cellpadding="0">
-									<tr>
-										<th>
-											会员等级
-										</th>
-									<!-- 	<th>
-											尊享分红
-										</th> -->
-										<th>
-											还款收益
-										</th>
-										<th>
-											推荐收益
-										</th>
-										<th>
-											<!-- 推荐付费人数 -->
-											升级条件
-										</th>
-									</tr>
-									<tr>
-										<td>
-											联合创始人
-										</td>
-									<!-- 	<td>
-											会员10%加还款万1分红
-										</td> -->
-										<td>
-											万31
-										</td>
-										<td>
-											60%
-										</td>
-										<td>
-											直推5个运营中心
-										</td>
-									</tr>
-									<tr>
-										<td>
-											运营中心
-										</td>
-									<!-- 	<td>
-											会员8%分红
-										</td> -->
-										<td>
-											万29
-										</td>
-										<td>
-											55%
-										</td>
-										<td>
-											直推10个城市合伙人
-										</td>
-									</tr>
-									<tr>
-										<td>
-											城市合伙人
-										</td>
-									<!-- 	<td>
-											会员5%分红
-										</td> -->
-										<td>
-											万27
-										</td>
-										<td>
-											50%
-										</td>
-										<td>
-											998元或直推10个钻石会员
-										</td>
-									</tr>
-									<tr>
-										<td>
-											钻石会员
-										</td>
-									<!-- 	<td>
-											增加万3
-										</td> -->
-										<td>
-											万23
-										</td>
-										<td>
-											45%
-										</td>
-										<td>
-											298元或直推5个金卡会员
-										</td>
-									</tr>
-									<tr>
-										<td>
-											金卡会员
-										</td>
-									<!-- 	<td>
-											万20
-										</td> -->
-										<td>
-											万20
-										</td>
-										<td>
-											30%
-										</td>
-										<td>
-											98元
-										</td>
-									</tr>
-									<tr>
-										<td>
-											VIP会员
-										</td>
-									<!-- 	<td>
-											75+1
-										</td> -->
-										<td>
-											万10
-										</td>
-										<td>
-											10%
-										</td>
-										<td>
-											免费
-										</td>
-									</tr>
-								</table>
-							</div>
+															<!--表格可直接放图片-->
+															<table cellspacing="0" cellpadding="0">
+																<tr>
+																	<th>
+																		会员等级
+																	</th>
+																	<th>
+																		尊享分红
+																	</th>
+																	<th>
+																		还款收益
+																	</th>
+																	<th>
+																		推荐收益
+																	</th>
+																	<th>
+																		<!-- 推荐付费人数 -->
+																		升级条件
+																	</th>
+																</tr>
+																<tr>
+																	<td>
+																		联合创始人
+																	</td>
+																	<td>
+																		会员10%分红
+																		还款万2分红
+																		收款万2分红
+																	</td>
+																	<td>
+																		万31
+																	</td>
+																	<td>
+																		60%
+																	</td>
+																	<td>
+																		直推5个运营中心
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		运营中心
+																	</td>
+																	<td>
+																		会员8%分红
+																		还款万1分红
+																		收款万1分红
+																	</td>
+																	<td>
+																		万29
+																	</td>
+																	<td>
+																		55%
+																	</td>
+																	<td>
+																		直推10个城市合伙人
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		城市合伙人
+																	</td>
+																	<td>
+																		会员5%分红
+																	</td>
+																	<td>
+																		万27
+																	</td>
+																	<td>
+																		50%
+																	</td>
+																	<td>
+																		998元或直推10个钻石会员
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		钻石会员
+																	</td>
+																	<td>
+																		增加万3
+																	</td>
+																	<td>
+																		万23
+																	</td>
+																	<td>
+																		45%
+																	</td>
+																	<td>
+																		298元或直推5个金卡会员
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		金卡会员
+																	</td>
+																	<td>
+																		万20
+																	</td>
+																	<td>
+																		万20
+																	</td>
+																	<td>
+																		30%
+																	</td>
+																	<td>
+																		98元
+																	</td>
+																</tr>
+																<tr>
+																	<td>
+																		VIP会员
+																	</td>
+																	<td>
+																		75+1
+																	</td>
+																	<td>
+																		万10
+																	</td>
+																	<td>
+																		10%
+																	</td>
+																	<td>
+																		免费
+																	</td>
+																</tr>
+															</table>
+														</div>
 						</div>
 					</div>
 					<div class="div_pay">
 						¥{{parseInt(payMembInfo.midPayAmount)/100}}/年
-						<span>¥298</span>
+						<span>¥198</span>
 						<button class="btn_pay" @click="payMember('levelThree')" v-if="payMembInfo.memberLevel == 1">立即购买</button>
 						<button class="btn_pay" @click="alreadyPurchased" v-if="payMembInfo.memberLevel >1">您已是会员</button>
 					</div>

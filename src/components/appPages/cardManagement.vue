@@ -393,8 +393,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			background: url(http://qiniuimg.kfmanager.com/bg1.jpg) no-repeat center center;
-			// background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
+			// background: url(http://qiniuimg.kfmanager.com/bg1.jpg) no-repeat center center;
+			background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -405,8 +405,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			background: url(http://qiniuimg.kfmanager.com/bg2.jpg) no-repeat center center;
-			// background: url(../../assets/img/cardManagement/bg2.jpg) no-repeat center center;
+			// background: url(http://qiniuimg.kfmanager.com/bg2.jpg) no-repeat center center;
+			background: url(../../assets/img/cardManagement/bg2.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -417,8 +417,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			background: url(http://qiniuimg.kfmanager.com/bg3.jpg) no-repeat center center;
-			// background: url(../../assets/img/cardManagement/bg3.jpg) no-repeat center center;
+			// background: url(http://qiniuimg.kfmanager.com/bg3.jpg) no-repeat center center;
+			background: url(../../assets/img/cardManagement/bg3.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -429,8 +429,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			background: url(http://qiniuimg.kfmanager.com/bg4.jpg) no-repeat center center;
-			// background: url(../../assets/img/cardManagement/bg4.jpg) no-repeat center center;
+			// background: url(http://qiniuimg.kfmanager.com/bg4.jpg) no-repeat center center;
+			background: url(../../assets/img/cardManagement/bg4.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -441,8 +441,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			background: url(http://qiniuimg.kfmanager.com/bg5.jpg) no-repeat center center;
-			// background: url(../../assets/img/cardManagement/bg5.jpg) no-repeat center center;
+			// background: url(http://qiniuimg.kfmanager.com/bg5.jpg) no-repeat center center;
+			background: url(../../assets/img/cardManagement/bg5.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;
@@ -453,8 +453,8 @@
 			margin-top: 20px;
 			width: 690px;
 			height: 350px;
-			background: url(http://qiniuimg.kfmanager.com/bg1.jpg) no-repeat center center;
-			// background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
+			// background: url(http://qiniuimg.kfmanager.com/bg1.jpg) no-repeat center center;
+			background: url(../../assets/img/cardManagement/bg1.jpg) no-repeat center center;
 			background-size: 100% 100%;
 			border-radius: 10px;
 			display: flex;

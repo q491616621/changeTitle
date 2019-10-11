@@ -6,7 +6,7 @@
 		<div class="server-box flx-c">
 			<div class="app-name flx-cas">
 				<div class="bold">安安卡管家</div>
-				<div>版本号1.0.0</div>
+				<div>版本号1.0.2</div>
 			</div>
 			<div class="server-info flx-cs">
 				<div class="flx-rs">
