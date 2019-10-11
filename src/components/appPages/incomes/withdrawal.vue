@@ -1,7 +1,8 @@
 <template>
 	<div class="container">
 		<!-- 顶部标题栏 -->
-		<div class="title-bar border-bottom">
+		<!-- <div class="title-bar border-bottom"> -->
+		<div class="record-bar border-bottom">
 			<!-- <top-title :titleName="titleName" :pageType='pageType'></top-title> -->
 			<div class="record" @click="goWithdrawalRecord">提现记录</div>
 		</div>
@@ -236,7 +237,11 @@
 	.container {
 		width: 100%;
 	}
-
+	.record-bar{
+		width: 100%;
+		height: 88px;
+		position: relative;
+	}
 	.record {
 		position: absolute;
 		font-size: 28px;
@@ -250,7 +255,7 @@
 	}
 
 	.withdraw-bank {
-		margin-top: 88px;
+		// margin-top: 88px;
 		height: 140px;
 		background: #fff;
 		position: relative;
@@ -328,7 +333,7 @@
 
 	// 没有绑定提现卡
 	.no-card {
-		margin-top: 88px;
+		// margin-top: 88px;
 		padding-top: 275px;
 		width: 100%;
 		height: 330px;

@@ -8,6 +8,9 @@ import VueLazyload from 'vue-lazyload'
 import 'amfe-flexible/index.js' //引入amfe-flexible,用来配合postcss-pxtorem 转换rem
 import store from './store/index.js';//引入vuex定义的全局仓库
 
+// import Bridge from '../public/tool/JSbridge.js' //引入Bridge
+// Vue.prototype.$bridge = Bridge;//注入Bridge到Vue全局
+
 import clipboard from 'clipboard';//引入clipboard 实现复制功能
 Vue.prototype.clipboard = clipboard;
 

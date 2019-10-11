@@ -54,6 +54,7 @@
 			<!-- <div class="codeBox-logo flx-r"><img src="../../assets/img/addCreditCard_logo.png" alt="logo" /></div> -->
 			<van-cell-group class="code-input flx-rs">
 				<van-field class="input-box medium" v-model="smsCode" type="number" placeholder="请输入验证码" />
+				<!-- <input type="number" class="input-box medium sms-input" v-model="smsCode" placeholder="请输入验证码"/> -->
 				<button class="send-btn medium" v-if='!countDownBox' @click="resendCode">发送验证码</button>
 				<div class="send-btn medium flx-r" v-if="countDownBox">
 					<van-count-down ref='countDown' class='count-down' :time="countDown" format='ss' :auto-start='false' @finish='finished' />
@@ -641,7 +642,7 @@
 			}
 		}
 	}
-
+	
 	.userInfo-box {
 		width: 690px;
 		height: 980px;
@@ -810,5 +811,9 @@
 		text-align: left;
 		padding-top: 20px;
 		color: red;
+	}
+	.sms-input{
+		border: none;
+		width: 320px;
 	}
 </style>

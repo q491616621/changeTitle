@@ -582,7 +582,7 @@
 		created() {
 			tool.setAppTitle('会员升级')
 			// ------------------------------------
-			// 模拟测试的数据
+			// // 模拟测试的数据
 			// let init = {
 			// 		'maxMemberName':'铂金会员',
 			// 		'maxPayAmount':'3',
@@ -654,11 +654,11 @@
 					window.webkit.messageHandlers.updateMember.postMessage(init);
 				} else {
 					// 调用安卓支付的方法
-					// window.AliPay.updateMember(JSON.stringify(init));
 					// 判断安卓的方法是否有定义了,没有定义的话进行提示
 					try{
-						window.AliPay.updateMember(JSON.stringify(init));
+						window.Android.updateMember(JSON.stringify(init));
 					}catch(e){
+						console.log(e);
 						this.$toast({
 							message:'方法调用异常，请稍后重新进入该页面再做尝试',
 							forbidClick:true

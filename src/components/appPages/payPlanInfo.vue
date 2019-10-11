@@ -4,12 +4,10 @@
 		<commomLoading v-if='commonLoading'></commomLoading>
 		<div v-if='!commonLoading'>
 			<div class="payPlanInfo">
-				<div class="flx-r top-title">
+				<!-- <div class="flx-r top-title">
 					<button class="return-btn" @click="returnBack">
-						<!-- <img src="../../assets/img/return_white.png" alt="返回按钮"> -->
 					</button>
-					<!-- <div class="title-name">{{titleName}}</div> -->
-				</div>
+				</div> -->
 				<div class="amount medium">{{planInfo.totalRepayMoney}}</div>
 				<!-- <div class="amount medium">500.00</div> -->
 				<div class="repayInfo flx-r">
@@ -239,16 +237,19 @@
 	.payPlanInfo {
 		position: fixed;
 		z-index: 9999;
-		top: 0px;
-		left: 0px;
+		top: 0;
+		left: 0;
 		width: 100%;
 		// height: 293px;
-		height: 245px;
+		// height: 245px;
 		background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
 
 		.amount {
-			padding-top: 40px;
+			// padding-top: 40px;
+			// margin-top: 40px;
+			height: 88px;
 			font-size: 42px;
+			line-height: 100px;
 			color: #fff;
 		}
 

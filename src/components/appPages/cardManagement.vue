@@ -87,7 +87,7 @@
 			</div>
 			<!-- 没有信用卡时背景 -->
 			<div class="card-list flx-cs" v-if='cardList.length == 0&&loadFail == false'>
-				<div class="bg0 no-card">
+				<div class="bg0 no-card" @click="goAddCreditCard">
 					<div class="card-top flx-cas">
 						<div class="logo flx-rs">
 							<img src="../../assets/img/cardManagement/logo.png">
