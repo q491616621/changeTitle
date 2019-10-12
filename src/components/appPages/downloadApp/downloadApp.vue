@@ -53,10 +53,15 @@
 				// 判断用户机型跳转不同的下载
 				let platFlag = this.platFlag;
 				// 0为安卓，1为ios，2为PC
-				if (platFlag == 0) {
-					window.location.href = 'https://fir.im/xlu8'
-				} else {
+				// if (platFlag == 0) {
+				// 	window.location.href = 'https://fir.im/xlu8'
+				// } else {
+				// 	window.location.href = "https://fir.im/8sgc";
+				// }
+				if(platFlag == 1){
 					window.location.href = "https://fir.im/8sgc";
+				}else{
+					window.location.href = 'https://fir.im/xlu8'
 				}
 			}
 		},

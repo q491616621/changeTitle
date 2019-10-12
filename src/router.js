@@ -33,6 +33,7 @@ Vue.use(Router)
 //merchantDetails //我的商户详情
 //companyIntroduction //公司简介
 //videoTutorials //适配教程
+//reimbursementTutorial //还款教程
 const router = new Router({
 	base: process.env.BASE_URL,
 	// mode: 'history',
@@ -50,6 +51,9 @@ const router = new Router({
 		{
 			path: '/test',
 			name: 'test', //测试用的
+			meta:{
+				title:'积分攻略'
+			},
 			component: resolve => require(['@/components/common/test.vue'], resolve)
 		},
 		{
@@ -294,6 +298,14 @@ const router = new Router({
 				title: '视频教程'
 			},
 			component: resolve => require(['@/components/appPages/videoTutorials/videoTutorials.vue'], resolve)
+		},
+		{
+			path: '/reimbursementTutorial',
+			name: 'reimbursementTutorial', // reimbursementTutorial //还款教程
+			meta: {
+				title: '还款教程'
+			},
+			component: resolve => require(['@/components/appPages/videoTutorials/reimbursementTutorial.vue'], resolve)
 		},
 	]
 })

@@ -245,7 +245,7 @@
 						}
 						img.onerror = ()=>{
 							this.$toast({
-								message:'选择的图片加载失败，请重试',
+								message:'图片加载中，请稍后再试',
 								forbidClick:true
 							})
 						}
