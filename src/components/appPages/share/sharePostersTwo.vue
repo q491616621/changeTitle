@@ -1,7 +1,7 @@
 <template>
 	<div style="width: 100%;">
 		<!-- 顶部标题栏 -->
-	<!-- 	<div class="title-bar flx-r">
+		<!-- 	<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType' :returnBtn='returnBtn'></top-title>
 		</div> -->
 		<div class="container flx-cas">
@@ -18,7 +18,7 @@
 				<div class="posters-li" v-for="(item,index) in postersList" :key='index'>
 					<div class="img-box">
 						<!-- <van-image :src="item.img" class="posters-img" @click="showPostersBox(item.img,index)"/> -->
-						<van-image :src="item.img" class="posters-img" @click="isImgDownLoadFinish(item.img,index)"/>
+						<van-image :src="item.img" class="posters-img" @click="isImgDownLoadFinish(item.img,index)" />
 					</div>
 					<div class="title">海报{{index+1}}</div>
 				</div>
@@ -68,7 +68,14 @@
 				pageType: 'app', //上个页面是什么h5还是app?
 				platFlag: '', //手机类型 0为安卓 1为ios
 				returnBtn: false, //页面是否带有返回按钮
-				postersList: [{
+				postersList: [
+					{
+						img: require('../../../assets/img/posters/posters15.jpg')
+					},
+					{
+						img: require('../../../assets/img/posters/posters14.jpg')
+					},
+					{
 						img: require('../../../assets/img/posters/posters13.jpg')
 					},
 					{
@@ -113,8 +120,12 @@
 				qrCode: '', //二维码
 				postersBox: false,
 				qrCodeSize: { //二维码与海报对应比例=》用于设置二维码在海报中的位置
-					width: 125 / 500,
-					height: 125 / 900,
+					width: 100 / 500,
+					// width: 110 / 500,
+					// width: 125 / 500,
+					height: 100 / 900,
+					// height: 110 / 900,
+					// height: 125 / 900,
 					left: 190 / 900,
 					top: 500 / 900,
 				},
@@ -171,26 +182,26 @@
 						})
 					})
 			},
-			isImgDownLoadFinish(postersBg,currentImgIndex){
+			isImgDownLoadFinish(postersBg, currentImgIndex) {
 				let image = new Image();
 				image.src = postersBg;
-				let timer = setTimeout(()=>{
+				let timer = setTimeout(() => {
 					this.$toast.clear()
 					// console.log('执行了')
 					// this.$toast({
 					// 	message:'加载超时了，图片加载失败，请稍后再试',
 					// 	forbidClick:true
 					// })
-				},8000)
+				}, 8000)
 				this.$toast({
-					type:'loading',
-					message:'加载中...',
-					duration:0,
-					forbidClick:true
+					type: 'loading',
+					message: '加载中...',
+					duration: 0,
+					forbidClick: true
 				})
 				// 判断图片是否加载完成,加载完成执行生成二维码图片函数
-				image.onload = ()=>{
-					this.showPostersBox(postersBg,currentImgIndex)
+				image.onload = () => {
+					this.showPostersBox(postersBg, currentImgIndex)
 					// 如果图片加载完成的话,清除定时器
 					clearInterval(timer)
 				}
@@ -243,10 +254,10 @@
 							// 递归list
 							drawing(index + 1)
 						}
-						img.onerror = ()=>{
+						img.onerror = () => {
 							this.$toast({
-								message:'图片加载中，请稍后再试',
-								forbidClick:true
+								message: '图片加载中，请稍后再试',
+								forbidClick: true
 							})
 						}
 					} else {
@@ -436,8 +447,10 @@
 
 						.van-image__img::before {
 							content: 'dddddd';
-							width: 50px;
-							height: 50px;
+							// width: 50px;
+							// height: 50px;
+							width: 40px;
+							height: 40px;
 							background: #fff;
 							position: absolute;
 							top: 270px;
@@ -447,8 +460,12 @@
 
 					.posters-img:before {
 						content: '';
-						width: 50px;
-						height: 50px;
+						// width: 50px;
+						// height: 50px;
+						// width: 44px;
+						// height: 44px;
+						width: 40px;
+						height: 40px;
 						background: #fff;
 						position: absolute;
 						top: 270px;

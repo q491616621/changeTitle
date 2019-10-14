@@ -31,19 +31,19 @@
 			</div>
 			<div style="width: 100%;">
 				<div class="video-li flx-r" @click="goVideoPlay(1)">
-					<div>还款使用说明</div>
-					<img src="../../../assets/img/addCreditCard_choose.png">
-				</div>
-	<!-- 			<a class="video-li flx-r" href="http://47.112.10.80/producth5/video/video1.mp4" title="还款使用说明">
-					<div>还款使用说明</div>
-					<img src="../../../assets/img/addCreditCard_choose.png">
-				</a> -->
-				<div class="video-li flx-r" @click="goVideoPlay(2)">
 					<div>绑卡使用说明</div>
 					<img src="../../../assets/img/addCreditCard_choose.png">
 				</div>
+				<div class="video-li flx-r" @click="goVideoPlay(2)">
+					<div>分享赚钱</div>
+					<img src="../../../assets/img/addCreditCard_choose.png">
+				</div>
 				<div class="video-li flx-r border-none" @click="goVideoPlay(3)">
-					<div>如何赚钱使用说明</div>
+					<div>会员分红说明</div>
+					<img src="../../../assets/img/addCreditCard_choose.png">
+				</div>
+				<div class="video-li flx-r border-none" @click="goVideoPlay(4)">
+					<div>还款使用说明</div>
 					<img src="../../../assets/img/addCreditCard_choose.png">
 				</div>
 			</div>
@@ -77,17 +77,22 @@
 					// this.$toast({
 					// 	message:'视频录制中，敬请期待！'
 					// })
-					window.location.href = 'http://47.112.10.80/producth5/video/video1.mp4'
+					window.location.href = 'https://www.kfmanager.com/producth5/video/video1.mp4'
 				}else if(type == 2){
 					// this.$toast({
 					// 	message:'视频录制中，敬请期待！'
 					// })
-					window.location.href = 'http://47.112.10.80/producth5/video/video1.mp4'
+					window.location.href = 'https://www.kfmanager.com/producth5/video/video2.mp4'
 				}else if(type == 3){
 					// this.$toast({
 					// 	message:'视频录制中，敬请期待！'
 					// })
-					window.location.href = 'http://47.112.10.80/producth5/video/video1.mp4'
+					window.location.href = 'https://www.kfmanager.com/producth5/video/video3.mp4'
+				}else if(type == 4){
+					// this.$toast({
+					// 	message:'视频录制中，敬请期待！'
+					// })
+					window.location.href = 'https://www.kfmanager.com/producth5/video/video4.mp4'
 				}
 			}
 		}
@@ -135,7 +140,7 @@
 		}
 	}
 	.title{
-		height: 240px!important;
+		height: 320px!important;
 	}
 	.img1{
 		width: 60px!important;

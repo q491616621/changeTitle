@@ -299,10 +299,15 @@
 					// 判断该用户的通道是否都是绑定失败的,如果都是失败的话,就不继续下面的操作了，直接提示用户去选择其他还款方式了
 					let value = false;
 					let a = 2;
+					// 判断是否在该还款方式中是否所有的通道都绑定失败
 					value = channelList.every(item=>item.isCardBindsuc == a)
 					if(value){
+						let method = '智能还款'
+						if(this.cardInfo.repaymothod == 2){
+							method = '完美还款'
+						}
 						this.$toast({
-							message:'您在该还款方式中，并未成功绑定过通道无法使用该方式还款，请选择其他还款方式',
+							message:`该还款方式您没有成功绑定的通道，无法使用该方式还款，请选择"${method}"进行还款`,
 							forbidClick:true,
 							duration:5000,
 							onClose:()=>{

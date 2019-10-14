@@ -177,7 +177,7 @@
 			type(value) {
 				let type = ''
 				if (value == 1) {
-					type = '代还返佣'
+					type = '推广奖励'
 				} else if (value == 2) {
 					type = '直推会员返现'
 				}
