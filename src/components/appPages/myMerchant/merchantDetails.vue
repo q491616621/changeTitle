@@ -18,7 +18,9 @@
 				</div>
 				<div class="status flx-r">
 					<div :class="item.authStatus == 0?'real-name2':'real-name1'">{{item.authStatus == 0?'未实名':'已实名'}}</div>
-					<div :class="item.memberRoute == null||item.memberRoute==0?'vip1':'vip2'">{{item.memberRoute==null||item.memberRoute==0?'普通':'VIP'}}</div>
+					<!-- <div :class="item.memberRoute == null||item.memberRoute==0?'vip1':'vip2'">{{item.memberRoute==null||item.memberRoute==0?'普通':'VIP'}}</div> -->
+					<div :class="item.memberLevel == 1?'vip1':'vip2'">{{item.memberLevel|memberName}}</div>
+					<!-- <div>{{item.memberLevel|memberName}}</div> -->
 				</div>
 				<!-- <div class="phone">
 					<img src="../../../assets/img/phone2.png">
@@ -117,6 +119,17 @@
 				}
 			},
 		},
+		filters:{
+			// 会员名称
+			memberName:(value)=>{
+				let arr = ['普通VIP','金卡会员','钻石会员','城市合伙人','运营中心','联合创始人'];
+				let arr2 = arr.filter((cur,index)=>{
+					if(index+1 == value)return cur;
+				}) 
+				if(typeof(arr2[0]) == 'undefined')arr2[0] = '普通VIP'
+				return arr2[0];
+			}
+		}
 	};
 </script>
 
