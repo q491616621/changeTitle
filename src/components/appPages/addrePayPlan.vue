@@ -72,6 +72,20 @@
 							</van-radio>
 						</van-radio-group>
 					</div>
+					<!-- 默认日期/定制日期选择 -->
+					<div class="road flx-rs medium">
+						<!-- <div class="name">消费方式</div> -->
+						<van-radio-group v-model="radio3" class='radio-box flx-rs' @change='changeRadio3'>
+							<van-radio :name="0">
+								默认日期顺序还款
+								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
+							</van-radio>
+							<van-radio :name="1">
+								默认日期顺序还款
+								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
+							</van-radio>
+						</van-radio-group>
+					</div>
 					<div class="city-picker flx-rs medium" v-if="isSupportLand == 1">
 						<div class="pick-title">落地城市</div>
 						<div class="pick-content flx-rs" @click="showPicker">
@@ -148,6 +162,7 @@
 				}],
 				radio: 0, //还款通道
 				radio2: 1, //还款方式
+				radio3:0,//还款日期选择方式，0默认日期，1手动选择的日期
 				planInfo: {
 					bindcardUniqueId: null, //绑卡标识id
 					repayAmount: null, //还款总额
@@ -427,6 +442,10 @@
 			changeRadio2(e) {
 				let name = e;
 				this.planInfo.repayMode = name;
+			},
+			changeRadio3(e){
+				let name = e;
+				console.log(e)
 			},
 			// 调起省市选择框
 			showPicker() {
