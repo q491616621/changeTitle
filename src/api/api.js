@@ -25,7 +25,7 @@ axios.interceptors.request.use(config => {
 })
 // 响应拦截器
 axios.interceptors.response.use(response => {
-	console.log(response)
+	// console.log(response)
 	Toast.clear()
 	return response
 }, error => {
@@ -161,7 +161,7 @@ export function post(url, data = {}) {
 				// 判断是否有返回的错误信息,没有的话提示错误码
 				Toast({
 					message:res.data.message||res.status,
-					forbidClick: true
+					// forbidClick: true,
 				})
 				resolve(null)
 			}

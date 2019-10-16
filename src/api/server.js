@@ -27,4 +27,5 @@ export const server = {
   newRepayChannels:(data)=>{return post('/plan/repayChannels.do',data)},//查询代还通道列表(新)
   countSubAccounts:(data)=>{return post('/user/countSubAccounts.do',data)},//查询直接间接推荐总数
   querySubAccountList:(data)=>{return post('/user/querySubAccountList.do',data)},//查询直接或间接人数列表
+  testSdjBindcard:(data)=>{return post('/admin/help/testSdjBindcard.do',data)},//获取盛迪佳外链代码接口
 }

@@ -6,7 +6,7 @@
 		<div class="server-box flx-c">
 			<div class="app-name flx-cas">
 				<div class="bold">安安卡管家</div>
-				<div>版本号1.0.2</div>
+				<div>版本号1.0.3</div>
 			</div>
 			<div class="server-info flx-cs">
 				<div class="flx-rs">
@@ -21,7 +21,7 @@
 				</div>
 			</div>
 			<div class="server-weChat flx-c">
-				<div class="title">客服微信</div>
+				<div class="title" @click="goTest">客服微信</div>
 				<div class="content flx-c">
 					<div>1.复制客服微信:18924596162</div>
 					<div>2.打开微信,点击右上角“+”,【添加朋友】</div>
@@ -57,6 +57,12 @@
 			this.copyBtn = new this.clipboard(this.$refs.copy);
 		},
 		methods: {
+			goTest(){
+				return;
+				this.$router.push({
+					name:'test'
+				})
+			},
 			// 复制微信
 			copyWx() {
 				let clipboard = this.copyBtn;
