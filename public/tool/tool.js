@@ -73,6 +73,39 @@ let tool = {
 		return dayCount;
 	},
 	//-----------------------------------------------------------------------------------------------------
+	// 检查下个月的天数
+	nextDays(){
+		let date = new Date();
+		let year = date.getFullYear();
+		let month = date.getMonth()+2;
+		if(month>12){
+			year += 1;
+			month = 1;
+		}
+		let now = new Date(year,month,0);
+		let dayCount = now.getDate();
+		return dayCount;
+	},
+	//-----------------------------------------------------------------------------------------------------
+	// 检查下个月的天数
+	getWeek(type){
+		let date = new Date();
+		let year = date.getFullYear();
+		let month = date.getMonth()+1;
+		let week;
+		if(type == 'current'){
+			week = new Date(`${year},${month},01`).getDay();
+		}else{
+			month++;
+			if(month>12){
+				year += 1;
+				month = 1;
+			}
+			week = new Date(`${year},${month},01`).getDay();
+		}
+		return week
+	},
+	//-----------------------------------------------------------------------------------------------------
 	// 加载中弹窗
 	toastLoading(){
 		Toast.loading({

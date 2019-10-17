@@ -124,8 +124,48 @@
 			</van-popup>
 		</div>
 		<!-- 日期选择器 -->
-		<!-- 		<van-popup v-model="show" position='bottom' style="height: 80%;">
-		</van-popup> -->
+		<van-popup class="date-box" v-model="show" position='bottom' style="height: 80%;" :close-on-click-overlay='false'>
+			<div class="date-title flx-r">
+				<div class="cancel" @click="cancelDate">取消</div>
+				<div class="title">
+					<div class="name">制定还款日期</div>
+					<div class="day-num">
+						<span>已选择天数：</span>
+						<span>0</span>
+						<span>天</span>
+					</div>
+				</div>
+				<div class="sure">确定</div>
+			</div>
+			<div class="date-table">
+<!-- 				<div class="title flx-r">
+					<img src="../../assets/img/addrePayPlan/left.png">
+					<div class="time">
+						<span>2019</span>
+						<span>年</span>
+						<span>10</span>
+						<span>月</span>
+					</div>
+					<img src="../../assets/img/addrePayPlan/right.png">
+				</div> -->
+				<div class="date-list">
+					<ul class="title flx-rs">
+						<li v-for="(item,index) in ['日','一','二','三','四','五','六']" :key='index'>{{item}}</li>
+					</ul>
+					<ul class="title flx-rs">
+						<li v-for="(item,index) in arr1" :key='index' class="li-choose">{{item}}</li>
+					</ul>
+				</div>
+				<div class="date-list">
+					<ul class="title flx-rs">
+						<li v-for="(item,index) in ['日','一','二','三','四','五','六']" :key='index'>{{item}}</li>
+					</ul>
+					<ul class="title flx-rs">
+						<li v-for="(item,index) in arr2" :key='index' class="li-no-choose">{{item}}</li>
+					</ul>
+				</div>
+			</div>
+		</van-popup>
 	</div>
 </template>
 <script>
@@ -202,7 +242,11 @@
 				],
 				isSupportLand: '', //是否支持选择落地城市，1支持，非1不支持
 				radioChange: false, //判断刚开始是否触发通道改变的方法
+				// --------------------------------------------------------------------------
 				show: false,
+				arr1:[],
+				arr2:[],
+				
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -255,11 +299,60 @@
 			this.isFirstEnter = false;
 		},
 		methods: {
+			// --------------------------------------------------------------
 			showPopup() {
-				this.show = true;
+				// let billingDay = this.planInfo.billingDay;//账单日
+				// let repaymentDay = this.planInfo.repaymentDay;//还款日
+				let billingDay = 16;//账单日
+				let repaymentDay = 16;//还款日
+				let strideMonth;//是否跨月
+				
+				let todayDate = new Date().getDate();//今天日期
+				// -------------------------
+				let dayCount = tool.days();//获取当前月份的天数
+				let nextDaysCount = tool.nextDays();//获取下个月份的天数
+				let curWeek = tool.getWeek('current');//获取当前月份第一天是星期几
+				let nextWeek = tool.getWeek('next');//获取下个月第一天是星期几
+				let arr1 = [];
+				let arr2 = [];
+				let arr3 = [];
+				let day = 0;
+				let day2 = 0;
+				for (let i = 0; i < 35; i++) {
+					if(i<curWeek||day>=dayCount){
+						arr1.push('');
+					}else{
+						day++
+						arr1.push(day);
+					}
+				}
+				for (let i = 0; i < 35; i++) {
+					if(i<nextWeek||day2>=nextDaysCount){
+						arr2.push('');
+					}else{
+						day2++
+						arr2.push(day2);
+					}
+				}
+				// 确认该计划是否跨月了
+				if(billingDay >= repaymentDay){
+					strideMonth = true;
+					
+				}else{
+					strideMonth = false;
+				}
+				
+				this.arr1 = arr1;
+				this.arr2 = arr2;
+				this.$nextTick(()=>{
+					this.show = true;
+				})
 			},
-
-
+			// 取消设置日期
+			cancelDate(){
+				this.show = false;
+			},
+			// ---------------------------------------------------------------
 			// 把上个页面传递过来的数据设置给这个页面
 			setCardInfo() {
 				let cardInfo = this.$route.params;
@@ -836,7 +929,7 @@
 
 		.repayPlan {
 			width: 690px;
-			height: 740px;
+			height: 640px;
 			background: rgba(255, 255, 255, 1);
 			box-shadow: 0px 3px 12px 0px rgba(212, 212, 212, 0.5);
 			border-radius: 14px;
@@ -919,7 +1012,7 @@
 			}
 
 			.repayPlan-btn {
-				margin-top: 188px;
+				margin-top: 88px;
 				width: 630px;
 				height: 90px;
 				background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
@@ -938,6 +1031,76 @@
 			width: 400px;
 			height: 80px;
 			line-height: 80px;
+		}
+	}
+
+	// 日期选择器
+	.date-box {
+		.date-title {
+			width: 100%;
+			height: 120px;
+			// background: pink;
+			box-sizing: border-box;
+			border-bottom: 2px solid #f5f5f5;
+			padding: 0 30px;
+			font-size: 28px;
+			justify-content: space-between;
+
+			.title {
+				font-size: 30px;
+				color: #333;
+				font-weight: bold;
+
+				.day-num {
+					padding-top: 5px;
+					font-size: 24px;
+					font-weight: bold;
+				}
+			}
+
+			.cancel,
+			.sure {
+				width: 80px;
+				height: 80px;
+				background: pink;
+				line-height: 80px;
+			}
+		}
+		.date-table{
+			.title{
+				padding-top: 20px;
+				font-size: 26px;
+				.time{
+					margin: 0 20px;
+					color: #333;
+					font-weight: bold;
+				}
+				img{
+					width: 40px;
+					height: 40px;
+				}
+			}
+			.date-list{
+				border-bottom: 20px solid #e0e0e0;
+				.title{
+					justify-content: space-around;
+					flex-wrap: wrap;
+					.li-choose{
+						width: 107px;
+						height: 60px;
+						font-weight: bold;
+						color: #333;
+						line-height: 60px;
+					}
+					.li-no-choose{
+						width: 107px;
+						height: 60px;
+						font-weight: bold;
+						color: #999;
+						line-height: 60px;
+					}
+				}
+			}
 		}
 	}
 </style>
