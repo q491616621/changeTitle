@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-<!-- 		<div class="title-bar">
+		<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
 		</div> -->
 		<!-- 信用卡列表 -->
@@ -80,7 +80,7 @@
 								默认日期顺序还款
 								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
 							</van-radio>
-							<van-radio :name="1">
+							<van-radio :name="1" @click="showPopup">
 								默认日期顺序还款
 								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
 							</van-radio>
@@ -97,13 +97,8 @@
 							<div v-if="!planInfo.provinceName" class="pick-tips">请选择落地城市</div>
 						</div>
 					</div>
-					<!-- 	<div class="protocol flx-rs medium">
-						<img src="../../assets/img/protocol_Yse.png" alt="注册协议">
-						<div>已阅读并同意</div>
-						<div class="protocol-li">《注册协议》</div>
-					</div> -->
-					<button class="repayPlan-btn bold" @click="PreviewRepayment">预览还款计划</button>
 				</van-cell-group>
+				<button class="repayPlan-btn bold" @click="PreviewRepayment">预览还款计划</button>
 			</div>
 		</div>
 		<!-- 输入金额框 -->
@@ -128,6 +123,9 @@
 				 :item-height="60" ref='cityPicker' />
 			</van-popup>
 		</div>
+		<!-- 日期选择器 -->
+		<!-- 		<van-popup v-model="show" position='bottom' style="height: 80%;">
+		</van-popup> -->
 	</div>
 </template>
 <script>
@@ -162,7 +160,7 @@
 				}],
 				radio: 0, //还款通道
 				radio2: 1, //还款方式
-				radio3:0,//还款日期选择方式，0默认日期，1手动选择的日期
+				radio3: 0, //还款日期选择方式，0默认日期，1手动选择的日期
 				planInfo: {
 					bindcardUniqueId: null, //绑卡标识id
 					repayAmount: null, //还款总额
@@ -203,7 +201,8 @@
 					30, 31
 				],
 				isSupportLand: '', //是否支持选择落地城市，1支持，非1不支持
-				radioChange:false,//判断刚开始是否触发通道改变的方法
+				radioChange: false, //判断刚开始是否触发通道改变的方法
+				show: false,
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -256,6 +255,11 @@
 			this.isFirstEnter = false;
 		},
 		methods: {
+			showPopup() {
+				this.show = true;
+			},
+
+
 			// 把上个页面传递过来的数据设置给这个页面
 			setCardInfo() {
 				let cardInfo = this.$route.params;
@@ -315,17 +319,17 @@
 					let value = false;
 					let a = 2;
 					// 判断是否在该还款方式中是否所有的通道都绑定失败
-					value = channelList.every(item=>item.isCardBindsuc == a)
-					if(value){
+					value = channelList.every(item => item.isCardBindsuc == a)
+					if (value) {
 						let method = '智能还款'
-						if(this.cardInfo.repaymothod == 2){
+						if (this.cardInfo.repaymothod == 2) {
 							method = '完美还款'
 						}
 						this.$toast({
-							message:`该还款方式您没有成功绑定的通道，无法使用该方式还款，请选择"${method}"进行还款`,
-							forbidClick:true,
-							duration:5000,
-							onClose:()=>{
+							message: `该还款方式您没有成功绑定的通道，无法使用该方式还款，请选择"${method}"进行还款`,
+							forbidClick: true,
+							duration: 5000,
+							onClose: () => {
 								this.$router.go(-1)
 							}
 						})
@@ -335,11 +339,11 @@
 					let defaultChannelCode = this.cardInfo.defaultChannelCode; //获取到我们默认的通道
 					let radio = 0;
 					for (let i = 0; i < channelList.length; i++) {
-						if(channelList[i].channelCode == defaultChannelCode && channelList[i].isCardBindsuc !=2){
+						if (channelList[i].channelCode == defaultChannelCode && channelList[i].isCardBindsuc != 2) {
 							radio = i;
 							break;
-						}else{
-							if(channelList[i].isCardBindsuc != 2){
+						} else {
+							if (channelList[i].isCardBindsuc != 2) {
 								radio = i;
 								break;
 							}
@@ -409,7 +413,7 @@
 			},
 			// 选择通道
 			changeRadio(e) {
-				if(!this.radioChange)return;
+				if (!this.radioChange) return;
 				let name = e;
 				// 选择通道时,设置通道id
 				this.planInfo.channelCode = this.channelList[name].channelCode;
@@ -443,7 +447,7 @@
 				let name = e;
 				this.planInfo.repayMode = name;
 			},
-			changeRadio3(e){
+			changeRadio3(e) {
 				let name = e;
 				console.log(e)
 			},
@@ -914,23 +918,8 @@
 				}
 			}
 
-			.protocol {
-				font-size: 24px;
-
-				img {
-					width: 22px;
-					height: 22px;
-					flex-shrink: 0;
-					padding-right: 15px;
-				}
-
-				.protocol-li {
-					color: #1A82FF;
-				}
-			}
-
 			.repayPlan-btn {
-				margin-top: 88px;
+				margin-top: 188px;
 				width: 630px;
 				height: 90px;
 				background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
