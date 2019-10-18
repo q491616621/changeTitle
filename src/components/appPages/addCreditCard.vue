@@ -296,6 +296,7 @@
 						this.$toast({
 							message:'该通道不支持这个银行绑定，已为您放开所有通道，请选择其他通道绑定',
 							forbidClick:true,
+							duration: 1500,
 							onClose:()=>{
 								this.failHandle()
 							}
@@ -312,6 +313,7 @@
 								this.$toast({
 									message:res.message,
 									forbidClick:true,
+									duration: 1500,
 									onClose:()=>{
 										this.failHandle();//执行失败处理
 									}
@@ -413,7 +415,8 @@
 					this.smsCode = null;
 					// this.verify = null;
 					this.$toast({
-						message:'卡片绑定失败，建议选择其他通道进行尝试',
+						message:'卡片绑定失败，正在为您放开所有通道，建议稍后选择其他通道进行尝试，勿离开此页面',
+						duration:1500,
 						forbidClick:true,
 						onClose:()=>{
 							this.failHandle()//执行失败处理函数
