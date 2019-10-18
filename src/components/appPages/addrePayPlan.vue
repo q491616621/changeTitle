@@ -153,7 +153,10 @@
 						<li v-for="(item,index) in ['日','一','二','三','四','五','六']" :key='index'>{{item}}</li>
 					</ul>
 					<ul class="title flx-rs">
-						<li v-for="(item,index) in arr1" :key='index' class="li-choose">{{item}}</li>
+						<!-- <li v-for="(item,index) in arr1" :key='index' class="li-choose">{{item.dateNum}}</li> -->
+						<li v-for="(item,index) in arr1" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'" @click="chooseDate(item,'arr1')">
+							<div :class="item.checked?'li-has-choose':''">{{item.dateNum}}</div>
+						</li>
 					</ul>
 				</div>
 				<div class="date-list">
@@ -161,7 +164,7 @@
 						<li v-for="(item,index) in ['日','一','二','三','四','五','六']" :key='index'>{{item}}</li>
 					</ul>
 					<ul class="title flx-rs">
-						<li v-for="(item,index) in arr2" :key='index' class="li-no-choose">{{item}}</li>
+						<li v-for="(item,index) in arr2" :key='index' :class="item.chooseable?'li-choose':'li-no-choose'">{{item.dateNum}}</li>
 					</ul>
 				</div>
 			</div>
@@ -246,7 +249,7 @@
 				show: false,
 				arr1:[],
 				arr2:[],
-				
+				chooseDateArr:[],
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -300,11 +303,12 @@
 		},
 		methods: {
 			// --------------------------------------------------------------
+			// 调起日期选择框
 			showPopup() {
 				// let billingDay = this.planInfo.billingDay;//账单日
 				// let repaymentDay = this.planInfo.repaymentDay;//还款日
-				let billingDay = 16;//账单日
-				let repaymentDay = 16;//还款日
+				let billingDay = 20;//账单日
+				let repaymentDay = 18;//还款日
 				let strideMonth;//是否跨月
 				
 				let todayDate = new Date().getDate();//今天日期
@@ -315,38 +319,162 @@
 				let nextWeek = tool.getWeek('next');//获取下个月第一天是星期几
 				let arr1 = [];
 				let arr2 = [];
-				let arr3 = [];
+				// let arr3 = [];
 				let day = 0;
 				let day2 = 0;
+				
+				
+				// 确认该计划是否跨月了
+				if(billingDay >= repaymentDay||repaymentDay<=todayDate){
+					// 账单日大于等于还款日或者还款日小于等于当天日期
+					strideMonth = true;
+				}else{
+					strideMonth = false;
+				}
+				console.log(strideMonth)
 				for (let i = 0; i < 35; i++) {
 					if(i<curWeek||day>=dayCount){
-						arr1.push('');
+						arr1.push({dateNum:'',chooseable:false,checked:false});
 					}else{
 						day++
-						arr1.push(day);
+						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){//账单日=还款日或者账单日-还款日=1；
+							arr1.push({dateNum:day,chooseable:false,checked:false});//全部不给选
+						}else if(billingDay-repaymentDay>1){//账单日>还款日(账单日大于还款日就一定是跨月了的)
+							if(day>billingDay&&day>todayDate){//日期大于账单日,且大于当前日
+								arr1.push({dateNum:day,chooseable:true,checked:false});
+							}else{
+								arr1.push({dateNum:day,chooseable:false,checked:false});
+							}
+						}else if(repaymentDay-billingDay>1){//还款日>账单日
+							if(repaymentDay>todayDate){//还款日大于当前日期(不需要跨月)		
+								if(day>billingDay&&day>todayDate&&day<repaymentDay){//日期大于账单日且大于当前日且小于还款日
+									arr1.push({dateNum:day,chooseable:true,checked:false});
+								}else{
+									arr1.push({dateNum:day,chooseable:false,checked:false});
+								}
+							}else{//还款日小于或等于当前日期(需要跨月)
+								if(day>repaymentDay&&day>todayDate){//日期大于账单日且大于当前日
+									arr1.push({dateNum:day,chooseable:true,checked:false});
+								}else{
+									arr1.push({dateNum:day,chooseable:false,checked:false});
+								}
+							}
+						}
+						// else if(repaymentDay-billingDay>1&&repaymentDay>todayDate){//还款日大于账单日多于1天,且还款日大于当天日期
+						// 	if(day<repaymentDay&&day>billingDay&&!strideMonth&&day>todayDate){//在账单日还款日区间内，非跨月，日期大于当天日期
+						// 		arr1.push({dateNum:day,chooseable:true});
+						// 	}else{
+						// 		arr1.push({dateNum:day,chooseable:false});
+						// 	}
+						// }else if(billingDay>todayDate&&repaymentDay<todayDate){//还款日小于账单日,且还款日小于当前日期
+						// 	if(day>billingDay){//大于账单日
+						// 		arr1.push({dateNum:day,chooseable:true});
+						// 	}else{
+						// 		arr1.push({dateNum:day,chooseable:false});
+						// 	}
+						// }else if(billingDay>todayDate&&repaymentDay<billingDay){//账单日大于当前日，且还款日小于账单日
+						// 	if(day>billingDay){//大于账单日
+						// 		arr1.push({dateNum:day,chooseable:true});
+						// 	}else{
+						// 		arr1.push({dateNum:day,chooseable:false});
+						// 	}
+						// }else if(billingDay<todayDate&&repaymentDay<billingDay){//账单日小于当前日，且还款日小于账单日
+						// 	if(day>billingDay&&day>todayDate){//大于账单日且大于当日
+						// 		arr1.push({dateNum:day,chooseable:true});
+						// 	}else{
+						// 		arr1.push({dateNum:day,chooseable:false});
+						// 	}
+						// }
+						else{
+							console.log(1111)
+							arr1.push({dateNum:day,chooseable:false,checked:false});
+						}
+						// arr1.push({dateNum:day,chooseable:true});
 					}
 				}
 				for (let i = 0; i < 35; i++) {
 					if(i<nextWeek||day2>=nextDaysCount){
-						arr2.push('');
+						arr2.push({dateNum:'',chooseable:false,checked:false});
 					}else{
 						day2++
-						arr2.push(day2);
+						// 判断还款日是否等于账单日或者还款日距离账单日只有1天，是的话所有的天数不可选
+						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){
+							arr2.push({dateNum:day2,chooseable:false,checked:false});
+						}else if(billingDay-repaymentDay>1){//账单日>还款日(账单日大于还款日就一定是跨月了的)
+							if(day2<repaymentDay){
+								arr2.push({dateNum:day2,chooseable:true,checked:false});
+							}else{
+								arr2.push({dateNum:day2,chooseable:false,checked:false});
+							}
+						}else if(repaymentDay-billingDay>1){//还款日>账单日
+							if(repaymentDay>todayDate){//还款日大于当前日期(不需要跨月)
+								arr2.push({dateNum:day2,chooseable:false,checked:false});
+							}else{//还款日小于或等于当前日期(需要跨月)
+								if(day2<repaymentDay){//还款日前
+									arr2.push({dateNum:day2,chooseable:true,checked:false});
+								}else{
+									arr2.push({dateNum:day2,chooseable:false,checked:false});
+								}
+							}
+						}
+						// else if(billingDay>todayDate&&repaymentDay<todayDate){//还款日小于账单日，且还款日小于当前日期
+						// 	if(day2<repaymentDay){//小于还款日
+						// 		arr2.push({dateNum:day2,chooseable:true})
+						// 	}else{
+						// 		arr2.push({dateNum:day2,chooseable:false})
+						// 	}
+						// }else if(billingDay>todayDate&&repaymentDay<billingDay){//账单日大于当前日，且还款日小于账单日
+						// 	if(day2<repaymentDay){//小于还款日
+						// 		arr2.push({dateNum:day2,chooseable:true})
+						// 	}else{
+						// 		arr2.push({dateNum:day2,chooseable:false})
+						// 	}
+						// }else if(billingDay<todayDate&&repaymentDay<billingDay){//账单日小于当前日，且还款日小于账单日
+						// 	if(day2<repaymentDay){//小于还款日
+						// 		arr2.push({dateNum:day2,chooseable:true});
+						// 	}else{
+						// 		arr2.push({dateNum:day2,chooseable:false});
+						// 	}
+						// }
+						else{
+							arr2.push({dateNum:day2,chooseable:false,checked:false});
+						}
+						// else if(repaymentDay-billingDay>1){
+						// 	if(day2<repaymentDay&&day2>billingDay&&strideMonth){
+						// 		arr2.push({dateNum:day2,chooseable:true});
+						// 	}else{
+						// 		arr2.push({dateNum:day2,chooseable:false});
+						// 	}
+						// }else if(repaymentDay-billingDay<0){
+						// 	if(day2<repaymentDay&&day2>billingDay&&strideMonth){
+						// 		arr2.push({dateNum:day2,chooseable:true});
+						// 	}else{
+						// 		arr2.push({dateNum:day2,chooseable:false});
+						// 	}
+						// }
+						// arr2.push({dateNum:day2,chooseable:false});
 					}
 				}
-				// 确认该计划是否跨月了
-				if(billingDay >= repaymentDay){
-					strideMonth = true;
-					
-				}else{
-					strideMonth = false;
-				}
+				
 				
 				this.arr1 = arr1;
 				this.arr2 = arr2;
 				this.$nextTick(()=>{
 					this.show = true;
 				})
+			},
+			// 选择日期
+			chooseDate(item,type){
+				if(!item.chooseable)return;
+				if(type == 'arr1'){
+					let arr1 = this.arr1.map(cur=>{
+						
+					})
+					
+				}else{
+					
+				}
+				console.log(type)
 			},
 			// 取消设置日期
 			cancelDate(){
@@ -1098,6 +1226,14 @@
 						font-weight: bold;
 						color: #999;
 						line-height: 60px;
+					}
+					.li-has-choose{
+						width: 55px;
+						height: 55px;
+						border-radius: 50%;
+						background: #6abcff;
+						line-height: 55px;
+						color: #fff;
 					}
 				}
 			}
