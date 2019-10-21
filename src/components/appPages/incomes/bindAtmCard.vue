@@ -11,19 +11,28 @@
 				 placeholder="请输入姓名" />
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.certificateNum" disabled clearable label="身份证"
 				 placeholder="请输入身份证号码" /> -->
+				 <!-- 银行卡号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardNumb" clearable
 				 label="储蓄卡" placeholder="请输入储蓄卡卡号" />
-				<!-- 	<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.userName" clearable label="开户行"
-				 placeholder="请输入开户行" /> -->
-
-				<!-- 	<div class="addPicker-li flx-rs">
-					<div>开户行</div>
-					<div class="right" @click="showBankPicker">
-						<div v-if="cardInfo.bankName ==''" class="default">请选择开户行</div>
+				 <!-- 银行名称 -->
+				<div class="addPicker-li flx-rs">
+					<div>银行名称</div>
+					<div class="right" @click="chooseBankBox = true">
+						<div v-if="cardInfo.bankName ==''" class="default">请选择银行</div>
 						<div v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
 						<img src="../../../assets/img/addCreditCard_choose.png" />
 					</div>
-				</div> -->
+				</div>
+				<!-- 开户支行 -->
+				<div class="addPicker-li flx-rs">
+					<div>开户支行</div>
+					<div class="right" @click="chooseBankBox = true">
+						<div v-if="cardInfo.bankName ==''" class="default">请选择所在开户支行</div>
+						<div v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
+				<!-- 开户行省市 -->
 				<div class="city-picker flx-rs medium">
 					<div class="pick-title">开户行省市</div>
 					<!-- <div class="pick-content flx-rs" @click="showCityPicker"> -->
@@ -43,13 +52,13 @@
 				<button class="sure-btn bold" @click="bindAtmCard">确认绑定</button>
 			</van-cell-group>
 		</div>
-		<!-- 选择开户行 -->
-		<!-- <div class="addCreditCard-choose-picker">
+		<!-- 选择银行 -->
+		<div class="addCreditCard-choose-picker">
 			<van-popup v-model="chooseBankBox" position="bottom">
-				<van-picker show-toolbar title="请选择信用卡开户行" :columns="bankColumns" @cancel="chooseBankBox=false" @confirm="sureBank"
+				<van-picker show-toolbar title="请选择所属银行" :columns="bankColumns" @cancel="chooseBankBox=false" @confirm="sureBank"
 				 :item-height='50' />
 			</van-popup>
-		</div> -->
+		</div>
 		<!-- 省市选择器 -->
 		<div class="addrePayPlan-choose-picker">
 			<van-popup v-model="chooseCityBox" position="bottom">
@@ -57,6 +66,7 @@
 				 :item-height="60" />
 			</van-popup>
 		</div>
+		
 	</div>
 </template>
 <script>
@@ -82,13 +92,35 @@
 					id: '',
 					bankCardNumb: '', //储蓄卡号码
 					bankCardMobile: '', //预留银行的手机号
-					bankName: '', //开户行
+					bankName: '', //选择的银行名称
+					bankCode:'',//选择的银行code
 					province: '', //省份名称
 					city: '', //城市名称
 					bankNameBranch: '', //支行
 				},
 				chooseBankBox: false, //控制银行的picker盒子显示与否
-				// bankColumns: ['建设银行', '中国银行', '工商银行', '农业银行', '人民银行'], //银行列表
+				bankColumns: [{
+					text: '建设银行',
+					bankCode: 1000
+				}, {
+					text: '中国银行',
+					bankCode: 1001
+				}, {
+					text: '工商银行',
+					bankCode: 1002
+				}, {
+					bankName: '农业银行',
+					text: 1003
+				}, {
+					text: '人民银行',
+					bankCode: 1004
+				}, {
+					text: '浦发银行',
+					bankCode: 1005
+				}, {
+					text: '广发银行',
+					bankCode: 1006
+				}], //银行列表
 				chooseCityBox: false, //控制省市的picker盒子显示与否
 				citys: '',
 				columns: [{
@@ -133,15 +165,13 @@
 				this.columns[0].values = arr;
 				this.columns[1].values = arr2;
 			},
-			// 打开银行选择器
-			// showBankPicker() {
-			// 	this.chooseBankBox = true;
-			// },
-			// 选择的银行
-			// sureBank(value) {
-			// 	this.cardInfo.bankName = cardInfo.bankCardNumb;
-			// 	this.chooseBankBox = false;
-			// },
+			// 确认选择的银行
+			sureBank(value) {
+				console.log(value)
+				this.cardInfo.bankName = value.text;
+				this.cardInfo.bankCode = value.bankCode;
+				this.chooseBankBox = false;
+			},
 			// 打开省市选择器
 			showCityPicker() {
 				// let init = {};
@@ -195,7 +225,7 @@
 				let verifier = {
 					'bankCardNumb': '请填写储蓄卡号码', //储蓄卡号码
 					'province': '请选择开户行省市', //省份名称
-					// 'bankName': '请选择开户行', //开户行
+					'bankName': '请选择开户行', //开户行
 					// 'branchBank': '请填写支行', //支行
 					'bankCardMobile': '请填写预留银行手机号', //预留银行的手机号
 				}
