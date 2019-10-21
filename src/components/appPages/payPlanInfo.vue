@@ -28,9 +28,13 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div style="height: 3000px;width: 100%;background: pink;"></div> -->
+			<!-- 选择手动设置还款日期时已选择的日期表 -->
+			<div class="repay-date" v-if="showRepayDate">
+				<span>还款日期：</span>
+				<span>{{repayDate.chooseDateArr|setRepayDate}}</span>
+			</div>
 			<!-- 还款信息列表 -->
-			<div class="repayInfo-list flx-cas">
+			<div :class="showRepayDate?'repayInfo-list flx-cas margin-top317':'repayInfo-list flx-cas margin-top245'">
 				<div class="list-li" v-for="(item,index) in planInfo.voList" :key='index'>
 					<div class='li-top flx-r medium'>
 						<div>{{item.dateTime}}</div>
@@ -99,6 +103,8 @@
 				cardInfo: null, //上个页面用户填写的卡信息
 				commonLoading: true, //默认加载中，页面加载完成才消失
 				channelType:'',//上个页面传过来的用户选择的还款类型
+				repayDate:'',//上个页面传过来的手动选择还款日期的参数
+				showRepayDate:false,
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -117,7 +123,7 @@
 		activated() {
 			tool.setAppTitle('还款总金额(元)')
 			if (!this.$route.meta.isBack||this.isFirstEnter) {
-				this.getPlanInfo()
+				this.getPlanInfo();
 			}
 			this.isFirstEnter = false;
 		},
@@ -134,7 +140,7 @@
 				surePlanInfo.channelType = this.channelType;
 				this.$router.push({
 					name: 'surePlan',
-					params: surePlanInfo
+					params: surePlanInfo,
 				})
 			},
 			// 增加或者减少期数
@@ -164,6 +170,13 @@
 				this.cardInfo = this.$route.params.cardInfo;
 				//设置上个页面传递过来的channelType
 				this.channelType = this.$route.params.channelType;
+				//设置山歌页面传递过来的手动设置还款日期的参数repayDate
+				this.repayDate = this.$route.params.repayDate;
+				if(JSON.stringify(this.$route.params.repayDate) == '{}'){
+					this.showRepayDate = false;
+				}else{
+					this.showRepayDate = true;
+				}
 			},
 			// 格式化数据
 			forMatInfo(planInfo) {
@@ -201,6 +214,12 @@
 				this.commonLoading = false;
 			}
 		},
+		filters:{
+			setRepayDate(value){
+				let arr = value.map(cur=>cur.dateNum);
+				return arr.join(',');
+			}
+		}
 	};
 </script>
 <style scoped="scoped" lang="less">
@@ -270,14 +289,18 @@
 			}
 		}
 	}
-
+	.margin-top245{
+		margin-top: 245px;
+	}
+	.margin-top317{
+		margin-top: 317px;
+	}
 	// 还款信息列表
 	.repayInfo-list {
 		// margin-top: 293px;
-		margin-top: 245px;
+		// margin-top: 245px;
 		padding: 20px 0px;
 		margin-bottom: 100px;
-
 		.list-li {
 			width: 690px;
 			// height: 470px;
@@ -400,5 +423,17 @@
 			box-shadow: 0px 6px 12px 0px rgba(53, 133, 254, 0.5);
 			border: none;
 		}
+	}
+	// 手动还款日期已选择的日期
+	.repay-date{
+		position: fixed;
+		top: 245px;
+		left: 0;
+		width: 100%;
+		font-size: 28px;
+		background: #fff;
+		padding: 20px;
+		border-bottom: 2px solid #f5f5f5;
+		text-align: left;
 	}
 </style>

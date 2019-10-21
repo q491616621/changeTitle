@@ -81,7 +81,7 @@
 								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
 							</van-radio>
 							<van-radio :name="1" @click="showPopup">
-								默认日期顺序还款
+								选择日期还款
 								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
 							</van-radio>
 						</van-radio-group>
@@ -135,7 +135,7 @@
 						<span>天</span>
 					</div>
 				</div>
-				<div class="sure">确定</div>
+				<div class="sure" @click="sureDate">确定</div>
 			</div>
 			<div class="date-table">
 <!-- 				<div class="title flx-r">
@@ -164,7 +164,9 @@
 						<li v-for="(item,index) in ['日','一','二','三','四','五','六']" :key='index'>{{item}}</li>
 					</ul>
 					<ul class="title flx-rs">
-						<li v-for="(item,index) in arr2" :key='index' :class="item.chooseable?'li-choose':'li-no-choose'">{{item.dateNum}}</li>
+						<li v-for="(item,index) in arr2" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'" @click="chooseDate(item,'arr2')">
+							<div :class="item.checked?'li-has-choose':''">{{item.dateNum}}</div>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -247,9 +249,11 @@
 				radioChange: false, //判断刚开始是否触发通道改变的方法
 				// --------------------------------------------------------------------------
 				show: false,
-				arr1:[],
-				arr2:[],
-				chooseDateArr:[],
+				arr1:[],//日期数组1
+				arr2:[],//日期数组2
+				checkArr1:[],//已经选择的日期数组1
+				checkArr2:[],//已经选择的日期数组2
+				chooseDateArr:[],//已经选择的日期总和
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -281,18 +285,6 @@
 					repayMode: 1, //默认扣1还1
 					repayType: '', //还款方式
 				};
-				// this.columns = [{
-				// 		// values: Object.keys(citys),
-				// 		values: [],
-				// 		className: 'column1'
-				// 	},
-				// 	{
-				// 		// values: citys['浙江'],
-				// 		values: [],
-				// 		className: 'column2',
-				// 		defaultIndex: 2
-				// 	}
-				// ];
 				this.radioChange = false;
 				this.radio = 0; //还款通道
 				this.radio2 = 1;
@@ -305,10 +297,18 @@
 			// --------------------------------------------------------------
 			// 调起日期选择框
 			showPopup() {
+				if(this.planInfo.billingDay==null||this.planInfo.repaymentDay == null){
+					this.$toast({
+						message:'请先选择好‘账单日’和‘还款日’',
+						duration:1500,
+					})
+					this.radio3 = 0;
+					return;
+				}
 				// let billingDay = this.planInfo.billingDay;//账单日
 				// let repaymentDay = this.planInfo.repaymentDay;//还款日
-				let billingDay = 20;//账单日
-				let repaymentDay = 18;//还款日
+				let billingDay = this.planInfo.billingDay;//账单日
+				let repaymentDay = this.planInfo.repaymentDay;//还款日
 				let strideMonth;//是否跨月
 				
 				let todayDate = new Date().getDate();//今天日期
@@ -359,37 +359,10 @@
 									arr1.push({dateNum:day,chooseable:false,checked:false});
 								}
 							}
-						}
-						// else if(repaymentDay-billingDay>1&&repaymentDay>todayDate){//还款日大于账单日多于1天,且还款日大于当天日期
-						// 	if(day<repaymentDay&&day>billingDay&&!strideMonth&&day>todayDate){//在账单日还款日区间内，非跨月，日期大于当天日期
-						// 		arr1.push({dateNum:day,chooseable:true});
-						// 	}else{
-						// 		arr1.push({dateNum:day,chooseable:false});
-						// 	}
-						// }else if(billingDay>todayDate&&repaymentDay<todayDate){//还款日小于账单日,且还款日小于当前日期
-						// 	if(day>billingDay){//大于账单日
-						// 		arr1.push({dateNum:day,chooseable:true});
-						// 	}else{
-						// 		arr1.push({dateNum:day,chooseable:false});
-						// 	}
-						// }else if(billingDay>todayDate&&repaymentDay<billingDay){//账单日大于当前日，且还款日小于账单日
-						// 	if(day>billingDay){//大于账单日
-						// 		arr1.push({dateNum:day,chooseable:true});
-						// 	}else{
-						// 		arr1.push({dateNum:day,chooseable:false});
-						// 	}
-						// }else if(billingDay<todayDate&&repaymentDay<billingDay){//账单日小于当前日，且还款日小于账单日
-						// 	if(day>billingDay&&day>todayDate){//大于账单日且大于当日
-						// 		arr1.push({dateNum:day,chooseable:true});
-						// 	}else{
-						// 		arr1.push({dateNum:day,chooseable:false});
-						// 	}
-						// }
-						else{
+						}else{
 							console.log(1111)
 							arr1.push({dateNum:day,chooseable:false,checked:false});
 						}
-						// arr1.push({dateNum:day,chooseable:true});
 					}
 				}
 				for (let i = 0; i < 35; i++) {
@@ -416,47 +389,31 @@
 									arr2.push({dateNum:day2,chooseable:false,checked:false});
 								}
 							}
-						}
-						// else if(billingDay>todayDate&&repaymentDay<todayDate){//还款日小于账单日，且还款日小于当前日期
-						// 	if(day2<repaymentDay){//小于还款日
-						// 		arr2.push({dateNum:day2,chooseable:true})
-						// 	}else{
-						// 		arr2.push({dateNum:day2,chooseable:false})
-						// 	}
-						// }else if(billingDay>todayDate&&repaymentDay<billingDay){//账单日大于当前日，且还款日小于账单日
-						// 	if(day2<repaymentDay){//小于还款日
-						// 		arr2.push({dateNum:day2,chooseable:true})
-						// 	}else{
-						// 		arr2.push({dateNum:day2,chooseable:false})
-						// 	}
-						// }else if(billingDay<todayDate&&repaymentDay<billingDay){//账单日小于当前日，且还款日小于账单日
-						// 	if(day2<repaymentDay){//小于还款日
-						// 		arr2.push({dateNum:day2,chooseable:true});
-						// 	}else{
-						// 		arr2.push({dateNum:day2,chooseable:false});
-						// 	}
-						// }
-						else{
+						}else{
 							arr2.push({dateNum:day2,chooseable:false,checked:false});
 						}
-						// else if(repaymentDay-billingDay>1){
-						// 	if(day2<repaymentDay&&day2>billingDay&&strideMonth){
-						// 		arr2.push({dateNum:day2,chooseable:true});
-						// 	}else{
-						// 		arr2.push({dateNum:day2,chooseable:false});
-						// 	}
-						// }else if(repaymentDay-billingDay<0){
-						// 	if(day2<repaymentDay&&day2>billingDay&&strideMonth){
-						// 		arr2.push({dateNum:day2,chooseable:true});
-						// 	}else{
-						// 		arr2.push({dateNum:day2,chooseable:false});
-						// 	}
-						// }
-						// arr2.push({dateNum:day2,chooseable:false});
 					}
 				}
-				
-				
+				if(this.checkArr1.length != 0){
+					arr1 = arr1.map(cur=>{
+						this.checkArr1.forEach(item=>{
+							if(item.dateNum == cur.dateNum){
+								cur = item
+							}
+						})
+						return cur
+					})
+				}
+				if(this.checkArr2.length != 0){
+					arr2 = arr2.map(cur=>{
+						this.checkArr2.forEach(item=>{
+							if(item.dateNum == cur.dateNum){
+								cur = item
+							}
+						})
+						return cur
+					})
+				}
 				this.arr1 = arr1;
 				this.arr2 = arr2;
 				this.$nextTick(()=>{
@@ -468,16 +425,37 @@
 				if(!item.chooseable)return;
 				if(type == 'arr1'){
 					let arr1 = this.arr1.map(cur=>{
-						
+						if(cur == item){
+							cur.checked = !cur.checked;
+						}
+						return cur;
 					})
-					
+					this.arr1 = arr1;
 				}else{
-					
+					let arr2 = this.arr2.map(cur=>{
+						if(cur == item){
+							cur.checked = !cur.checked;
+						}
+						return cur;
+					})
+					this.arr2 = arr2;
 				}
-				console.log(type)
 			},
 			// 取消设置日期
 			cancelDate(){
+				// 如果用户没有选择日期的话,重置为‘默认日期顺寻还款’
+				if(this.chooseDateArr.length == 0){
+					this.radio3 = 0;
+				}
+				this.show = false;
+			},
+			// 确定设置日期
+			sureDate(){
+				let checkArr1 = this.arr1.filter(cur=>cur.checked == true);
+				let checkArr2 = this.arr2.filter(cur=>cur.checked == true);
+				this.checkArr1 = checkArr1;
+				this.checkArr2 = checkArr2;
+				this.chooseDateArr = [...checkArr1,...checkArr2]
 				this.show = false;
 			},
 			// ---------------------------------------------------------------
@@ -630,6 +608,15 @@
 				} else {
 					this.planInfo.billingDay = value
 				}
+				//重置还款日期选择器所有的东西
+				this.arr1 = [];
+				this.arr2 = [];
+				this.checkArr1 = [];
+				this.checkArr2 = [];
+				this.chooseDateArr = [];
+				//重置为默认日期顺序还款
+				this.radio3 = 0;
+				// 关闭日期选择器
 				this.chooseDateBox = false;
 			},
 			// 选择通道
@@ -722,6 +709,16 @@
 				// 	this.$toast('账单日或还款日不能大于当月最大天数，请修改后重试')
 				// 	return
 				// }
+				// ----------------------------------------------------------------
+				let repayDate = {};
+				if(this.radio3 == 1){
+					repayDate = {
+						arr1:this.arr1,
+						arr2:this.arr2,
+						chooseDateArr:this.chooseDateArr
+					}
+				}
+				// ----------------------------------------------------------------
 				// 弹窗加载中
 				tool.toastLoading();
 				server.preCreatePlan(planInfo).then(res => {
@@ -734,6 +731,7 @@
 							channelType,
 							cardInfo: planInfo,
 							planInfo: res.data,
+							repayDate
 							// userInfo:this.cardInfo
 						}
 					})
