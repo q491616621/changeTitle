@@ -715,7 +715,7 @@
 					repayDate = {
 						arr1:this.arr1,
 						arr2:this.arr2,
-						chooseDateArr:this.chooseDateArr
+						chooseDateArr:this.chooseDateArr,
 					}
 				}
 				// ----------------------------------------------------------------
@@ -725,6 +725,9 @@
 					if (res == null) return;
 					let channelType = this.channelList[this.radio].channelType;
 					this.$toast.clear()
+					// ----------------------------------------------------------------------------
+					planInfo.manualDays = this.chooseDateArr.map(cur=>cur.dateNum).join(',');
+					// -------------------------------------------------------------------------------
 					this.$router.push({
 						name: 'payPlanInfo',
 						params: {

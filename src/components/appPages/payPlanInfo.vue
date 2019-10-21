@@ -31,7 +31,7 @@
 			<!-- 选择手动设置还款日期时已选择的日期表 -->
 			<div class="repay-date" v-if="showRepayDate">
 				<span>还款日期：</span>
-				<span>{{repayDate.chooseDateArr|setRepayDate}}</span>
+				<span>{{cardInfo.manualDays}}</span>
 			</div>
 			<!-- 还款信息列表 -->
 			<div :class="showRepayDate?'repayInfo-list flx-cas margin-top317':'repayInfo-list flx-cas margin-top245'">
@@ -212,12 +212,6 @@
 				})
 				this.planInfo = planInfo;
 				this.commonLoading = false;
-			}
-		},
-		filters:{
-			setRepayDate(value){
-				let arr = value.map(cur=>cur.dateNum);
-				return arr.join(',');
 			}
 		}
 	};
