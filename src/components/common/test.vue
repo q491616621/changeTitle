@@ -20,7 +20,7 @@
 					// url:'http://47.112.10.80:9010/channelapi/repaysdj/admin/help/testSdjBindcard.do',
 				})
 				.then(res=>{
-					let routeData = this.$router.resolve({
+					let routeData = this.$router.push({
 						path:'/test2',
 						query:{
 							htmls:res.data.unionHtml
