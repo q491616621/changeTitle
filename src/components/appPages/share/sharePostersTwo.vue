@@ -70,6 +70,9 @@
 				returnBtn: false, //页面是否带有返回按钮
 				postersList: [
 					{
+						img: require('../../../assets/img/posters/posters16.jpg')
+					},
+					{
 						img: require('../../../assets/img/posters/posters15.jpg')
 					},
 					{
