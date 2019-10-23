@@ -49,6 +49,11 @@ const router = new Router({
 			component: resolve => require(['@/components/common/login.vue'], resolve)
 		},
 		{
+			path: '/commonError',
+			name: 'commonError', //commonError
+			component: resolve => require(['@/components/common/commonError.vue'], resolve)
+		},
+		{
 			path: '/test',
 			name: 'test', //测试用的
 			meta:{
@@ -191,11 +196,6 @@ const router = new Router({
 			component: resolve => require(['@/components/appPages/payment/updateMember.vue'], resolve)
 		},
 		{
-			path: '/updateMember2',
-			name: 'updateMember2', // updateMember2 //购买升级会员
-			component: resolve => require(['@/components/appPages/payment/updateMember2.vue'], resolve)
-		},
-		{
 			path: '/registerProtocol',
 			name: 'registerProtocol', // registerProtocol //注册协议
 			meta: {
@@ -237,6 +237,9 @@ const router = new Router({
 		{
 			path: '/swipeCard',
 			name: 'swipeCard', // swipeCard //信用卡刷卡
+			meta:{
+				title:'信用卡刷卡'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/swipeCard.vue'], resolve)
 		},
 		{

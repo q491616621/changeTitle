@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
-		<div class="container flx-cas">
+		</div> -->
+		<div class="container flx-cas" v-if="false">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<!-- <div>使用说明</div> -->
@@ -64,12 +64,12 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
-	// import tool from '../../../../public/tool/tool.js'
+	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../../public/tool/tool.js'
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '信用卡刷卡', //标题栏标题
@@ -79,6 +79,18 @@
 		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#f6f6f6')
+		},
+		created(){
+			tool.setAppTitle('信用卡刷卡')
+			let platFlag = tool.testPlat();
+			if (platFlag == 1) {
+				let aaa = '奥利奥，泡一泡';
+				// closeWeb ios定义的退回上一页，删除H5页面的方法
+				window.webkit.messageHandlers.closeWeb.postMessage(aaa);
+			} else {
+				// btnBack 安卓定义的退回上一页,删除H5页面的方法
+				window.android.btnBack()
+			}
 		},
 		methods: {
 			// 跳转选择信用卡页面
@@ -182,7 +194,7 @@
 <style scoped="scoped" lang="less">
 	.container {
 		width: 100%;
-		margin-top: 88px;
+		// margin-top: 88px;
 
 		.instructions {
 			width: 690px;

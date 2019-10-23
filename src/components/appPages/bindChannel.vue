@@ -53,6 +53,7 @@
 	</div>
 </template>
 <script>
+	import axios from 'axios'
 	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../public/tool/tool.js';
 	import switchServer from '../../../public/tool/switchServer.js';
@@ -97,7 +98,10 @@
 				verify: null, //验证银行卡绑卡需要的信息
 				countDown: 59000, //倒计时
 				surePlanData: '', //surePlan页面传过来的数据
-				isSumbitPlan: false //是否在该页面提交过计划
+				isSumbitPlan: false ,//是否在该页面提交过计划
+				// ---------------
+				sessionId:'',
+				// ---------------
 			};
 		},
 		beforeCreate() {
@@ -118,9 +122,11 @@
 					me.appEnter(url)
 				}
 				tool.setAppTitle('通道绑定')
-				// let a =
-				// 	'{"repayChannelCode": "1000020002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
-				// 	this.appEnter(a)
+				// ------------------------------------------
+				let a =
+					'{"repayChannelCode": "1000020002","sessionId": "2ea4aaba-b5dc-49f5-a014-e43771b06225","certificateNum": "445122199010122716","userName": "王金盛"}';
+					this.appEnter(a)
+				// -------------------------------------------
 			}
 			// let cardInfo = this.$route.params
 			// this.cardInfo = cardInfo; 
@@ -138,6 +144,26 @@
 			// window.removeEventListener('popstate', this.goBack, false)
 		},
 		methods: {
+			// ----------------------------------------------------------
+			jump() {
+				axios({
+					method:'post',
+					url:'http://47.112.10.80:9010/channelapi/admin/help/testSdjBindcard.do',
+					// url:'http://47.112.10.80:9010/channelapi/repaysdj/admin/help/testSdjBindcard.do',
+				})
+				.then(res=>{
+					let routeData = this.$router.push({
+						path:'/test2',
+						query:{
+							htmls:res.data.unionHtml
+						}
+					});
+					window.open(routeData.href,'_blank');
+					// res.data.unionHtml
+					// console.log(res.data.unionHtml)
+				})
+			},
+			// ----------------------------------------------------------
 			// 返回事件(安卓手机返回按钮)
 			// goBack() {
 			// 	if (this.pageType == 'app') {
@@ -274,10 +300,48 @@
 				server.getBindcardSm(init)
 					.then(res => {
 						if (res == null) return;
-						if (res.code != 0) {
+						if (res.code != 0&&res.code != '-20007') {
 							this.$toast({
 								message: res.message,
 								forbidClick: true,
+							})
+							return;
+						}else if(res.code == '-20007'){//后端返回码-20007，让用户去完善资料
+							this.$dialog.alert({
+								message:'绑定该通道需要您完善结算卡资料，点击确定跳转至完善页面',
+								showCancelButton:true,
+								beforeClose:(action, done)=>{
+									if(action == 'confirm'){
+										tool.toastLoading();
+										server.querySettleCard({isAppCall: 1})
+										.then(res=>{
+											if (res == null) return;
+											done()
+											let bankCardInfo = res.data.settleCardInfo;
+											this.$router.push({
+												name: 'bindAtmCard',
+												params: {
+													id: bankCardInfo.id||'',
+													bankBranchCode: bankCardInfo.bankBranchCode||'',
+													bankCardMobile: bankCardInfo.bankCardMobile||'',
+													bankCardNumb: bankCardInfo.bankCardNumb||'',
+													bankCode: bankCardInfo.bankCode||'',
+													bankName: bankCardInfo.bankName||'',
+													bankNameBranch: bankCardInfo.bankNameBranch||'',
+													city: bankCardInfo.city||'',
+													cityCode: bankCardInfo.cityCode||'',
+													idcardValidEnd: bankCardInfo.idcardValidEnd||'',
+													idcardValidStart: bankCardInfo.idcardValidStart||'',
+													province: bankCardInfo.province||'',
+													provinceCode: bankCardInfo.provinceCode||'',
+													registAddr: bankCardInfo.registAddr||'',
+												}
+											})
+										})
+									}else{
+										done()
+									}
+								}
 							})
 							return;
 						}
@@ -312,6 +376,10 @@
 						}
 					})
 				} else if (status == 0) { //处理中
+					if(this.currentChannelCode == '1000000004'){
+						console.log(res)
+						return;
+					}
 					this.$toast({
 						message: '绑卡正在处理中了，请稍等',
 						forbidClick: true,

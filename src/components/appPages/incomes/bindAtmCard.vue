@@ -13,29 +13,29 @@
 				 placeholder="请输入身份证号码" /> -->
 				<!-- 银行卡号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardNumb" clearable
-				 label="储蓄卡" placeholder="请输入储蓄卡卡号" />
-				 <!-- 身份证有效期开始时间 -->
-				 <div class="addPicker-li flx-rs">
-				 	<div>有效期开始</div>
-				 	<div class="right" @click="showValidityBox(1)">
-				 		<div v-if="cardInfo.idcardValidStart ==''" class="default">请选择身份证有效期开始时间</div>
-				 		<div v-if="cardInfo.idcardValidStart !=''">{{ cardInfo.idcardValidStart }}</div>
-				 		<img src="../../../assets/img/addCreditCard_choose.png" />
-				 	</div>
-				 </div>
-				 <!-- 身份证有效期结束时间 -->
-				 <div class="addPicker-li flx-rs">
-				 	<div>有效期结束</div>
-				 	<div class="right" @click="showValidityBox(0)">
-				 		<div v-if="cardInfo.idcardValidEnd ==''" class="default">请选择身份证有效期结束时间</div>
-				 		<div v-if="cardInfo.idcardValidEnd !=''">{{ cardInfo.idcardValidEnd }}</div>
-				 		<img src="../../../assets/img/addCreditCard_choose.png" />
-				 	</div>
-				 </div>
+				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' />
+				<!-- 身份证有效期开始时间 -->
+				<div class="addPicker-li flx-rs">
+					<div>有效期开始</div>
+					<div class="right" @click="showValidityBox(1)">
+						<div v-if="cardInfo.idcardValidStart ==''" class="default">请选择身份证有效期开始时间</div>
+						<div v-if="cardInfo.idcardValidStart !=''">{{ cardInfo.idcardValidStart }}</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
+				<!-- 身份证有效期结束时间 -->
+				<div class="addPicker-li flx-rs">
+					<div>有效期结束</div>
+					<div class="right" @click="showValidityBox(0)">
+						<div v-if="cardInfo.idcardValidEnd ==''" class="default">请选择身份证有效期结束时间</div>
+						<div v-if="cardInfo.idcardValidEnd !=''">{{ cardInfo.idcardValidEnd }}</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
 				<!-- 银行名称 -->
 				<div class="addPicker-li flx-rs">
 					<div>银行名称</div>
-					<div class="right" @click="showChooseBankBox">
+					<div class="right" @click="chooseBankBox = true">
 						<div v-if="cardInfo.bankName ==''" class="default">请选择银行</div>
 						<div v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
 						<img src="../../../assets/img/addCreditCard_choose.png" />
@@ -66,7 +66,7 @@
 				<!-- 用户住址 -->
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.registAddr" clearable label="用户住址"
 				 placeholder="请输入住址" />
-				 <!-- 银行预留手机号 -->
+				<!-- 银行预留手机号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardMobile" clearable
 				 label="手机号码" placeholder="请输入银行预留手机号" />
 				<button class="sure-btn bold" @click="bindAtmCard">确认绑定</button>
@@ -89,13 +89,13 @@
 		<!-- 开户支行 -->
 		<div class="search-box">
 			<van-action-sheet class="search" v-model="branchBankSearchBox" title="搜索" style="height: 100%;"
-			 :close-on-click-overlay='false' :lock-scroll='false' @close = 'closeSearchBox'>
+			 :close-on-click-overlay='false' :lock-scroll='false' @close='closeSearchBox'>
 				<van-search v-model="searchValue" placeholder="请输入搜索关键词" show-action shape="round" @search="onSearch" @input='list=[]'>
 					<div slot="action" @click="onSearch">搜索</div>
 				</van-search>
 				<div class="search-list">
 					<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-						<van-cell v-for="(item,index) in list" :key="index" :title="item.key" @click = 'setBranchBank(item)'/>
+						<van-cell v-for="(item,index) in list" :key="index" :title="item.key" @click='setBranchBank(item)' />
 					</van-list>
 				</div>
 			</van-action-sheet>
@@ -103,15 +103,9 @@
 		<!-- 身份证有效期 -->
 		<div class="validity-box">
 			<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
-			 :close-on-click-overlay='false' :lock-scroll='false' @close = 'validityBox=false'>
-			 <van-datetime-picker
-			   v-model="currentDate"
-			   type="date"
-			   :min-date="new Date('1999,01,01')"
-			   :max-date="new Date('2039,12,31')"
-			   @confirm = 'sureValidity'
-			   @cancel = 'validityBox = false'
-			 />
+			 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
+				<van-datetime-picker v-model="currentDate" type="date" :min-date="new Date('1999,01,01')" :max-date="new Date('2039,12,31')"
+				 @confirm='sureValidity' @cancel='validityBox = false' />
 			</van-action-sheet>
 		</div>
 	</div>
@@ -134,6 +128,7 @@
 			return {
 				currentDate: new Date(),
 				titleName: '绑定提现银行卡', //标题栏标题
+				from:'',//来自哪个页面
 				cardInfo: {
 					// userName: '王金盛', //姓名
 					// certificateNum: '4451456464646846844', //身份证
@@ -142,28 +137,28 @@
 					bankCardMobile: '', //预留银行的手机号
 					bankName: '', //选择的银行名称
 					bankNameBranch: '', //支行名称
-					bankBranchCode:'',//银行支行联行号
+					bankBranchCode: '', //银行支行联行号
 					province: '', //省份名称
-					provinceCode:'',//省份编码
-					cityCode:'',//城市编码
+					provinceCode: '', //省份编码
+					cityCode: '', //城市编码
 					city: '', //城市名称
-					idcardValidStart:'',//身份证有效期开始时间
-					idcardValidEnd:'',//身份证有效期结束时间
-					registAddr:'',//用户住址
+					idcardValidStart: '', //身份证有效期开始时间
+					idcardValidEnd: '', //身份证有效期结束时间
+					registAddr: '', //用户住址
 				},
-				title:'',//用户现在开始或者结束，1有效期开始，0有效期结束
+				title: '', //用户现在开始或者结束，1有效期开始，0有效期结束
 				bankCode: '', //选择的银行code
 				chooseBankBox: false, //控制银行的picker盒子显示与否
 				branchBankSearchBox: false, //控制搜索盒子显示与否
-				validityBox:false,//控制有效期选择盒子显示与否
+				validityBox: false, //控制有效期选择盒子显示与否
 				searchValue: '', //搜索内容
-				
+
 				// ---------------------------
 				list: [],
 				loading: false,
 				finished: true,
-				page:1,//页数
-				pageSize:10,//每页个数
+				page: 1, //页数
+				pageSize: 10, //每页个数
 				// ---------------------------
 				bankColumns: [], //银行列表
 				chooseCityBox: false, //控制省市的picker盒子显示与否
@@ -182,6 +177,11 @@
 				],
 			};
 		},
+		beforeRouteEnter(to,from,next){
+			next(vm=>{
+				vm.from = from.name;
+			})
+		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
@@ -189,9 +189,36 @@
 			tool.setAppTitle('绑定提现银行卡')
 			let arr = Object.keys(this.$route.params)
 			if (arr.length > 0) {
-				this.cardInfo.id = this.$route.params.id
+				this.cardInfo.id = this.$route.params.id;
+				this.cardInfo.bankBranchCode = this.$route.params.bankBranchCode;
+				this.cardInfo.bankCardMobile = this.$route.params.bankCardMobile;
+				this.cardInfo.bankCardNumb = this.$route.params.bankCardNumb;
+				this.cardInfo.bankName = this.$route.params.bankName;
+				this.cardInfo.bankNameBranch = this.$route.params.bankNameBranch;
+				this.cardInfo.city = this.$route.params.city;
+				this.cardInfo.cityCode = this.$route.params.cityCode;
+				this.cardInfo.idcardValidEnd = this.$route.params.idcardValidEnd;
+				this.cardInfo.idcardValidStart = this.$route.params.idcardValidStart;
+				this.cardInfo.province = this.$route.params.province;
+				this.cardInfo.provinceCode = this.$route.params.provinceCode;
+				this.cardInfo.registAddr = this.$route.params.registAddr;
+				this.bankCode = this.$route.params.bankCode;
+				// : this.bankCardInfo.bankCardMobile||'',
+				// : this.bankCardInfo.bankCardNumb||'',
+				// : this.bankCardInfo.bankCode||'',
+				// : this.bankCardInfo.bankName||'',
+				// : this.bankCardInfo.bankNameBranch||'',
+				// : this.bankCardInfo.city||'',
+				// : this.bankCardInfo.cityCode||'',
+				// : this.bankCardInfo.idcardValidEnd||'',
+				// : this.bankCardInfo.idcardValidStart||'',
+				// : this.bankCardInfo.province||'',
+				// : this.bankCardInfo.provinceCode||'',
+				// : this.bankCardInfo.registAddr||'',
+				console.log(this.$route.params)
 			}
-			this.setColums()
+			this.setColums();
+			this.setbankColumns();
 		},
 		methods: {
 			// 设置省市列表
@@ -210,41 +237,8 @@
 				this.columns[0].values = arr;
 				this.columns[1].values = arr2;
 			},
-			// 展示有效期选择盒子
-			showValidityBox(value){
-				this.title = value;
-				this.validityBox = true;
-			},
-			// 确认有效期选择
-			sureValidity(value){
-				if(this.title){
-					//设置身份证有效期开始时间
-					let d = new Date(value);
-					let month;
-					if(d.getMonth()+1 < 10){
-						month = '0'+(d.getMonth()+1)
-					}else{
-						month = d.getMonth()+1
-					}
-					this.cardInfo.idcardValidStart = d.getFullYear() + '-' + month + '-' + d.getDate();
-					this.validityBox = false;
-				}else{
-					//设置身份证有效期结束时间
-					let d = new Date(value);
-					let month;
-					if(d.getMonth()+1 < 10){
-						month = '0'+(d.getMonth()+1)
-					}else{
-						month = d.getMonth()+1
-					}
-					this.cardInfo.idcardValidEnd = d.getFullYear() + '-' + month + '-' + d.getDate();
-					this.validityBox = false;
-				}
-			},
-			// 展示银行选择框
-			showChooseBankBox() {
-				// 判断数组里面是否有数据了,有的话不再发请求
-				if (this.bankColumns.length != 0) return this.chooseBankBox = true;
+			// 设置银行列表
+			setbankColumns() {
 				tool.toastLoading();
 				server.querySettleBankList()
 					.then(res => {
@@ -256,9 +250,83 @@
 							bankColumns.push(init)
 						})
 						this.bankColumns = bankColumns;
-						this.chooseBankBox = true;
+						// 判断用户是否是从修改进来的
+						if(Object.keys(this.$route.params).length>0){
+							// 判断上个页面传进来的银行名称是否和我们的银行数组相匹配,不匹配的话 把银行名,卡号,银行code都重置
+							let arr = bankColumns.filter(cur=>cur.text == this.$route.params.bankName);
+							if(arr.length != 0){
+								this.cardInfo.bankName = arr[0].text;
+								this.bankCode = arr[0].bankCode;
+							}else{
+								this.cardInfo.bankName = '';
+								this.bankCode = '';
+								this.bankCardNumb = '';
+							}
+						}
 					})
 			},
+			getBankName(){
+				tool.toastLoading()
+				server.queryBankcardInfo({
+						bankcardNumb: this.cardInfo.bankCardNumb
+					})
+					.then(res => {
+						if (res == null) return;
+						// 接口返回数据为{},用户卡片不支持,就不继续发绑卡请求了
+						if (JSON.stringify(res.data) == '{}') return;
+						// 判断返回的bankName是否和银行名称数组里有一样的,有的话把相同的设置给数据
+						let arr = this.bankColumns.filter(cur=>cur.text == res.data.bankName);
+						if(arr.length != 0){
+							this.cardInfo.bankName = arr[0].text;
+							this.bankCode = arr[0].bankCode;
+						}
+					})
+			},
+			// 展示有效期选择盒子
+			showValidityBox(value) {
+				this.title = value;
+				this.validityBox = true;
+			},
+			// 确认有效期选择
+			sureValidity(value) {
+				if (this.title) {
+					//设置身份证有效期开始时间
+					let d = new Date(value);
+					let month = d.getMonth() + 1;
+					let days = d.getDate();
+					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1); 
+					if(d.getDate()<10) days = '0'+(d.getDate());
+					this.cardInfo.idcardValidStart = d.getFullYear() + '-' + month + '-' + days;
+					this.validityBox = false;
+				} else {
+					//设置身份证有效期结束时间
+					let d = new Date(value);
+					let month = d.getMonth() + 1;
+					let days = d.getDate();
+					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1); 
+					if(d.getDate()<10) days = '0'+(d.getDate());
+					this.cardInfo.idcardValidEnd = d.getFullYear() + '-' + month + '-' + days;
+					this.validityBox = false;
+				}
+			},
+			// // 展示银行选择框
+			// showChooseBankBox() {
+			// 	// 判断数组里面是否有数据了,有的话不再发请求
+			// 	if (this.bankColumns.length != 0) return this.chooseBankBox = true;
+			// 	tool.toastLoading();
+			// 	server.querySettleBankList()
+			// 		.then(res => {
+			// 			let bankColumns = [];
+			// 			res.data.forEach(cur => {
+			// 				let init = {};
+			// 				init.text = cur.key;
+			// 				init.bankCode = cur.value;
+			// 				bankColumns.push(init)
+			// 			})
+			// 			this.bankColumns = bankColumns;
+			// 			this.chooseBankBox = true;
+			// 		})
+			// },
 			// 确认选择的银行
 			sureBank(value) {
 				this.cardInfo.bankName = value.text;
@@ -277,17 +345,17 @@
 				this.branchBankSearchBox = true;
 			},
 			// 关闭搜素框
-			closeSearchBox(){
+			closeSearchBox() {
 				this.page = 1;
 				this.finished = true;
 				console.log('执行了')
 			},
 			// 搜索支行
 			onSearch() {
-				if(this.searchValue == ''){
+				if (this.searchValue == '') {
 					this.$toast({
-						message:'请输入搜索内容！',
-						duration:2000
+						message: '请输入搜索内容！',
+						duration: 2000
 					})
 					return
 				}
@@ -295,11 +363,11 @@
 				this.list = [];
 				this.finished = false;
 				// this.$nextTick(()=>{
-					this.onLoad()
+				this.onLoad()
 				// })
 			},
 			//设置支行
-			setBranchBank(item){
+			setBranchBank(item) {
 				console.log(item)
 				this.cardInfo.bankNameBranch = item.key;
 				this.cardInfo.bankBranchCode = item.value;
@@ -310,31 +378,31 @@
 			// 支行列表加载
 			onLoad() {
 				let init = {
-					bankFlag:this.bankCode,
-					branchName:this.searchValue,
-					page:this.page,
-					pageSize:this.pageSize,
+					bankFlag: this.bankCode,
+					branchName: this.searchValue,
+					page: this.page,
+					pageSize: this.pageSize,
 				};
 				this.loading = true;
 				server.querySettleBankBranchList(init)
-				.then(res=>{
-					if (res == null) return;
-					if (res.data.length == 0) {
+					.then(res => {
+						if (res == null) return;
+						if (res.data.length == 0) {
+							this.loading = false;
+							this.finished = true;
+							return;
+						}
+						let arr = res.data;
+						this.list = this.list.concat(arr);
 						this.loading = false;
-						this.finished = true;
-						return;
-					}
-					let arr = res.data;
-					this.list = this.list.concat(arr);
-					this.loading = false;
-					// 判断这次拿回来的数据是否小于每页的条数,小于的话不必再触发onLoad事件
-					if (res.data.length < this.pageSize) {
-						this.loading = false;
-						this.finished = true;
-						return
-					}
-					this.page += 1;
-				})
+						// 判断这次拿回来的数据是否小于每页的条数,小于的话不必再触发onLoad事件
+						if (res.data.length < this.pageSize) {
+							this.loading = false;
+							this.finished = true;
+							return
+						}
+						this.page += 1;
+					})
 			},
 			// 改变省市选择
 			onChange(picker, value) {
@@ -352,7 +420,7 @@
 				picker.setColumnValues(1, arr)
 			},
 			// 确定省市选择
-			onConfirm(value,index) {
+			onConfirm(value, index) {
 				this.cardInfo.province = value[0] //设置省的值
 				this.cardInfo.city = value[1] //设置市的值
 				this.cardInfo.provinceCode = this.citys[index[0]].code; //设置省的code
@@ -361,6 +429,8 @@
 			},
 			// 提交资料绑定银行卡
 			bindAtmCard() {
+				console.log(this.$route)
+				console.log(this.$router)
 				let cardInfo = this.cardInfo;
 				let value = true;
 				let verifier = {
@@ -369,9 +439,9 @@
 					'bankName': '请选择银行', //开户行
 					'bankNameBranch': '请选择支行', //支行
 					'bankCardMobile': '请填写预留银行手机号', //预留银行的手机号
-					'registAddr':'请填写用户地址',
-					'idcardValidStart':'请选择身份证有效期开始时间',
-					'idcardValidEnd':'请选择身份证有效期结束时间'
+					'registAddr': '请填写用户地址',
+					'idcardValidStart': '请选择身份证有效期开始时间',
+					'idcardValidEnd': '请选择身份证有效期结束时间'
 				}
 				// 判读cardInfo 里面哪个值没填写,返回对应提示文字
 				for (let it in cardInfo) {
@@ -385,40 +455,33 @@
 				}
 				// 如果value 为true 的话,进行下一步绑定卡片，否则提示用户哪些信息未填写
 				if (value === true) {
-					// return
 					tool.toastLoading()
-					// 先发请求查询银行卡信息的请求确认用户的卡片是否支持
-					server.queryBankcardInfo({
-							bankcardNumb: cardInfo.bankCardNumb
-						})
+					server.bindSettleCard(cardInfo)
 						.then(res => {
 							if (res == null) return;
-							// 接口返回数据为{},用户卡片不支持,就不继续发绑卡请求了
-							if (JSON.stringify(res.data) == '{}') {
-								this.$toast('该卡不支持，请换别的卡绑定')
-								return;
-							}
-							// cardInfo.bankName = res.data.bankName;
-							tool.toastLoading()
-							server.bindSettleCard(cardInfo)
-								.then(res => {
-									if (res == null) return;
-									this.$toast({
-										message: '绑定成功',
-										duration: 2000,
-										forbidClick: true,
-										// onClose: () => {
-										// 	this.$router.push({
-										// 		name: 'withdrawal'
-										// 	})
-										// }
+							this.$toast({
+								message: '绑定成功',
+								duration: 2000,
+								forbidClick: true,
+								// onClose: () => {
+								// 	this.$router.push({
+								// 		name: 'withdrawal'
+								// 	})
+								// }
+							})
+							if(this.from == 'bindChannel'){
+								setTimeout(() => {
+									this.$router.replace({
+										name: 'bindChannel'
 									})
-									setTimeout(() => {
-										this.$router.push({
-											name: 'withdrawal'
-										})
-									}, 3000)
-								})
+								}, 2000)
+							}else{
+								setTimeout(() => {
+									this.$router.push({
+										name: 'withdrawal'
+									})
+								}, 2000)
+							}
 						})
 				} else {
 					this.$toast({
@@ -483,7 +546,8 @@
 			left: 0;
 			overflow-y: scroll;
 		}
-		.van-cell{
+
+		.van-cell {
 			border-bottom: 1px solid #f5f5f5;
 		}
 
@@ -541,12 +605,14 @@
 						width: 100%;
 						color: #d5d5d5;
 					}
-					.name{
+
+					.name {
 						white-space: nowrap;
 						width: 420px;
 						overflow: hidden;
 						text-overflow: ellipsis;
 					}
+
 					img {
 						width: 11px;
 						height: 20px;

@@ -25,7 +25,7 @@
 				<img :src="bankCardInfo.logo">
 				<div class="bank-info flx-c">
 					<div class="bank-name">{{bankCardInfo.bankName}}</div>
-					<div class="bank-num">尾号{{bankCardInfo.bankCardNumb}}</div>
+					<div class="bank-num">尾号{{bankCardInfo.bankCardTailNumb}}</div>
 				</div>
 				<div class="changeBankCard" @click="goBindAtmCard">修改</div>
 			</div>
@@ -139,7 +139,7 @@
 									settleCardInfo.logo = bankLogo[item];
 								}
 							}
-							settleCardInfo.bankCardNumb = settleCardInfo.bankCardNumb.substr(settleCardInfo.bankCardNumb.length - 4);
+							settleCardInfo.bankCardTailNumb = settleCardInfo.bankCardNumb.substr(settleCardInfo.bankCardNumb.length - 4);
 							this.canApplyAmount = tool.centTurnSmacker(res.data.canApplyAmount / 100)
 							this.bankCardInfo = settleCardInfo;
 							this.hasCard = true;
@@ -202,7 +202,20 @@
 					this.$router.push({
 						name: 'bindAtmCard',
 						params: {
-							id: this.bankCardInfo.id
+							id: this.bankCardInfo.id,
+							bankBranchCode: this.bankCardInfo.bankBranchCode||'',
+							bankCardMobile: this.bankCardInfo.bankCardMobile||'',
+							bankCardNumb: this.bankCardInfo.bankCardNumb||'',
+							bankCode: this.bankCardInfo.bankCode||'',
+							bankName: this.bankCardInfo.bankName||'',
+							bankNameBranch: this.bankCardInfo.bankNameBranch||'',
+							city: this.bankCardInfo.city||'',
+							cityCode: this.bankCardInfo.cityCode||'',
+							idcardValidEnd: this.bankCardInfo.idcardValidEnd||'',
+							idcardValidStart: this.bankCardInfo.idcardValidStart||'',
+							province: this.bankCardInfo.province||'',
+							provinceCode: this.bankCardInfo.provinceCode||'',
+							registAddr: this.bankCardInfo.registAddr||'',
 						}
 					})
 				}
