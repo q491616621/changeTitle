@@ -370,6 +370,8 @@
 									this.$refs.cityPicker.setColumnIndex(1, 2);
 								}
 							})
+					}else{
+						this.radioChange = true;
 					}
 				})
 			},
