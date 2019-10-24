@@ -173,7 +173,7 @@
 							// })
 							// let defaultChannelCode = this.$store.state.repayChannelCode; //从vuex里面拿默认通道编号
 							// let channelList = res.data.filter(cur => cur.channelCode != defaultChannelCode)//过滤掉默认通道编号的选项
-							let channelList = res.data;
+							let channelList = res.data.filter(cur=>cur.channelCode != '1000000004');
 							this.channelList = channelList;
 							this.cardInfo.channelCode = channelList[0].channelCode;//设置当前通道为通道列表第一个
 							this.radio = 0;
@@ -184,7 +184,7 @@
 					// 	message: '卡片在默认通道绑定失败,现为您切换其他通道,请重新进行绑定',
 					// 	forbidClick: true,
 					// })
-					let channelList = this.channelList;
+					let channelList = this.channelList.filter(cur=>cur.channelCode != '1000000004');
 					this.cardInfo.channelCode = channelList[0].channelCode;
 					this.radio = 0;
 					this.channelListBox = true;
