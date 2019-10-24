@@ -15,15 +15,9 @@ const mutations = {
 	setCardManagement(state,appData){
 		// 把app传递过来的参数设置给state里面对应的值
 		state.sessionId = appData.sessionId;
-		if(appData.repayChannelCode){	
-			state.repayChannelCode = appData.repayChannelCode;
-		}
-		if(appData.userName){	
-			state.userName = appData.userName;
-		}
-		if(appData.certificateNum){
-			state.certificateNum = appData.certificateNum;
-		}
+		state.repayChannelCode = appData.repayChannelCode;
+		state.userName = appData.userName;
+		state.certificateNum = appData.certificateNum;
 	},
 	setWithdrawalType(state){
 		state.withdrawalType = 'h5' 
