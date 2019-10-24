@@ -123,9 +123,9 @@
 				}
 				tool.setAppTitle('通道绑定')
 				// ------------------------------------------
-				let a =
-					'{"repayChannelCode": "1000020002","sessionId": "2ea4aaba-b5dc-49f5-a014-e43771b06225","certificateNum": "445122199010122716","userName": "王金盛"}';
-					this.appEnter(a)
+				// let a =
+				// 	'{"repayChannelCode": "1000020002","sessionId": "2ea4aaba-b5dc-49f5-a014-e43771b06225","certificateNum": "445122199010122716","userName": "王金盛"}';
+				// 	this.appEnter(a)
 				// -------------------------------------------
 			}
 			// let cardInfo = this.$route.params
@@ -378,6 +378,17 @@
 				} else if (status == 0) { //处理中
 					if(this.currentChannelCode == '1000000004'){
 						console.log(res)
+						let routeData = this.$router.replace({
+							path:'/test2',
+							query:{
+								htmls:res.data.unionHtml
+							}
+						});
+						window.open(routeData.href,'_blank');
+						// 关闭弹窗时,如果是倒计时状态,就重置倒计时
+						if (this.$refs.countDown) this.$refs.countDown.reset();
+						this.codeBox = false;
+						console.log('2')
 						return;
 					}
 					this.$toast({

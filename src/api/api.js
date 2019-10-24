@@ -14,6 +14,9 @@ axios.defaults.timeout = 5000; //默认延时
 axios.defaults.baseURL = 'http://47.112.10.80:9011/productapi/api';
 // 正式环境
 // axios.defaults.baseURL = 'https://www.kfmanager.com/productapi/api';
+// 本地环境
+// axios.defaults.baseURL = 'http://192.168.0.188:8280/productapi/api';
+// 192.168.0.188:8280
 // ------------------------------------------------------------------------
 
 // axios.defaults.headers.post["Content-Type"] = "multipart/form-data"

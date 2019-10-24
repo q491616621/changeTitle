@@ -465,11 +465,12 @@
 				} else if (!planInfo.cardQuota) {
 					this.$toast('请设置卡片额度');
 					return
-				} else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
-					// 判断当前通道是否有落地城市,如果有的话必须填落地省市
-					this.$toast('请选择落地城市');
-					return
-				}
+				} 
+				// else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
+				// 	// 判断当前通道是否有落地城市,如果有的话必须填落地省市
+				// 	this.$toast('请选择落地城市');
+				// 	return
+				// }
 				let days = tool.days(); //获取当前月份的最大天数
 				// 判断当前用户设置的账单日或者是还款日是否大于当前月份的最大天数,是的话改成当前月份最大的天数
 				if (planInfo.billingDay > days) planInfo.billingDay = days;
