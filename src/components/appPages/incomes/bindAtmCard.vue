@@ -101,13 +101,17 @@
 			</van-action-sheet>
 		</div>
 		<!-- 身份证有效期 -->
-		<div class="validity-box">
+		<!-- <div class="validity-box"> -->
 			<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
 			 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
+				<van-datetime-picker v-model="currentDate" type="date" :min-date="min" :max-date="max"
+				 @confirm='sureValidity' @cancel='validityBox = false' @change='change' :formatter='formatter' />
+			</van-action-sheet>
+			<!-- 	<van-popup v-model="validityBox">
 				<van-datetime-picker v-model="currentDate" type="date" :min-date="new Date('1999,01,01')" :max-date="new Date('2039,12,31')"
 				 @confirm='sureValidity' @cancel='validityBox = false' />
-			</van-action-sheet>
-		</div>
+			</van-popup> -->
+		<!-- </div> -->
 	</div>
 </template>
 <script>
@@ -126,9 +130,11 @@
 		// },
 		data() {
 			return {
-				currentDate: new Date(),
+				currentDate: '',
+				max:'',
+				min:'',
 				titleName: '绑定提现银行卡', //标题栏标题
-				from:'',//来自哪个页面
+				from: '', //来自哪个页面
 				cardInfo: {
 					// userName: '王金盛', //姓名
 					// certificateNum: '4451456464646846844', //身份证
@@ -177,8 +183,8 @@
 				],
 			};
 		},
-		beforeRouteEnter(to,from,next){
-			next(vm=>{
+		beforeRouteEnter(to, from, next) {
+			next(vm => {
 				vm.from = from.name;
 			})
 		},
@@ -186,6 +192,13 @@
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
 		created() {
+			let a = '1999-11-11 10:11';
+			let b = '2039-11-11 10:11';
+			let c = '2019-10-25 10:11';
+			this.max = new Date(a.replace(/-/g, "/"));
+			this.min = new Date(b.replace(/-/g, "/"));
+			this.currentDate = new Date(c.replace(/-/g, "/"));
+			// console.log(new Date(a.replace(/-/g, "/")))
 			tool.setAppTitle('绑定提现银行卡')
 			let arr = Object.keys(this.$route.params)
 			if (arr.length > 0) {
@@ -221,6 +234,19 @@
 			this.setbankColumns();
 		},
 		methods: {
+			formatter(type, value) {
+				if (type === 'year') {
+					return `${value}年`;
+				} else if (type === 'month') {
+					return `${value}月`
+				} else if (type === 'day') {
+					return `${value}日`
+				}
+				return value;
+			},
+			change(e) {
+				console.log(e.getValues())
+			},
 			// 设置省市列表
 			setColums() {
 				// 把本地的省市json设置给页面
@@ -251,13 +277,13 @@
 						})
 						this.bankColumns = bankColumns;
 						// 判断用户是否是从修改进来的
-						if(Object.keys(this.$route.params).length>0){
+						if (Object.keys(this.$route.params).length > 0) {
 							// 判断上个页面传进来的银行名称是否和我们的银行数组相匹配,不匹配的话 把银行名,卡号,银行code都重置
-							let arr = bankColumns.filter(cur=>cur.text == this.$route.params.bankName);
-							if(arr.length != 0){
+							let arr = bankColumns.filter(cur => cur.text == this.$route.params.bankName);
+							if (arr.length != 0) {
 								this.cardInfo.bankName = arr[0].text;
 								this.bankCode = arr[0].bankCode;
-							}else{
+							} else {
 								this.cardInfo.bankName = '';
 								this.bankCode = '';
 								this.bankCardNumb = '';
@@ -265,7 +291,7 @@
 						}
 					})
 			},
-			getBankName(){
+			getBankName() {
 				tool.toastLoading()
 				server.queryBankcardInfo({
 						bankcardNumb: this.cardInfo.bankCardNumb
@@ -275,8 +301,8 @@
 						// 接口返回数据为{},用户卡片不支持,就不继续发绑卡请求了
 						if (JSON.stringify(res.data) == '{}') return;
 						// 判断返回的bankName是否和银行名称数组里有一样的,有的话把相同的设置给数据
-						let arr = this.bankColumns.filter(cur=>cur.text == res.data.bankName);
-						if(arr.length != 0){
+						let arr = this.bankColumns.filter(cur => cur.text == res.data.bankName);
+						if (arr.length != 0) {
 							this.cardInfo.bankName = arr[0].text;
 							this.bankCode = arr[0].bankCode;
 						}
@@ -284,6 +310,7 @@
 			},
 			// 展示有效期选择盒子
 			showValidityBox(value) {
+				console.log(new Date())
 				this.title = value;
 				this.validityBox = true;
 			},
@@ -294,8 +321,8 @@
 					let d = new Date(value);
 					let month = d.getMonth() + 1;
 					let days = d.getDate();
-					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1); 
-					if(d.getDate()<10) days = '0'+(d.getDate());
+					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1);
+					if (d.getDate() < 10) days = '0' + (d.getDate());
 					this.cardInfo.idcardValidStart = d.getFullYear() + '-' + month + '-' + days;
 					this.validityBox = false;
 				} else {
@@ -303,8 +330,8 @@
 					let d = new Date(value);
 					let month = d.getMonth() + 1;
 					let days = d.getDate();
-					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1); 
-					if(d.getDate()<10) days = '0'+(d.getDate());
+					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1);
+					if (d.getDate() < 10) days = '0' + (d.getDate());
 					this.cardInfo.idcardValidEnd = d.getFullYear() + '-' + month + '-' + days;
 					this.validityBox = false;
 				}
@@ -469,13 +496,13 @@
 								// 	})
 								// }
 							})
-							if(this.from == 'bindChannel'){
+							if (this.from == 'bindChannel') {
 								setTimeout(() => {
 									this.$router.replace({
 										name: 'bindChannel'
 									})
 								}, 2000)
-							}else{
+							} else {
 								setTimeout(() => {
 									this.$router.push({
 										name: 'withdrawal'

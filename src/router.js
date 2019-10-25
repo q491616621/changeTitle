@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 // login //登陆页面
+//turnBackApp//提示返回app页面
 // addCreditCard //添加信用卡页面
 // contactServer //联系客服页面
 // cardManagement //信用卡管理页面
@@ -49,8 +50,16 @@ const router = new Router({
 			component: resolve => require(['@/components/common/login.vue'], resolve)
 		},
 		{
+			path: '/turnBackApp',
+			name: 'turnBackApp', //turnBackApp 提示返回app页面
+			meta:{
+				title:'绑卡成功'
+			},
+			component: resolve => require(['@/components/common/turnBackApp.vue'], resolve)
+		},
+		{
 			path: '/commonError',
-			name: 'commonError', //commonError
+			name: 'commonError', //commonError 统一处理错误页面
 			component: resolve => require(['@/components/common/commonError.vue'], resolve)
 		},
 		{
