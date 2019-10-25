@@ -102,10 +102,15 @@
 		</div>
 		<!-- 身份证有效期 -->
 		<!-- <div class="validity-box"> -->
-			<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
+	<!-- 		<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
 			 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
 				<van-datetime-picker v-model="currentDate" type="date" :min-date="min" :max-date="max"
 				 @confirm='sureValidity' @cancel='validityBox = false' @change='change' :formatter='formatter' />
+			</van-action-sheet> -->
+			<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
+			 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
+				<van-datetime-picker v-model="currentDate" type="date" :min-date="min" :max-date="max"
+				 @confirm='sureValidity' @cancel='validityBox = false' />
 			</van-action-sheet>
 			<!-- 	<van-popup v-model="validityBox">
 				<van-datetime-picker v-model="currentDate" type="date" :min-date="new Date('1999,01,01')" :max-date="new Date('2039,12,31')"
@@ -130,7 +135,8 @@
 		// },
 		data() {
 			return {
-				currentDate: '',
+				// currentDate: '',
+				currentDate: new Date(),
 				max:'',
 				min:'',
 				titleName: '绑定提现银行卡', //标题栏标题
@@ -192,11 +198,11 @@
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
 		created() {
-			let a = '1999-11-11 10:11';
-			let b = '2039-11-11 10:11';
-			let c = '2019-10-25 10:11';
-			this.max = new Date(a.replace(/-/g, "/"));
-			this.min = new Date(b.replace(/-/g, "/"));
+			let a = '1999-01-01 00:00';
+			let b = '2039-12-31 00:00';
+			let c = '2019-01-01 00:00';
+			this.max = new Date(b.replace(/-/g, "/"));
+			this.min = new Date(a.replace(/-/g, "/"));
 			this.currentDate = new Date(c.replace(/-/g, "/"));
 			// console.log(new Date(a.replace(/-/g, "/")))
 			tool.setAppTitle('绑定提现银行卡')
@@ -234,19 +240,19 @@
 			this.setbankColumns();
 		},
 		methods: {
-			formatter(type, value) {
-				if (type === 'year') {
-					return `${value}年`;
-				} else if (type === 'month') {
-					return `${value}月`
-				} else if (type === 'day') {
-					return `${value}日`
-				}
-				return value;
-			},
-			change(e) {
-				console.log(e.getValues())
-			},
+			// formatter(type, value) {
+			// 	if (type === 'year') {
+			// 		return `${value}年`;
+			// 	} else if (type === 'month') {
+			// 		return `${value}月`
+			// 	} else if (type === 'day') {
+			// 		return `${value}日`
+			// 	}
+			// 	return value;
+			// },
+			// change(e) {
+			// 	console.log(e.getValues())
+			// },
 			// 设置省市列表
 			setColums() {
 				// 把本地的省市json设置给页面
