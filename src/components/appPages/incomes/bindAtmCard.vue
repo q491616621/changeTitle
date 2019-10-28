@@ -14,6 +14,37 @@
 				<!-- 银行卡号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardNumb" clearable
 				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' />
+				<!-- 银行名称 -->
+				<div class="addPicker-li flx-rs">
+					<div>银行名称</div>
+					<div class="right" @click="chooseBankBox = true">
+						<div v-if="cardInfo.bankName ==''" class="default">请选择银行</div>
+						<div v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
+				 <!-- 开户支行 -->
+				 <div class="addPicker-li flx-rs">
+				 	<div>开户支行</div>
+				 	<div class="right" @click="showSearchBox">
+				 		<div v-if="cardInfo.bankNameBranch ==''" class="default">请选择所在开户支行</div>
+				 		<div v-if="cardInfo.bankNameBranch !=''" class="name">{{ cardInfo.bankNameBranch }}</div>
+				 		<img src="../../../assets/img/addCreditCard_choose.png" />
+				 	</div>
+				 </div>
+				 <!-- 开户行省市 -->
+				 <div class="city-picker flx-rs medium">
+				 	<div class="pick-title">开户行省市</div>
+				 	<!-- <div class="pick-content flx-rs" @click="showCityPicker"> -->
+				 	<div class="pick-content flx-rs" @click="chooseCityBox = true">
+				 		<div style="color:#d5d5d5;" v-if="cardInfo.province == ''">请选择开户行省市</div>
+				 		<div class="pick-citys flx-rs" v-if="cardInfo.province != ''">
+				 			<div class="pick-provinceName">{{cardInfo.province}}</div>
+				 			<div>{{cardInfo.city}}</div>
+				 		</div>
+				 		<img src="../../../assets/img/addCreditCard_choose.png" />
+				 	</div>
+				 </div>
 				<!-- 身份证有效期开始时间 -->
 				<div class="addPicker-li flx-rs">
 					<div>有效期开始</div>
@@ -32,37 +63,7 @@
 						<img src="../../../assets/img/addCreditCard_choose.png" />
 					</div>
 				</div>
-				<!-- 银行名称 -->
-				<div class="addPicker-li flx-rs">
-					<div>银行名称</div>
-					<div class="right" @click="chooseBankBox = true">
-						<div v-if="cardInfo.bankName ==''" class="default">请选择银行</div>
-						<div v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
-						<img src="../../../assets/img/addCreditCard_choose.png" />
-					</div>
-				</div>
-				<!-- 开户支行 -->
-				<div class="addPicker-li flx-rs">
-					<div>开户支行</div>
-					<div class="right" @click="showSearchBox">
-						<div v-if="cardInfo.bankNameBranch ==''" class="default">请选择所在开户支行</div>
-						<div v-if="cardInfo.bankNameBranch !=''" class="name">{{ cardInfo.bankNameBranch }}</div>
-						<img src="../../../assets/img/addCreditCard_choose.png" />
-					</div>
-				</div>
-				<!-- 开户行省市 -->
-				<div class="city-picker flx-rs medium">
-					<div class="pick-title">开户行省市</div>
-					<!-- <div class="pick-content flx-rs" @click="showCityPicker"> -->
-					<div class="pick-content flx-rs" @click="chooseCityBox = true">
-						<div style="color:#d5d5d5;" v-if="cardInfo.province == ''">请选择开户行省市</div>
-						<div class="pick-citys flx-rs" v-if="cardInfo.province != ''">
-							<div class="pick-provinceName">{{cardInfo.province}}</div>
-							<div>{{cardInfo.city}}</div>
-						</div>
-						<img src="../../../assets/img/addCreditCard_choose.png" />
-					</div>
-				</div>
+			
 				<!-- 用户住址 -->
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.registAddr" clearable label="用户住址"
 				 placeholder="请输入住址" />
@@ -101,22 +102,11 @@
 			</van-action-sheet>
 		</div>
 		<!-- 身份证有效期 -->
-		<!-- <div class="validity-box"> -->
-	<!-- 		<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
-			 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
-				<van-datetime-picker v-model="currentDate" type="date" :min-date="min" :max-date="max"
-				 @confirm='sureValidity' @cancel='validityBox = false' @change='change' :formatter='formatter' />
-			</van-action-sheet> -->
-			<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
-			 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
-				<van-datetime-picker v-model="currentDate" type="date" :min-date="min" :max-date="max"
-				 @confirm='sureValidity' @cancel='validityBox = false' />
-			</van-action-sheet>
-			<!-- 	<van-popup v-model="validityBox">
-				<van-datetime-picker v-model="currentDate" type="date" :min-date="new Date('1999,01,01')" :max-date="new Date('2039,12,31')"
-				 @confirm='sureValidity' @cancel='validityBox = false' />
-			</van-popup> -->
-		<!-- </div> -->
+		<van-action-sheet class="search" v-model="validityBox" :title="title?'有效期开始时间':'有效期结束时间'" style="height: 50%;"
+		 :close-on-click-overlay='false' :lock-scroll='false' @close='validityBox=false'>
+			<van-datetime-picker v-model="currentDate" type="date" :min-date="min" :max-date="max" @confirm='sureValidity'
+			 @cancel='validityBox = false' />
+		</van-action-sheet>
 	</div>
 </template>
 <script>
@@ -137,8 +127,8 @@
 			return {
 				// currentDate: '',
 				currentDate: new Date(),
-				max:'',
-				min:'',
+				max: '',
+				min: '',
 				titleName: '绑定提现银行卡', //标题栏标题
 				from: '', //来自哪个页面
 				cardInfo: {
@@ -198,14 +188,16 @@
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
 		created() {
+			// 转化时间(这个是为了修复ios手机new Date方法生成的不能使用)
 			let a = '1999-01-01 00:00';
 			let b = '2039-12-31 00:00';
 			let c = '2019-01-01 00:00';
 			this.max = new Date(b.replace(/-/g, "/"));
 			this.min = new Date(a.replace(/-/g, "/"));
 			this.currentDate = new Date(c.replace(/-/g, "/"));
-			// console.log(new Date(a.replace(/-/g, "/")))
+			// 调用方法设置苹果手机顶部标题
 			tool.setAppTitle('绑定提现银行卡')
+			// 判断上个页面是否传值过来了,传了的话把值设置给相对的值
 			let arr = Object.keys(this.$route.params)
 			if (arr.length > 0) {
 				this.cardInfo.id = this.$route.params.id;
@@ -222,37 +214,11 @@
 				this.cardInfo.provinceCode = this.$route.params.provinceCode;
 				this.cardInfo.registAddr = this.$route.params.registAddr;
 				this.bankCode = this.$route.params.bankCode;
-				// : this.bankCardInfo.bankCardMobile||'',
-				// : this.bankCardInfo.bankCardNumb||'',
-				// : this.bankCardInfo.bankCode||'',
-				// : this.bankCardInfo.bankName||'',
-				// : this.bankCardInfo.bankNameBranch||'',
-				// : this.bankCardInfo.city||'',
-				// : this.bankCardInfo.cityCode||'',
-				// : this.bankCardInfo.idcardValidEnd||'',
-				// : this.bankCardInfo.idcardValidStart||'',
-				// : this.bankCardInfo.province||'',
-				// : this.bankCardInfo.provinceCode||'',
-				// : this.bankCardInfo.registAddr||'',
-				console.log(this.$route.params)
 			}
 			this.setColums();
 			this.setbankColumns();
 		},
 		methods: {
-			// formatter(type, value) {
-			// 	if (type === 'year') {
-			// 		return `${value}年`;
-			// 	} else if (type === 'month') {
-			// 		return `${value}月`
-			// 	} else if (type === 'day') {
-			// 		return `${value}日`
-			// 	}
-			// 	return value;
-			// },
-			// change(e) {
-			// 	console.log(e.getValues())
-			// },
 			// 设置省市列表
 			setColums() {
 				// 把本地的省市json设置给页面
@@ -304,7 +270,6 @@
 					})
 					.then(res => {
 						if (res == null) return;
-						// 接口返回数据为{},用户卡片不支持,就不继续发绑卡请求了
 						if (JSON.stringify(res.data) == '{}') return;
 						// 判断返回的bankName是否和银行名称数组里有一样的,有的话把相同的设置给数据
 						let arr = this.bankColumns.filter(cur => cur.text == res.data.bankName);
@@ -316,7 +281,6 @@
 			},
 			// 展示有效期选择盒子
 			showValidityBox(value) {
-				console.log(new Date())
 				this.title = value;
 				this.validityBox = true;
 			},
@@ -329,7 +293,8 @@
 					let days = d.getDate();
 					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1);
 					if (d.getDate() < 10) days = '0' + (d.getDate());
-					this.cardInfo.idcardValidStart = d.getFullYear() + '-' + month + '-' + days;
+					// this.cardInfo.idcardValidStart = d.getFullYear() + '-' + month + '-' + days;
+					this.cardInfo.idcardValidStart = `${d.getFullYear()}-${month}-${days}`;
 					this.validityBox = false;
 				} else {
 					//设置身份证有效期结束时间
@@ -338,7 +303,8 @@
 					let days = d.getDate();
 					if (d.getMonth() + 1 < 10) month = '0' + (d.getMonth() + 1);
 					if (d.getDate() < 10) days = '0' + (d.getDate());
-					this.cardInfo.idcardValidEnd = d.getFullYear() + '-' + month + '-' + days;
+					// this.cardInfo.idcardValidEnd = d.getFullYear() + '-' + month + '-' + days;
+					this.cardInfo.idcardValidEnd = `${d.getFullYear()}-${month}-${days}`;
 					this.validityBox = false;
 				}
 			},
@@ -381,7 +347,6 @@
 			closeSearchBox() {
 				this.page = 1;
 				this.finished = true;
-				console.log('执行了')
 			},
 			// 搜索支行
 			onSearch() {
@@ -401,7 +366,6 @@
 			},
 			//设置支行
 			setBranchBank(item) {
-				console.log(item)
 				this.cardInfo.bankNameBranch = item.key;
 				this.cardInfo.bankBranchCode = item.value;
 				this.list = [];
@@ -462,8 +426,6 @@
 			},
 			// 提交资料绑定银行卡
 			bindAtmCard() {
-				console.log(this.$route)
-				console.log(this.$router)
 				let cardInfo = this.cardInfo;
 				let value = true;
 				let verifier = {

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-<!-- 		<div class="title-bar flx-r">
+		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
 		<div class="container flx-cas" v-if="false">
@@ -75,35 +75,52 @@
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
+				isRealName: false, //是否已经完善快捷资料
 			};
 		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#f6f6f6')
 		},
-		created(){
+		created() {
 			tool.setAppTitle('信用卡刷卡')
 			let platFlag = tool.testPlat();
-			if (platFlag == 1) {
-				let aaa = '奥利奥，泡一泡';
-				// closeWeb ios定义的退回上一页，删除H5页面的方法
-				window.webkit.messageHandlers.closeWeb.postMessage(aaa);
-			} else {
-				// btnBack 安卓定义的退回上一页,删除H5页面的方法
-				window.android.btnBack()
-			}
+			this.$dialog.alert({
+				message:'该功能正在开发中，敬请期待！',
+				beforeClose:(action, done)=>{
+					if (platFlag == 1) {
+						// closeWeb ios定义的退回上一页，删除H5页面的方法
+						window.webkit.messageHandlers.closeWeb.postMessage('');
+						done()
+					} else {
+						// btnBack 安卓定义的退回上一页,删除H5页面的方法
+						window.android.btnBack()
+						done()
+					}
+				}
+			})
 		},
 		methods: {
 			// 跳转选择信用卡页面
-			goChooseQuickCard(){
-				if(!this.amount||this.amount == 0){
+			goChooseQuickCard() {
+				if (!this.amount || this.amount == 0) {
 					this.$toast({
-						message:'请输入刷卡金额',
+						message: '请输入刷卡金额',
 					})
 					return;
 				}
-				this.$router.push({
-					name:'chooseQuickCard'
-				})
+				// 判断用户是否已经完善快捷资料？,未完善跳转app完善资料页面
+				if (this.isRealName) {
+					this.$router.push({
+						name: 'chooseQuickCard'
+					})
+				} else {
+					let platFlag = tool.testPlat();
+					if(platFlag == 1){
+						window.webkit.messageHandlers.closeWeb.openRealName('');
+					}else{
+						window.android.openRealName()
+					}
+				}
 			},
 			// 输入金额
 			setAmount(num) {
@@ -141,7 +158,7 @@
 					// amount = '0.'
 					return;
 				} else {
-				//如果不是，添加一个小数点
+					//如果不是，添加一个小数点
 					amount += '.'
 				}
 				this.amount = amount;
@@ -151,9 +168,9 @@
 			_handleDeleteKey() {
 				let amount = this.amount;
 				// 如果没有输入,直接返回
-				if(!amount.length)return;
+				if (!amount.length) return;
 				// 否则删除最后一个 
-				amount = amount.substring(0,amount.length-1);
+				amount = amount.substring(0, amount.length - 1);
 				this.amount = amount;
 				// console.log('删除')
 			},
@@ -161,17 +178,17 @@
 			_handleNumberKey(num) {
 				let amount = this.amount;
 				//如果有小数点且小数点位数不小于2
-				if(amount.indexOf('.')>-1&&amount.substring(amount.indexOf('.')+1).length<2){
-					amount += num; 
+				if (amount.indexOf('.') > -1 && amount.substring(amount.indexOf('.') + 1).length < 2) {
+					amount += num;
 				}
 				// 有小数点
-				if(!(amount.indexOf('.') > -1)){
-					if(num == 0&&amount.length == 0){
+				if (!(amount.indexOf('.') > -1)) {
+					if (num == 0 && amount.length == 0) {
 						// amount = '0.'
 						amount = '0'
 						// return;
-					}else{
-						if(amount.length && Number(amount.charAt(0))===0) return;
+					} else {
+						if (amount.length && Number(amount.charAt(0)) === 0) return;
 						amount += num;
 					}
 				}
@@ -311,8 +328,9 @@
 					height: 120px;
 					margin: 0 0 10px 10px;
 					border-radius: 5px;
-					line-height:0;
-					img{
+					line-height: 0;
+
+					img {
 						width: 34px;
 						height: 26px;
 					}

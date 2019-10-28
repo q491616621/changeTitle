@@ -35,6 +35,7 @@ Vue.use(Router)
 //companyIntroduction //公司简介
 //videoTutorials //适配教程
 //reimbursementTutorial //还款教程
+//sdjBindChannel //盛迪佳通道绑定页面
 const router = new Router({
 	base: process.env.BASE_URL,
 	// mode: 'history',
@@ -71,10 +72,10 @@ const router = new Router({
 			component: resolve => require(['@/components/common/test.vue'], resolve)
 		},
 		{
-			path: '/test2',
-			name: 'test2', //测试用的
+			path: '/sdjBindChannel',
+			name: 'sdjBindChannel', //盛迪佳通道绑定
 			
-			component: resolve => require(['@/components/common/test2.vue'], resolve)
+			component: resolve => require(['@/components/common/sdjBindChannel.vue'], resolve)
 		},
 		{
 			path: '/addCreditCard',

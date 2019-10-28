@@ -53,7 +53,6 @@
 	</div>
 </template>
 <script>
-	import axios from 'axios'
 	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../public/tool/tool.js';
 	import switchServer from '../../../public/tool/switchServer.js';
@@ -144,36 +143,6 @@
 			// window.removeEventListener('popstate', this.goBack, false)
 		},
 		methods: {
-			// ----------------------------------------------------------
-			jump() {
-				axios({
-					method:'post',
-					url:'http://47.112.10.80:9010/channelapi/admin/help/testSdjBindcard.do',
-					// url:'http://47.112.10.80:9010/channelapi/repaysdj/admin/help/testSdjBindcard.do',
-				})
-				.then(res=>{
-					let routeData = this.$router.push({
-						path:'/test2',
-						query:{
-							htmls:res.data.unionHtml
-						}
-					});
-					window.open(routeData.href,'_blank');
-					// res.data.unionHtml
-					// console.log(res.data.unionHtml)
-				})
-			},
-			// ----------------------------------------------------------
-			// 返回事件(安卓手机返回按钮)
-			// goBack() {
-			// 	if (this.pageType == 'app') {
-			// 		window.android.btnBack()
-			// 	} else {
-			// 		this.$router.replace({
-			// 			name: 'cardManagement'
-			// 		})
-			// 	}
-			// },
 			// 从App端进入该页面
 			appEnter(e) {
 				// 获取app传过来的sessionId并设置给cookie,再执行getChannelList函数
@@ -313,6 +282,7 @@
 								beforeClose:(action, done)=>{
 									if(action == 'confirm'){
 										tool.toastLoading();
+										// 发请求获取用户之前填写结算卡的信息
 										server.querySettleCard({isAppCall: 1})
 										.then(res=>{
 											if (res == null) return;
@@ -376,10 +346,10 @@
 						}
 					})
 				} else if (status == 0) { //处理中
+					// 判断处理中状态是否是盛迪佳通道的1000000004,是的话跳转到盛迪佳绑卡页面
 					if(this.currentChannelCode == '1000000004'){
-						console.log(res)
-						let routeData = this.$router.replace({
-							path:'/test2',
+						let routeData = this.$router.push({
+							path:'/sdjBindChannel',
 							query:{
 								htmls:res.data.unionHtml
 							}
@@ -388,7 +358,6 @@
 						// 关闭弹窗时,如果是倒计时状态,就重置倒计时
 						if (this.$refs.countDown) this.$refs.countDown.reset();
 						this.codeBox = false;
-						console.log('2')
 						return;
 					}
 					this.$toast({
