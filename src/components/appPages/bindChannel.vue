@@ -29,7 +29,8 @@
 					<div>{{item.bankName}}</div>
 				</div>
 				<div class="left flx-c">
-					<div class="btn" color="#fff" @click="bindTheChannel(index)">绑定该通道</div>
+					<div class="btn"  @click="bindTheChannel(index)" v-if="item.bindFlag == 0">绑定该通道</div>
+					<div class="btn" style="background:#29cd83;" @click="bindTheChannel(index)" v-if="item.bindFlag != 0 ">该通道已绑定</div>	
 				</div>
 			</div>
 		</div>
@@ -121,11 +122,17 @@
 					me.appEnter(url)
 				}
 				tool.setAppTitle('通道绑定')
+<<<<<<< HEAD
 				// ------------------------------------------
 				// let a =
 				// 	'{"repayChannelCode": "1000020002","sessionId": "2ea4aaba-b5dc-49f5-a014-e43771b06225","certificateNum": "445122199010122716","userName": "王金盛"}';
 				// 	this.appEnter(a)
 				// -------------------------------------------
+=======
+				let a =
+					'{"repayChannelCode": "1000020002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
+					this.appEnter(a)
+>>>>>>> Merchant-bindChannel
 			}
 			// let cardInfo = this.$route.params
 			// this.cardInfo = cardInfo; 
@@ -191,7 +198,7 @@
 								if (res == null) return;
 								this.cardList = res.data.map(cur => {
 									cur.bankCardNumb = cur.bankCardNumb.substr(cur.bankCardNumb.length - 4);
-									// 添加银行logo
+									// 添加默认银行logo
 									cur.logo = require('../../assets/img/bankLogo/bank15.png');
 									for (let item in bankLogo) {
 										if (cur.bankName == item) {
@@ -240,6 +247,14 @@
 			},
 			// 绑定该通道
 			bindTheChannel(index) {
+				if(this.cardList[index].bindFlag == 1){
+					this.$toast({
+						message:'该通道已成功绑定，请勿重复绑定',
+						duration:1500,
+						forbidClick:true
+					})
+					return
+				}
 				this.currentIndex = index;
 				let init = {};
 				init.channelCode = this.currentChannelCode;
@@ -406,8 +421,13 @@
 						forbidClick: true,
 						onClose: () => {
 							// 绑定成功把该卡从数组移除掉
-							this.cardList = this.cardList.filter((cur, index) => {
-								if (index != this.currentIndex) return cur;
+							// this.cardList = this.cardList.filter((cur, index) => {
+							// 	if (index != this.currentIndex) return cur;
+							// })
+							//绑定成功把该卡的bindFlay改成1
+							this.cardList = this.cardList.map((cur,index)=>{
+								if(index == this.currentIndex) cur.bindFlag = 1;
+								return cur
 							})
 							// 关闭弹窗时,如果是倒计时状态,就重置倒计时
 							if (this.$refs.countDown) this.$refs.countDown.reset();
