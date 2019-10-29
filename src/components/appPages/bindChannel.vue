@@ -119,9 +119,9 @@
 					me.appEnter(url)
 				}
 				tool.setAppTitle('通道绑定')
-				let a =
-					'{"repayChannelCode": "1000020002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
-					this.appEnter(a)
+				// let a =
+				// 	'{"repayChannelCode": "1000020002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
+				// 	this.appEnter(a)
 			}
 			// let cardInfo = this.$route.params
 			// this.cardInfo = cardInfo; 
