@@ -248,7 +248,7 @@
 							bankColumns.push(init)
 						})
 						this.bankColumns = bankColumns;
-						// 判断用户是否是从修改进来的
+						// 判断用户是否带着上个页面的参数进来的
 						if (Object.keys(this.$route.params).length > 0) {
 							// 判断上个页面传进来的银行名称是否和我们的银行数组相匹配,不匹配的话 把银行名,卡号,银行code都重置
 							let arr = bankColumns.filter(cur => cur.text == this.$route.params.bankName);
@@ -259,6 +259,13 @@
 								this.cardInfo.bankName = '';
 								this.bankCode = '';
 								this.bankCardNumb = '';
+							}
+							// 判断上个页面传过来的数据是否有provinceCode或者是cityCode,没有的话循环遍历相对应的给到他
+							if(this.cardInfo.provinceCode == ''||this.cardInfo.cityCode == ''){
+								let arr2 = this.citys.filter(cur=>cur.name == this.cardInfo.province);
+								let arr3 = arr2[0].cities.filter(cur=>cur.name == this.cardInfo.city);
+								this.cardInfo.provinceCode = arr2[0].code;
+								this.cardInfo.cityCode = arr3[0].code;
 							}
 						}
 					})
@@ -464,10 +471,12 @@
 								// 	})
 								// }
 							})
+							// 判断用户是从哪个页面进来的,根据来的方向返回不同的页面
 							if (this.from == 'bindChannel') {
 								setTimeout(() => {
 									this.$router.replace({
-										name: 'bindChannel'
+										name: 'bindChannel',
+										params:{channelCode:'1000000004',page:'bindAtmCard'}
 									})
 								}, 2000)
 							} else {
@@ -483,7 +492,7 @@
 						message: value
 					})
 				}
-			}
+			},
 		},
 	};
 </script>

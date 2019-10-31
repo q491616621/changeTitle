@@ -46,11 +46,11 @@
       },
       // 登陆
       denglu() {
-        let init = {
-          agentId: 1986738797,
-          userName: 13610144601,
-          passWord: '123456'
-        }
+        // let init = {
+        //   agentId: 1986738797,
+        //   userName: 13610144601,
+        //   passWord: '123456'
+        // }
 		//  let init = {
 		//   agentId: 1986738797,
 		//   userName: 17665271721,
@@ -67,6 +67,12 @@
 		// 	userName: 18665327870,
 		// 	passWord: '123456'
 		// }
+		// 昭茜的账号2
+		// let init = {
+		//   agentId: 1986738797,
+		//   userName: 13504631571,
+		//   passWord: '123456'
+		// }
 		//金盛二号手机
 		// let init = {
 		// 	agentId:1986738797,
@@ -81,11 +87,11 @@
 		// 	passWord:'123456'
 		// }
 		//老于
-		// let init = {
-		// 	agentId:1908141437,
-		// 	userName:18682001955,
-		// 	passWord:'woaini'
-		// }
+		let init = {
+			agentId:1908141437,
+			userName:18682001955,
+			passWord:'woaini'
+		}
 		// let init = {
 		// 	agentId:1908141437,
 		// 	userName:13631435331,
