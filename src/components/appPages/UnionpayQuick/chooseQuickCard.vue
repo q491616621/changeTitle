@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<div class="container flx-cas">
 			<div class="order-info">
 				<div class="order-li flx-r">
@@ -62,19 +62,23 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 export default {
-	components: {
-		topTitle,
-	},
+	// components: {
+	// 	topTitle,
+	// },
 	data() {
 		return {
 			titleName: '确认支付', //标题栏标题
-			cardList:[1]
+			cardList:[1],
+			amount:'',
 		};
 	},
 	beforeCreate() {
 		document.querySelector('body').setAttribute('style', 'background-color:#FFFFFF')
+	},
+	created() {
+		this.amount = this.$store.state.unionpayQuickAmount
 	},
 	methods: {
 		// 跳转绑定快捷信用卡页面
@@ -96,7 +100,7 @@ export default {
 <style scoped="scoped" lang="less">
 	.container{
 		width: 100%;
-		margin-top: 88px;
+		// margin-top: 88px;
 		.order-info{
 			width: 690px;
 			font-size: 30px;

@@ -343,6 +343,24 @@
 			// 检查绑卡状态函数
 			checkCardStatus(status, res) {
 				if (status == 4) { //需短验
+					//判断是否是1000000004这个通道，是的话直接调用短信验证接口
+					if (this.currentChannelCode == '1000000004') {
+						tool.toastLoading()
+						let verify = {
+							channelCode:res.data.channelCode,
+							orderId:res.data.orderId,
+							recordId:res.data.recordId,
+							smsCode:'111111'
+						};
+						server.verifyBindcardSm(verify)
+							.then(res => {
+								if (res == null) return; //返回为null 不执行下面操作
+								let status = res.data.status;
+								this.checkCardStatus(status, res) //执行检查
+							})
+						return
+					}
+					//其他通道正常发短信
 					this.$toast({
 						message: '验证短信已发送,请留意接收',
 						duration: 1000,

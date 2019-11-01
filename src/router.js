@@ -255,21 +255,33 @@ const router = new Router({
 		{
 			path: '/quickVerify',
 			name: 'quickVerify', // quickVerify //快捷支付短信验证
+			meta:{
+				title:'短信验证'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/quickVerify.vue'], resolve)
 		},
 		{
 			path: '/channelIntroduce',
-			name: 'channelIntroduce', // channelIntroduce //信用卡刷卡
+			name: 'channelIntroduce', // channelIntroduce //通道介绍
+			meta:{
+				title:'通道介绍'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/channelIntroduce.vue'], resolve)
 		},
 		{
 			path: '/chooseQuickCard',
 			name: 'chooseQuickCard', // chooseQuickCard //选择快捷支付银行卡
+			meta:{
+				title:'选择支付银行'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/chooseQuickCard.vue'], resolve)
 		},
 		{
 			path: '/addQuickCard',
 			name: 'addQuickCard', // addQuickCard //添加快捷信用卡
+			meta: {
+				title: '添加快捷信用卡'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/addQuickCard.vue'], resolve)
 		},
 		{

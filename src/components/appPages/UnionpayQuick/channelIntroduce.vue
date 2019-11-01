@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+	<!-- 	<div class="title-bar flx-r">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<div class="intro-box flx-cas">
 			<div class="intro-title flx-ras">
 				<div class='title'>银行名称</div>
@@ -19,11 +19,11 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '银联快捷-积分通道A', //标题栏标题
@@ -57,7 +57,8 @@
 
 <style scoped="scoped" lang="less">
 	.intro-box {
-		margin-top: 108px;
+		// margin-top: 108px;
+		margin-top: 20px;
 		padding-bottom:30px;
 		.intro-title {
 			width: 690px;

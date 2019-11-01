@@ -4,7 +4,7 @@
 		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
-		<div class="container flx-cas" v-if="false">
+		<div class="container flx-cas" v-if="true">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<!-- <div>使用说明</div> -->
@@ -15,9 +15,9 @@
 					<span>(元)</span>
 				</div>
 				<div class="content flx-rs">
-					<span>￥</span>
-					<span v-if="amount.length>0">{{amount}}</span>
-					<span v-if="!(amount.length>0)">0.00</span>
+					<div>￥</div>
+					<div v-if="amount.length>0">{{amount}}</div>
+					<div v-if="!(amount.length>0)">0.00</div>
 					<!-- <span>0.00</span> -->
 				</div>
 				<div class="bottom flx-r">
@@ -75,7 +75,7 @@
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
-				isRealName: false, //是否已经完善快捷资料
+				isRealName: true, //是否已经完善快捷资料
 			};
 		},
 		beforeCreate() {
@@ -83,21 +83,22 @@
 		},
 		created() {
 			tool.setAppTitle('信用卡刷卡')
-			let platFlag = tool.testPlat();
-			this.$dialog.alert({
-				message:'该功能正在开发中，敬请期待！',
-				beforeClose:(action, done)=>{
-					if (platFlag == 1) {
-						// closeWeb ios定义的退回上一页，删除H5页面的方法
-						window.webkit.messageHandlers.closeWeb.postMessage('');
-						done()
-					} else {
-						// btnBack 安卓定义的退回上一页,删除H5页面的方法
-						window.android.btnBack()
-						done()
-					}
-				}
-			})
+			// let platFlag = tool.testPlat();
+			// this.$dialog.alert({
+			// 	message:'该功能正在开发中，敬请期待！',
+			// 	beforeClose:(action, done)=>{
+			// 		if (platFlag == 1) {
+			// 			// closeWeb ios定义的退回上一页，删除H5页面的方法
+			// 			window.webkit.messageHandlers.closeWeb.postMessage('');
+			// 			done()
+			// 		} else {
+			// 			// btnBack 安卓定义的退回上一页,删除H5页面的方法
+			// 			window.android.btnBack()
+			// 			done()
+			// 		}
+			// 	}
+			// })
+			this.amount = this.$store.state.unionpayQuickAmount;
 		},
 		methods: {
 			// 跳转选择信用卡页面
@@ -110,8 +111,10 @@
 				}
 				// 判断用户是否已经完善快捷资料？,未完善跳转app完善资料页面
 				if (this.isRealName) {
+					//调用vuex 设置银联快捷的金额
+					this.$store.commit('setUnionpayQuickAmount',parseFloat(this.amount).toString())
 					this.$router.push({
-						name: 'chooseQuickCard'
+						name: 'chooseQuickCard',
 					})
 				} else {
 					let platFlag = tool.testPlat();
@@ -255,10 +258,10 @@
 				height: 100px;
 				line-height: 100px;
 				padding-top: 60px;
-				border-bottom: 1px solid #e5e5e5;
-
-				span {
-					height: 80px;
+				// border-bottom: 1px solid #e5e5e5;
+				
+				div {
+					height: 100px;
 					line-height: 80px;
 					font-size: 60px;
 					color: #444;
@@ -270,6 +273,7 @@
 			}
 
 			.bottom {
+				border-top: 1px solid #e5e5e5;
 				padding-top: 20px;
 				width: 100%;
 				height: 100%;
