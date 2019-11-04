@@ -29,5 +29,7 @@ export const server = {
   querySubAccountList:(data)=>{return post('/user/querySubAccountList.do',data)},//查询直接或间接人数列表
   // testSdjBindcard:(data)=>{return post('/admin/help/testSdjBindcard.do',data)},//获取盛迪佳外链代码接口
   querySettleBankList:(data)=>{return post('/insettle/querySettleBankList.do',data)},//查询结算卡银行列表 
-  querySettleBankBranchList:(data)=>{return post('/insettle/querySettleBankBranchList.do',data)},//查询结算卡银行支行列表  
+  querySettleBankBranchList:(data)=>{return post('/insettle/querySettleBankBranchList.do',data)},//查询结算卡银行支行列表
+  querySdjPronAndCityList:(data)=>{return post('/insettle/querySdjPronAndCityList.do',data)},//查询结算卡省份城市列表 
+  querySdjDistList:(data)=>{return post('/insettle/querySdjDistList.do',data)},//查询结算卡指定城市下的区县列表 
 }

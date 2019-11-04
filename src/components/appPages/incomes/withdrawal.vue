@@ -216,6 +216,8 @@
 							province: this.bankCardInfo.province||'',
 							provinceCode: this.bankCardInfo.provinceCode||'',
 							registAddr: this.bankCardInfo.registAddr||'',
+							dist:this.bankCardInfo.dist||'',
+							distCode:this.bankCardInfo.distCode||'',
 						}
 					})
 				}

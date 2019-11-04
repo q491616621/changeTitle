@@ -99,8 +99,26 @@
 			// 	}
 			// })
 			this.amount = this.$store.state.unionpayQuickAmount;
+			// ----------------------------------
+			let me = this;
+			window['setSwipeCardData'] = (url) => {
+				me.setSwipeCardData(url)
+			}
 		},
 		methods: {
+			// 设置获取app传过来的数据
+			setSwipeCardData(data){
+				console.log('执行了')
+				let appData = JSON.parse(data)
+				let sessionId = appData.sessionId;
+				let faceStatus = appData.faceStatus;
+				let realName = appData.realName;
+				let certificateNumb = appData.certificateNumb;
+				this.$toast({
+					message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
+					duration:0
+				})
+			},
 			// 跳转选择信用卡页面
 			goChooseQuickCard() {
 				if (!this.amount || this.amount == 0) {

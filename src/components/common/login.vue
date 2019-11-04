@@ -87,10 +87,16 @@
 		// 	passWord:'123456'
 		// }
 		//老于
+		// let init = {
+		// 	agentId:1908141437,
+		// 	userName:18682001955,
+		// 	passWord:'woaini'
+		// }
+		//不知名测试号
 		let init = {
 			agentId:1908141437,
-			userName:18682001955,
-			passWord:'woaini'
+			userName:15991001682,
+			passWord:'123456'
 		}
 		// let init = {
 		// 	agentId:1908141437,

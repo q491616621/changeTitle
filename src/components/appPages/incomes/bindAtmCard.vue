@@ -23,28 +23,37 @@
 						<img src="../../../assets/img/addCreditCard_choose.png" />
 					</div>
 				</div>
-				 <!-- 开户支行 -->
-				 <div class="addPicker-li flx-rs">
-				 	<div>开户支行</div>
-				 	<div class="right" @click="showSearchBox">
-				 		<div v-if="cardInfo.bankNameBranch ==''" class="default">请选择所在开户支行</div>
-				 		<div v-if="cardInfo.bankNameBranch !=''" class="name">{{ cardInfo.bankNameBranch }}</div>
-				 		<img src="../../../assets/img/addCreditCard_choose.png" />
-				 	</div>
-				 </div>
-				 <!-- 开户行省市 -->
-				 <div class="city-picker flx-rs medium">
-				 	<div class="pick-title">开户行省市</div>
-				 	<!-- <div class="pick-content flx-rs" @click="showCityPicker"> -->
-				 	<div class="pick-content flx-rs" @click="chooseCityBox = true">
-				 		<div style="color:#d5d5d5;" v-if="cardInfo.province == ''">请选择开户行省市</div>
-				 		<div class="pick-citys flx-rs" v-if="cardInfo.province != ''">
-				 			<div class="pick-provinceName">{{cardInfo.province}}</div>
-				 			<div>{{cardInfo.city}}</div>
-				 		</div>
-				 		<img src="../../../assets/img/addCreditCard_choose.png" />
-				 	</div>
-				 </div>
+				<!-- 开户支行 -->
+				<div class="addPicker-li flx-rs">
+					<div>开户支行</div>
+					<div class="right" @click="showSearchBox">
+						<div v-if="cardInfo.bankNameBranch ==''" class="default">请选择所在开户支行</div>
+						<div v-if="cardInfo.bankNameBranch !=''" class="name">{{ cardInfo.bankNameBranch }}</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
+				<!-- 开户行省市 -->
+				<div class="city-picker flx-rs medium">
+					<div class="pick-title">开户行省市</div>
+					<!-- <div class="pick-content flx-rs" @click="showCityPicker"> -->
+					<div class="pick-content flx-rs" @click="chooseCityBox = true">
+						<div style="color:#d5d5d5;" v-if="cardInfo.province == ''">请选择开户行省市</div>
+						<div class="pick-citys flx-rs" v-if="cardInfo.province != ''">
+							<div class="pick-provinceName">{{cardInfo.province}}</div>
+							<div>{{cardInfo.city}}</div>
+						</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
+				<!-- 开户行省市 -->
+				<div class="addPicker-li flx-rs">
+					<div>开户所在区</div>
+					<div class="right" @click="getRegion">
+						<div v-if="cardInfo.dist ==''" class="default">请选择开户行所在区</div>
+						<div v-if="cardInfo.dist !=''">{{ cardInfo.dist }}</div>
+						<img src="../../../assets/img/addCreditCard_choose.png" />
+					</div>
+				</div>
 				<!-- 身份证有效期开始时间 -->
 				<div class="addPicker-li flx-rs">
 					<div>有效期开始</div>
@@ -63,7 +72,7 @@
 						<img src="../../../assets/img/addCreditCard_choose.png" />
 					</div>
 				</div>
-			
+
 				<!-- 用户住址 -->
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.registAddr" clearable label="用户住址"
 				 placeholder="请输入住址" />
@@ -84,6 +93,13 @@
 		<div class="addrePayPlan-choose-picker">
 			<van-popup v-model="chooseCityBox" position="bottom">
 				<van-picker show-toolbar :columns="columns" @change="onChange" @cancel="chooseCityBox=false" @confirm='onConfirm'
+				 :item-height="60" />
+			</van-popup>
+		</div>
+		<!-- 区选择器 -->
+		<div class="addrePayPlan-choose-picker">
+			<van-popup v-model="regionBox" position="bottom">
+				<van-picker show-toolbar :columns="columns2" @change="onChange" @cancel="regionBox=false" @confirm='setRegion'
 				 :item-height="60" />
 			</van-popup>
 		</div>
@@ -112,7 +128,7 @@
 <script>
 	// import topTitle from '@/components/common/topTitle.vue';
 	import tool from '../../../../public/tool/tool.js';
-	import citys from '../../../../public/tool/city.json';
+	// import citys from '../../../../public/tool/city.json';
 	import {
 		server
 	} from '@/api/server.js';
@@ -142,8 +158,10 @@
 					bankBranchCode: '', //银行支行联行号
 					province: '', //省份名称
 					provinceCode: '', //省份编码
-					cityCode: '', //城市编码
 					city: '', //城市名称
+					cityCode: '', //城市编码
+					dist: '', //开户行所在区
+					distCode: '', //区域编码
 					idcardValidStart: '', //身份证有效期开始时间
 					idcardValidEnd: '', //身份证有效期结束时间
 					registAddr: '', //用户住址
@@ -164,7 +182,9 @@
 				// ---------------------------
 				bankColumns: [], //银行列表
 				chooseCityBox: false, //控制省市的picker盒子显示与否
+				regionBox: false, //控制区的picker盒子显示与否
 				citys: '',
+				regionList:[],
 				columns: [{
 						// values: Object.keys(citys),
 						values: [],
@@ -177,6 +197,7 @@
 						defaultIndex: 2
 					}
 				],
+				columns2:[],//区列表
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -200,18 +221,33 @@
 			// 判断上个页面是否传值过来了,传了的话把值设置给相对的值
 			let arr = Object.keys(this.$route.params)
 			if (arr.length > 0) {
+				if (this.$route.params.bankBranchCode) {//判断用户的bankBranchCode（支行联行号）是否存在，存在的话代表用户是已经完善过数据了的，把传过来的数据设置进去
+					this.cardInfo.bankBranchCode = this.$route.params.bankBranchCode;
+					this.cardInfo.bankNameBranch = this.$route.params.bankNameBranch;
+					this.cardInfo.province = this.$route.params.province;
+					this.cardInfo.provinceCode = this.$route.params.provinceCode;
+					this.cardInfo.city = this.$route.params.city;
+					this.cardInfo.cityCode = this.$route.params.cityCode;
+					this.cardInfo.dist = this.$route.params.dist;
+					this.cardInfo.distCode = this.$route.params.distCode;
+				} else {//未完善数据的把数据设置为''
+					this.cardInfo.bankBranchCode = '';
+					this.cardInfo.bankNameBranch = '';
+					this.cardInfo.province = '';
+					this.cardInfo.provinceCode = '';
+					this.cardInfo.city = '';
+					this.cardInfo.cityCode = '';
+					this.cardInfo.dist = '';
+					this.cardInfo.distCode = '';
+				}
 				this.cardInfo.id = this.$route.params.id;
-				this.cardInfo.bankBranchCode = this.$route.params.bankBranchCode;
+				// this.cardInfo.bankBranchCode = this.$route.params.bankBranchCode;
+				// this.cardInfo.bankNameBranch = this.$route.params.bankNameBranch;
 				this.cardInfo.bankCardMobile = this.$route.params.bankCardMobile;
 				this.cardInfo.bankCardNumb = this.$route.params.bankCardNumb;
 				this.cardInfo.bankName = this.$route.params.bankName;
-				this.cardInfo.bankNameBranch = this.$route.params.bankNameBranch;
-				this.cardInfo.city = this.$route.params.city;
-				this.cardInfo.cityCode = this.$route.params.cityCode;
 				this.cardInfo.idcardValidEnd = this.$route.params.idcardValidEnd;
 				this.cardInfo.idcardValidStart = this.$route.params.idcardValidStart;
-				this.cardInfo.province = this.$route.params.province;
-				this.cardInfo.provinceCode = this.$route.params.provinceCode;
 				this.cardInfo.registAddr = this.$route.params.registAddr;
 				this.bankCode = this.$route.params.bankCode;
 			}
@@ -221,25 +257,44 @@
 		methods: {
 			// 设置省市列表
 			setColums() {
-				// 把本地的省市json设置给页面
-				this.citys = citys.provinces;
-				let arr = [];
-				let arr2 = [];
-				citys.provinces.forEach(cur => {
-					arr.push(cur.name)
+				tool.toastLoading();
+				server.querySdjPronAndCityList()
+				.then(res=>{
+					if (res == null) return;
+					// 把本地的省市json设置给页面
+					this.citys = res.data;
+					let arr = [];
+					let arr2 = [];
+					res.data.forEach(cur => {
+						arr.push(cur.name)
+					})
+					res.data[0].cities.forEach(cur => {
+						arr2.push(cur.name)
+					})
+					// 把省市设置给选择器
+					this.columns[0].values = arr;
+					this.columns[1].values = arr2;
 				})
-				citys.provinces[0].cities.forEach(cur => {
-					arr2.push(cur.name)
-				})
-				// 把省市设置给选择器
-				this.columns[0].values = arr;
-				this.columns[1].values = arr2;
+				// // 把本地的省市json设置给页面
+				// this.citys = citys.provinces;
+				// let arr = [];
+				// let arr2 = [];
+				// citys.provinces.forEach(cur => {
+				// 	arr.push(cur.name)
+				// })
+				// citys.provinces[0].cities.forEach(cur => {
+				// 	arr2.push(cur.name)
+				// })
+				// // 把省市设置给选择器
+				// this.columns[0].values = arr;
+				// this.columns[1].values = arr2;
 			},
 			// 设置银行列表
 			setbankColumns() {
 				tool.toastLoading();
 				server.querySettleBankList()
 					.then(res => {
+						if (res == null) return;
 						let bankColumns = [];
 						res.data.forEach(cur => {
 							let init = {};
@@ -248,9 +303,10 @@
 							bankColumns.push(init)
 						})
 						this.bankColumns = bankColumns;
+						// return
 						// 判断用户是否带着上个页面的参数进来的
 						if (Object.keys(this.$route.params).length > 0) {
-							// 判断上个页面传进来的银行名称是否和我们的银行数组相匹配,不匹配的话 把银行名,卡号,银行code都重置
+							// 判断上个页面传进来的银行名称是否和我们的银行数组相匹配,不匹配的话 把银行名,卡号,银行code，支行名称都重置
 							let arr = bankColumns.filter(cur => cur.text == this.$route.params.bankName);
 							if (arr.length != 0) {
 								this.cardInfo.bankName = arr[0].text;
@@ -258,15 +314,25 @@
 							} else {
 								this.cardInfo.bankName = '';
 								this.bankCode = '';
-								this.bankCardNumb = '';
+								this.cardInfo.bankCardNumb = '';
+								this.cardInfo.bankNameBranch = '';
+								this.cardInfo.bankBranchCode = '';
 							}
 							// 判断上个页面传过来的数据是否有provinceCode或者是cityCode,没有的话循环遍历相对应的给到他
-							if(this.cardInfo.provinceCode == ''||this.cardInfo.cityCode == ''){
-								let arr2 = this.citys.filter(cur=>cur.name == this.cardInfo.province);
-								let arr3 = arr2[0].cities.filter(cur=>cur.name == this.cardInfo.city);
-								this.cardInfo.provinceCode = arr2[0].code;
-								this.cardInfo.cityCode = arr3[0].code;
-							}
+							// if (this.cardInfo.provinceCode == '' || this.cardInfo.cityCode == '') {
+							// 	let arr2 = this.citys.filter(cur => cur.name == this.cardInfo.province);
+							// 	let arr3 = arr2[0].cities.filter(cur => cur.name == this.cardInfo.city);
+							// 	this.cardInfo.provinceCode = arr2[0].code;
+							// 	this.cardInfo.cityCode = arr3[0].code;
+							// }
+							
+							// else {
+							// 	console.log('aa')
+							// 	this.cardInfo.province = '';
+							// 	this.cardInfo.provinceCode = '';
+							// 	this.cardInfo.city = '';
+							// 	this.cardInfo.cityCode = '';
+							// }
 						}
 					})
 			},
@@ -431,6 +497,34 @@
 				this.cardInfo.cityCode = this.citys[index[0]].cities[index[1]].code; //设置市的code
 				this.chooseCityBox = false;
 			},
+			// 获取区列表,调起区选择picker
+			getRegion(){
+				if(this.cardInfo.province == ''||this.cardInfo.city == ''){
+					this.$toast({
+						message: '请先选择省市',
+						duration: 1500
+					})
+					return
+				}
+				tool.toastLoading()
+				server.querySdjDistList({parentCode:this.cardInfo.cityCode})
+				.then(res=>{
+					if (res == null) return;
+					let arr = [];
+					res.data.forEach(cur => {
+						arr.push(cur.name)
+					})
+					this.columns2 = arr;
+					this.regionBox = true;
+					this.regionList = res.data;
+				})
+			},
+			//确认所选的区的选项
+			setRegion(value,index){
+				this.cardInfo.dist = value;
+				this.cardInfo.distCode = this.regionList[index].code; 
+				this.regionBox = false;
+			},
 			// 提交资料绑定银行卡
 			bindAtmCard() {
 				let cardInfo = this.cardInfo;
@@ -438,12 +532,13 @@
 				let verifier = {
 					'bankCardNumb': '请填写储蓄卡号码', //储蓄卡号码
 					'province': '请选择开户行省市', //省份名称
+					'dist':'请选择开户行所在区',//区名称
 					'bankName': '请选择银行', //开户行
 					'bankNameBranch': '请选择支行', //支行
 					'bankCardMobile': '请填写预留银行手机号', //预留银行的手机号
 					'registAddr': '请填写用户地址',
 					'idcardValidStart': '请选择身份证有效期开始时间',
-					'idcardValidEnd': '请选择身份证有效期结束时间'
+					'idcardValidEnd': '请选择身份证有效期结束时间',
 				}
 				// 判读cardInfo 里面哪个值没填写,返回对应提示文字
 				for (let it in cardInfo) {
@@ -476,7 +571,11 @@
 								setTimeout(() => {
 									this.$router.replace({
 										name: 'bindChannel',
-										params:{channelCode:'1000000004',page:'bindAtmCard'}
+										params: {
+											channelCode: '1000000004',
+											page: 'bindAtmCard',
+											type:'ok'
+										}
 									})
 								}, 2000)
 							} else {

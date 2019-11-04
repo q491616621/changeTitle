@@ -101,8 +101,23 @@
 				isSumbitPlan: false, //是否在该页面提交过计划
 				// ---------------
 				sessionId: '',
+				from:'',
 				// ---------------
 			};
+		},
+		beforeRouteEnter(to, from, next) {
+			if (from.name == 'bindAtmCard'&&Object.keys(from.params).length == 0) {
+				next(vm=>{
+					let params = {
+						channelCode: '1000000004',
+						page: 'bindAtmCard',
+					}
+					vm.getChannelList(params);
+					tool.setAppTitle('通道绑定')
+				})
+			} else {
+				next();
+			}
 		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#f6f6f6')
@@ -322,6 +337,8 @@
 														province: bankCardInfo.province || '',
 														provinceCode: bankCardInfo.provinceCode || '',
 														registAddr: bankCardInfo.registAddr || '',
+														dist: bankCardInfo.dist || '',
+														distCode: bankCardInfo.distCode || '',
 													}
 												})
 											})
@@ -347,10 +364,10 @@
 					if (this.currentChannelCode == '1000000004') {
 						tool.toastLoading()
 						let verify = {
-							channelCode:res.data.channelCode,
-							orderId:res.data.orderId,
-							recordId:res.data.recordId,
-							smsCode:'111111'
+							channelCode: res.data.channelCode,
+							orderId: res.data.orderId,
+							recordId: res.data.recordId,
+							smsCode: '111111'
 						};
 						server.verifyBindcardSm(verify)
 							.then(res => {
