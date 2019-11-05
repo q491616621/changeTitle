@@ -30,7 +30,8 @@
 				</div>
 				<div class="left flx-c">
 					<div class="btn" @click="bindTheChannel(index)" v-if="item.bindFlag == 0">绑定该通道</div>
-					<div class="btn" style="background:#29cd83;" @click="bindTheChannel(index)" v-if="item.bindFlag != 0 ">该通道已绑定</div>
+					<div class="btn" style="background:#29cd83;" @click="bindTheChannel(index)" v-if="item.bindFlag == 1 ">该通道已绑定</div>
+					<div class="btn" style="background:#c2565b;" @click="bindTheChannel(index)" v-if="item.bindFlag == 2">绑定处理中</div>
 				</div>
 			</div>
 		</div>
@@ -259,6 +260,13 @@
 				if (this.cardList[index].bindFlag == 1) {
 					this.$toast({
 						message: '该通道已成功绑定，请勿重复绑定',
+						duration: 1500,
+						forbidClick: true
+					})
+					return
+				}else if(this.cardList[index].bindFlag == 2){
+					this.$toast({
+						message: '通道正在绑定中，请耐心等待',
 						duration: 1500,
 						forbidClick: true
 					})
