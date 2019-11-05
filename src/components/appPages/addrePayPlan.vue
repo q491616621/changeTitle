@@ -155,7 +155,11 @@
 					<ul class="title flx-rs">
 						<!-- <li v-for="(item,index) in arr1" :key='index' class="li-choose">{{item.dateNum}}</li> -->
 						<li v-for="(item,index) in arr1" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'" @click="chooseDate(item,'arr1')">
-							<div :class="item.checked?'li-has-choose':''">{{item.dateNum}}</div>
+							<div :class="item.checked?'li-has-choose':'li-not-choose'">
+							{{item.dateNum}}
+							<div>账单日</div>
+							<div>还款日</div>
+							</div>
 						</li>
 					</ul>
 				</div>
