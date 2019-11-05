@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-<!-- 		<div class="title-bar">
+		<!-- 		<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
 		</div> -->
 		<!-- 信用卡列表 -->
@@ -188,7 +188,7 @@
 					30, 31
 				],
 				isSupportLand: '', //是否支持选择落地城市，1支持，非1不支持
-				radioChange:false,//判断刚开始是否触发通道改变的方法
+				radioChange: false, //判断刚开始是否触发通道改变的方法
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -232,6 +232,16 @@
 				// 		defaultIndex: 2
 				// 	}
 				// ];
+				this.planList=[{ //方式列表
+					planCode: 1,
+					name: '消费1'
+				}, {
+					planCode: 2,
+					name: '消费2'
+				}, {
+					planCode: 3,
+					name: '消费3'
+				}];
 				this.radioChange = false;
 				this.radio = 0; //还款通道
 				this.radio2 = 1;
@@ -300,17 +310,17 @@
 					let value = false;
 					let a = 2;
 					// 判断是否在该还款方式中是否所有的通道都绑定失败
-					value = channelList.every(item=>item.isCardBindsuc == a)
-					if(value){
+					value = channelList.every(item => item.isCardBindsuc == a)
+					if (value) {
 						let method = '智能还款'
-						if(this.cardInfo.repaymothod == 2){
+						if (this.cardInfo.repaymothod == 2) {
 							method = '完美还款'
 						}
 						this.$toast({
-							message:`该还款方式您没有成功绑定的通道，无法使用该方式还款，请选择"${method}"进行还款`,
-							forbidClick:true,
-							duration:5000,
-							onClose:()=>{
+							message: `该还款方式您没有成功绑定的通道，无法使用该方式还款，请选择"${method}"进行还款`,
+							forbidClick: true,
+							duration: 5000,
+							onClose: () => {
 								this.$router.go(-1)
 							}
 						})
@@ -320,11 +330,11 @@
 					let defaultChannelCode = this.cardInfo.defaultChannelCode; //获取到我们默认的通道
 					let radio = 0;
 					for (let i = 0; i < channelList.length; i++) {
-						if(channelList[i].channelCode == defaultChannelCode && channelList[i].isCardBindsuc !=2){
+						if (channelList[i].channelCode == defaultChannelCode && channelList[i].isCardBindsuc != 2) {
 							radio = i;
 							break;
-						}else{
-							if(channelList[i].isCardBindsuc != 2){
+						} else {
+							if (channelList[i].isCardBindsuc != 2) {
 								radio = i;
 								break;
 							}
@@ -370,7 +380,7 @@
 									this.$refs.cityPicker.setColumnIndex(1, 2);
 								}
 							})
-					}else{
+					} else {
 						this.radioChange = true;
 					}
 				})
@@ -396,129 +406,151 @@
 			},
 			// 选择通道
 			changeRadio(e) {
-				if(!this.radioChange)return;
+				if (!this.radioChange) return;
 				let name = e;
 				// 选择通道时,设置通道id
 				this.planInfo.channelCode = this.channelList[name].channelCode;
-				//选择通道时，设置是否支持选择落地城市
-				this.isSupportLand = this.channelList[name].isSupportLand;
-				if (this.channelList[name].isSupportLand == 1) {
-					tool.toastLoading()
-					server.queryProvinces({
-							channelCode: this.channelList[name].channelCode
-						})
-						.then(res => {
-							if (res == null) return;
-							this.citys = res.data;
-							let province = Object.keys(res.data)[0] //拿到第一个省
-							this.columns[0].values = Object.keys(res.data) //设置省选择框内数据
-							this.columns[1].values = res.data[province] //设置市选择框内数据
-							this.planInfo.provinceName = '';
-							this.planInfo.cityName = '';
-							if (this.$refs.cityPicker) {
-								this.$refs.cityPicker.setColumnValues(0, Object.keys(res.data));
-								this.$refs.cityPicker.setColumnValues(1, res.data[province]);
-								this.$refs.cityPicker.setColumnIndex(0, 0);
-								this.$refs.cityPicker.setColumnIndex(1, 2);
-							}
-						})
+				// 当通道号等于1000000004时,关闭消费2 消费3选项
+				if (this.channelList[name].channelCode == '1000000004') {
+					this.planList = [{ //方式列表
+						planCode: 1,
+						name: '消费1'
+					}]
+					this.radio2 = 1;
+				}else{
+					this.planList = [
+						{ //方式列表
+							planCode: 1,
+							name: '消费1'
+						}, {
+							planCode: 2,
+							name: '消费2'
+						}, {
+							planCode: 3,
+							name: '消费3'
+						}
+					]
 				}
 
-			},
-			// 选择方式
-			changeRadio2(e) {
-				let name = e;
-				this.planInfo.repayMode = name;
-			},
-			// 调起省市选择框
-			showPicker() {
-				this.chooseCityBox = true;
-			},
-			// 改变选项
-			onChange(picker, value) {
-				let province = value[0]
-				let citys = this.citys
-				picker.setColumnValues(1, citys[province])
-			},
-			// 点击确定
-			onConfirm(value) {
-				this.planInfo.provinceName = value[0]
-				this.planInfo.cityName = value[1]
-				this.chooseCityBox = false;
-			},
-			// 预览还款计划
-			PreviewRepayment() {
-				let planInfo = this.planInfo;
-				// 判断是否有少填写东西
-				if (!planInfo.repayAmount) {
-					this.$toast('请填写还款金额');
-					return
-				} else if (!planInfo.balanceAmount) {
-					this.$toast('请填写卡内余额');
-					return
-				} else if (!planInfo.billingDay) {
-					this.$toast('请选择账单日');
-					return
-				} else if (!planInfo.repaymentDay) {
-					this.$toast('请选择还款日');
-					return
-				} else if (!planInfo.cardQuota) {
-					this.$toast('请设置卡片额度');
-					return
-				}else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
-					// 判断当前通道是否有落地城市,如果有的话必须填落地省市
-					this.$toast('请选择落地城市');
-					return
-				}
-				let days = tool.days(); //获取当前月份的最大天数
-				// 判断当前用户设置的账单日或者是还款日是否大于当前月份的最大天数,是的话改成当前月份最大的天数
-				if (planInfo.billingDay > days) planInfo.billingDay = days;
-				if (planInfo.repaymentDay > days) planInfo.repaymentDay = days;
-				if (planInfo.billingDay == planInfo.repaymentDay) return this.$toast('账单日和还款日不能是同一天哦!')
-				// 判断用户设置的账单日和还款日是否大于当前月分的天数,是的话提示用户进行修改
-				// if (planInfo.billingDay > days || planInfo.repaymentDay > days) {
-				// 	this.$toast('账单日或还款日不能大于当月最大天数，请修改后重试')
-				// 	return
-				// }
-				// 弹窗加载中
-				tool.toastLoading();
-				server.preCreatePlan(planInfo).then(res => {
-					if (res == null) return;
-					let channelType = this.channelList[this.radio].channelType;
-					this.$toast.clear()
-					this.$router.push({
-						name: 'payPlanInfo',
-						params: {
-							channelType,
-							cardInfo: planInfo,
-							planInfo: res.data,
-							// userInfo:this.cardInfo
+			//选择通道时，设置是否支持选择落地城市
+			this.isSupportLand = this.channelList[name].isSupportLand;
+			if (this.channelList[name].isSupportLand == 1) {
+				tool.toastLoading()
+				server.queryProvinces({
+						channelCode: this.channelList[name].channelCode
+					})
+					.then(res => {
+						if (res == null) return;
+						this.citys = res.data;
+						let province = Object.keys(res.data)[0] //拿到第一个省
+						this.columns[0].values = Object.keys(res.data) //设置省选择框内数据
+						this.columns[1].values = res.data[province] //设置市选择框内数据
+						this.planInfo.provinceName = '';
+						this.planInfo.cityName = '';
+						if (this.$refs.cityPicker) {
+							this.$refs.cityPicker.setColumnValues(0, Object.keys(res.data));
+							this.$refs.cityPicker.setColumnValues(1, res.data[province]);
+							this.$refs.cityPicker.setColumnIndex(0, 0);
+							this.$refs.cityPicker.setColumnIndex(1, 2);
 						}
 					})
-				})
-			},
-		},
-		filters: {
-			// 过滤账单日,还款日
-			dateTime: (value) => {
-				let time = value;
-				if (time == null) {
-					time = ''
-				} else if (time < 10) {
-					time = '0' + value;
-				}
-				return time;
-			},
-			// 过滤额度
-			Quota: (value) => {
-				if (value == null || value == '') {
-					value = ''
-				} else {
-					value = tool.centTurnSmacker(value);
-				}
-				return value;
 			}
+
+		},
+		// 选择方式
+		changeRadio2(e) {
+			let name = e;
+			this.planInfo.repayMode = name;
+		},
+		// 调起省市选择框
+		showPicker() {
+			this.chooseCityBox = true;
+		},
+		// 改变选项
+		onChange(picker, value) {
+			let province = value[0]
+			let citys = this.citys
+			picker.setColumnValues(1, citys[province])
+		},
+		// 点击确定
+		onConfirm(value) {
+			this.planInfo.provinceName = value[0]
+			this.planInfo.cityName = value[1]
+			this.chooseCityBox = false;
+		},
+		// 预览还款计划
+		PreviewRepayment() {
+			let planInfo = this.planInfo;
+			// 判断是否有少填写东西
+			if (!planInfo.repayAmount) {
+				this.$toast('请填写还款金额');
+				return
+			} else if (!planInfo.balanceAmount) {
+				this.$toast('请填写卡内余额');
+				return
+			} else if (!planInfo.billingDay) {
+				this.$toast('请选择账单日');
+				return
+			} else if (!planInfo.repaymentDay) {
+				this.$toast('请选择还款日');
+				return
+			} else if (!planInfo.cardQuota) {
+				this.$toast('请设置卡片额度');
+				return
+			} else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
+				// 判断当前通道是否有落地城市,如果有的话必须填落地省市
+				this.$toast('请选择落地城市');
+				return
+			}
+			let days = tool.days(); //获取当前月份的最大天数
+			// 判断当前用户设置的账单日或者是还款日是否大于当前月份的最大天数,是的话改成当前月份最大的天数
+			if (planInfo.billingDay > days) planInfo.billingDay = days;
+			if (planInfo.repaymentDay > days) planInfo.repaymentDay = days;
+			if (planInfo.billingDay == planInfo.repaymentDay) return this.$toast('账单日和还款日不能是同一天哦!')
+			// 判断用户设置的账单日和还款日是否大于当前月分的天数,是的话提示用户进行修改
+			// if (planInfo.billingDay > days || planInfo.repaymentDay > days) {
+			// 	this.$toast('账单日或还款日不能大于当月最大天数，请修改后重试')
+			// 	return
+			// }
+			// 弹窗加载中
+			tool.toastLoading();
+			server.preCreatePlan(planInfo).then(res => {
+				if (res == null) return;
+				let channelType = this.channelList[this.radio].channelType;
+				this.$toast.clear()
+				this.$router.push({
+					name: 'payPlanInfo',
+					params: {
+						channelType,
+						cardInfo: planInfo,
+						planInfo: res.data,
+						// userInfo:this.cardInfo
+					}
+				})
+			})
+		},
+	},
+	filters: {
+		// 过滤账单日,还款日
+		dateTime: (value) => {
+			let time = value;
+			if (time == null) {
+				time = ''
+			} else if (time < 10) {
+				time = '0' + value;
+			}
+			return time;
+		},
+		// 过滤额度
+		Quota: (value) => {
+			if (value == null || value == '') {
+				value = ''
+			} else {
+				value = tool.centTurnSmacker(value);
+			}
+			return value;
 		}
+	}
 	};
 </script>
 <style lang="less">
