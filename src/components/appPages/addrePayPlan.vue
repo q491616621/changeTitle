@@ -394,6 +394,7 @@
 						}
 					}
 				}
+				// 判断用户在这个月是否选择了,选择了的话把已经选择了的,标上颜色
 				if(this.checkArr1.length != 0){
 					arr1 = arr1.map(cur=>{
 						this.checkArr1.forEach(item=>{
@@ -404,6 +405,7 @@
 						return cur
 					})
 				}
+				// 判断用户在下个月是否选择了,选择了的话把已经选择了的,标上颜色
 				if(this.checkArr2.length != 0){
 					arr2 = arr2.map(cur=>{
 						this.checkArr2.forEach(item=>{
@@ -488,7 +490,7 @@
 					// 返回和用户选择的通道类型相同的通道
 					let channelList = res.data.filter(cur => {
 						return cur.channelType == this.planInfo.repayType;
-					});
+					}).reverse();
 					// ---------------------------------
 					// channelList = [
 					// 	{
@@ -588,6 +590,8 @@
 									this.$refs.cityPicker.setColumnIndex(1, 2);
 								}
 							})
+					}else{
+						this.radioChange = true;
 					}
 				})
 			},
@@ -694,7 +698,7 @@
 				} else if (!planInfo.cardQuota) {
 					this.$toast('请设置卡片额度');
 					return
-				} else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
+				}else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
 					// 判断当前通道是否有落地城市,如果有的话必须填落地省市
 					this.$toast('请选择落地城市');
 					return

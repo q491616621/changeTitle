@@ -67,6 +67,12 @@
 		// 	userName: 18665327870,
 		// 	passWord: '123456'
 		// }
+		// 昭茜的账号2
+		// let init = {
+		//   agentId: 1986738797,
+		//   userName: 13504631571,
+		//   passWord: '123456'
+		// }
 		//金盛二号手机
 		// let init = {
 		// 	agentId:1986738797,
@@ -85,6 +91,12 @@
 		// 	agentId:1908141437,
 		// 	userName:18682001955,
 		// 	passWord:'woaini'
+		// }
+		//不知名测试号
+		// let init = {
+		// 	agentId:1908141437,
+		// 	userName:15991001682,
+		// 	passWord:'123456'
 		// }
 		// let init = {
 		// 	agentId:1908141437,

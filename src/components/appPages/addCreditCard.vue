@@ -173,7 +173,7 @@
 							// })
 							// let defaultChannelCode = this.$store.state.repayChannelCode; //从vuex里面拿默认通道编号
 							// let channelList = res.data.filter(cur => cur.channelCode != defaultChannelCode)//过滤掉默认通道编号的选项
-							let channelList = res.data;
+							let channelList = res.data.filter(cur=>cur.channelCode != '1000000004');//过滤掉1000000004这个通道不显示
 							this.channelList = channelList;
 							this.cardInfo.channelCode = channelList[0].channelCode;//设置当前通道为通道列表第一个
 							this.radio = 0;
@@ -184,7 +184,7 @@
 					// 	message: '卡片在默认通道绑定失败,现为您切换其他通道,请重新进行绑定',
 					// 	forbidClick: true,
 					// })
-					let channelList = this.channelList;
+					let channelList = this.channelList.filter(cur=>cur.channelCode != '1000000004');//过滤掉1000000004这个通道不显示
 					this.cardInfo.channelCode = channelList[0].channelCode;
 					this.radio = 0;
 					this.channelListBox = true;
@@ -296,6 +296,7 @@
 						this.$toast({
 							message:'该通道不支持这个银行绑定，已为您放开所有通道，请选择其他通道绑定',
 							forbidClick:true,
+							duration: 1500,
 							onClose:()=>{
 								this.failHandle()
 							}
@@ -312,6 +313,7 @@
 								this.$toast({
 									message:res.message,
 									forbidClick:true,
+									duration: 1500,
 									onClose:()=>{
 										this.failHandle();//执行失败处理
 									}
@@ -413,7 +415,8 @@
 					this.smsCode = null;
 					// this.verify = null;
 					this.$toast({
-						message:'卡片绑定失败，建议选择其他通道进行尝试',
+						message:'卡片绑定失败，正在为您放开所有通道，建议稍后选择其他通道进行尝试，勿离开此页面',
+						duration:1500,
 						forbidClick:true,
 						onClose:()=>{
 							this.failHandle()//执行失败处理函数

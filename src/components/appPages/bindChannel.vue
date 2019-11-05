@@ -1,7 +1,7 @@
 <template>
 	<div class="flx-cas">
 		<!-- 顶部标题栏 -->
-	<!-- 	<div class="title-bar">
+		<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
 		<!-- 通道列表 -->
@@ -29,7 +29,9 @@
 					<div>{{item.bankName}}</div>
 				</div>
 				<div class="left flx-c">
-					<div class="btn" color="#fff" @click="bindTheChannel(index)">绑定该通道</div>
+					<div class="btn" @click="bindTheChannel(index)" v-if="item.bindFlag == 0">绑定该通道</div>
+					<div class="btn" style="background:#29cd83;" @click="bindTheChannel(index)" v-if="item.bindFlag == 1 ">该通道已绑定</div>
+					<div class="btn" style="background:#c2565b;" @click="bindTheChannel(index)" v-if="item.bindFlag == 2">绑定处理中</div>
 				</div>
 			</div>
 		</div>
@@ -97,8 +99,26 @@
 				verify: null, //验证银行卡绑卡需要的信息
 				countDown: 59000, //倒计时
 				surePlanData: '', //surePlan页面传过来的数据
-				isSumbitPlan: false //是否在该页面提交过计划
+				isSumbitPlan: false, //是否在该页面提交过计划
+				// ---------------
+				sessionId: '',
+				from:'',
+				// ---------------
 			};
+		},
+		beforeRouteEnter(to, from, next) {
+			if (from.name == 'bindAtmCard'&&Object.keys(from.params).length == 0) {
+				next(vm=>{
+					let params = {
+						channelCode: '1000000004',
+						page: 'bindAtmCard',
+					}
+					vm.getChannelList(params);
+					tool.setAppTitle('通道绑定')
+				})
+			} else {
+				next();
+			}
 		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#f6f6f6')
@@ -118,9 +138,11 @@
 					me.appEnter(url)
 				}
 				tool.setAppTitle('通道绑定')
+				// ------------------------------------------
 				// let a =
-				// 	'{"repayChannelCode": "1000020002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "445122199010122716","userName": "王金盛"}';
-				// 	this.appEnter(a)
+				// 	'{"repayChannelCode": "1000020002","sessionId": "2ea4aaba-b5dc-49f5-a014-e43771b06225","certificateNum": "445122199010122716","userName": "王金盛"}';
+				// this.appEnter(a)
+				// -------------------------------------------
 			}
 			// let cardInfo = this.$route.params
 			// this.cardInfo = cardInfo; 
@@ -138,16 +160,6 @@
 			// window.removeEventListener('popstate', this.goBack, false)
 		},
 		methods: {
-			// 返回事件(安卓手机返回按钮)
-			// goBack() {
-			// 	if (this.pageType == 'app') {
-			// 		window.android.btnBack()
-			// 	} else {
-			// 		this.$router.replace({
-			// 			name: 'cardManagement'
-			// 		})
-			// 	}
-			// },
 			// 从App端进入该页面
 			appEnter(e) {
 				// 获取app传过来的sessionId并设置给cookie,再执行getChannelList函数
@@ -163,7 +175,7 @@
 						if (res == null) return;
 						let channelList = [];
 						let channelCode = '';
-						if (data && data.channelCode) { //判断data.channeCode是否有值，有值的话说明是surePlan页面过来的
+						if (data && data.channelCode) { //判断data.channeCode是否有值，有值的话说明是surePlan或者bindAtm页面过来的
 							channelList = res.data.reverse().map(cur => {
 								// surePlan页面过来的,把用户当前要绑定的通道作为默认选择的通道
 								if (cur.channelCode == data.channelCode) {
@@ -196,7 +208,7 @@
 								if (res == null) return;
 								this.cardList = res.data.map(cur => {
 									cur.bankCardNumb = cur.bankCardNumb.substr(cur.bankCardNumb.length - 4);
-									// 添加银行logo
+									// 添加默认银行logo
 									cur.logo = require('../../assets/img/bankLogo/bank15.png');
 									for (let item in bankLogo) {
 										if (cur.bankName == item) {
@@ -245,6 +257,21 @@
 			},
 			// 绑定该通道
 			bindTheChannel(index) {
+				if (this.cardList[index].bindFlag == 1) {
+					this.$toast({
+						message: '该通道已成功绑定，请勿重复绑定',
+						duration: 1500,
+						forbidClick: true
+					})
+					return
+				}else if(this.cardList[index].bindFlag == 2){
+					this.$toast({
+						message: '通道正在绑定中，请耐心等待',
+						duration: 1500,
+						forbidClick: true
+					})
+					return
+				}
 				this.currentIndex = index;
 				let init = {};
 				init.channelCode = this.currentChannelCode;
@@ -274,10 +301,59 @@
 				server.getBindcardSm(init)
 					.then(res => {
 						if (res == null) return;
-						if (res.code != 0) {
+						if (res.code != 0 && res.code != '-20007') {
 							this.$toast({
 								message: res.message,
 								forbidClick: true,
+							})
+							return;
+						} else if (res.code == '-20007') { //后端返回码-20007，让用户去完善资料
+							this.$dialog.alert({
+								message: '绑定该通道需要您完善结算卡资料，点击确定跳转至完善页面',
+								showCancelButton: true,
+								beforeClose: (action, done) => {
+									if (action == 'confirm') {
+										tool.toastLoading();
+										// 发请求获取用户之前填写结算卡的信息
+										server.querySettleCard({
+												isAppCall: 1
+											})
+											.then(res => {
+												if (res == null) return;
+												done()
+												let bankCardInfo = res.data.settleCardInfo;
+												if (bankCardInfo == null) {
+													this.$router.push({
+														name: 'bindAtmCard',
+													})
+													return
+												}
+												this.$router.push({
+													name: 'bindAtmCard',
+													params: {
+														id: bankCardInfo.id || '',
+														bankBranchCode: bankCardInfo.bankBranchCode || '',
+														bankCardMobile: bankCardInfo.bankCardMobile || '',
+														bankCardNumb: bankCardInfo.bankCardNumb || '',
+														bankCode: bankCardInfo.bankCode || '',
+														bankName: bankCardInfo.bankName || '',
+														bankNameBranch: bankCardInfo.bankNameBranch || '',
+														city: bankCardInfo.city || '',
+														cityCode: bankCardInfo.cityCode || '',
+														idcardValidEnd: bankCardInfo.idcardValidEnd || '',
+														idcardValidStart: bankCardInfo.idcardValidStart || '',
+														province: bankCardInfo.province || '',
+														provinceCode: bankCardInfo.provinceCode || '',
+														registAddr: bankCardInfo.registAddr || '',
+														dist: bankCardInfo.dist || '',
+														distCode: bankCardInfo.distCode || '',
+													}
+												})
+											})
+									} else {
+										done()
+									}
+								}
 							})
 							return;
 						}
@@ -292,6 +368,24 @@
 			// 检查绑卡状态函数
 			checkCardStatus(status, res) {
 				if (status == 4) { //需短验
+					//判断是否是1000000004这个通道，是的话直接调用短信验证接口
+					if (this.currentChannelCode == '1000000004') {
+						tool.toastLoading()
+						let verify = {
+							channelCode: res.data.channelCode,
+							orderId: res.data.orderId,
+							recordId: res.data.recordId,
+							smsCode: '111111'
+						};
+						server.verifyBindcardSm(verify)
+							.then(res => {
+								if (res == null) return; //返回为null 不执行下面操作
+								let status = res.data.status;
+								this.checkCardStatus(status, res) //执行检查
+							})
+						return
+					}
+					//其他通道正常发短信
 					this.$toast({
 						message: '验证短信已发送,请留意接收',
 						duration: 1000,
@@ -312,6 +406,20 @@
 						}
 					})
 				} else if (status == 0) { //处理中
+					// 判断处理中状态是否是盛迪佳通道的1000000004,是的话跳转到盛迪佳绑卡页面
+					if (this.currentChannelCode == '1000000004') {
+						let routeData = this.$router.push({
+							path: '/sdjBindChannel',
+							query: {
+								htmls: res.data.unionHtml
+							}
+						});
+						window.open(routeData.href, '_blank');
+						// 关闭弹窗时,如果是倒计时状态,就重置倒计时
+						if (this.$refs.countDown) this.$refs.countDown.reset();
+						this.codeBox = false;
+						return;
+					}
 					this.$toast({
 						message: '绑卡正在处理中了，请稍等',
 						forbidClick: true,
@@ -323,7 +431,8 @@
 							// --------------------------------------------------
 							// 此段代码用来提交surePlan页面过来绑定通道,绑定成功了提交计划
 							// 判断是否是从h5页面过来的,是否之前没提交过计划,绑定的卡是否是用户做计划的卡,是的话提交计划
-							if (this.pageType == 'h5' && !this.isSumbitPlan && this.surePlanData.planData.bindcardUniqueId == this.currentUniqueId&&this.surePlanData.planData.channelType==1) {
+							if (this.pageType == 'h5' && !this.isSumbitPlan && this.surePlanData.planData.bindcardUniqueId == this.currentUniqueId &&
+								this.surePlanData.planData.channelType == 1) {
 								let init = {};
 								init.channelCode = this.currentChannelCode;
 								init.planDTO = this.surePlanData.planData.planDTO;
@@ -358,8 +467,13 @@
 						forbidClick: true,
 						onClose: () => {
 							// 绑定成功把该卡从数组移除掉
-							this.cardList = this.cardList.filter((cur, index) => {
-								if (index != this.currentIndex) return cur;
+							// this.cardList = this.cardList.filter((cur, index) => {
+							// 	if (index != this.currentIndex) return cur;
+							// })
+							//绑定成功把该卡的bindFlay改成1
+							this.cardList = this.cardList.map((cur, index) => {
+								if (index == this.currentIndex) cur.bindFlag = 1;
+								return cur
 							})
 							// 关闭弹窗时,如果是倒计时状态,就重置倒计时
 							if (this.$refs.countDown) this.$refs.countDown.reset();
@@ -367,7 +481,8 @@
 							// --------------------------------------------------
 							// 此段代码用来提交surePlan页面过来绑定通道,绑定成功了提交计划
 							// 判断是否是从h5页面过来的,是否之前没提交过计划,绑定的卡是否是用户做计划的卡,是的话提交计划
-							if (this.pageType == 'h5' && !this.isSumbitPlan && this.surePlanData.planData.bindcardUniqueId == this.currentUniqueId&&this.surePlanData.planData.channelType==1) {
+							if (this.pageType == 'h5' && !this.isSumbitPlan && this.surePlanData.planData.bindcardUniqueId == this.currentUniqueId &&
+								this.surePlanData.planData.channelType == 1) {
 								let init = {};
 								init.channelCode = this.currentChannelCode;
 								init.planDTO = this.surePlanData.planData.planDTO;

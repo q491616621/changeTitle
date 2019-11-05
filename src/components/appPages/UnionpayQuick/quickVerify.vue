@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<div class="verify-box">
 			<div class="channel-information flx-rs" @click="aaa">
 				<img src="../../../assets/img/unionpay.png">
@@ -20,11 +20,11 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 export default {
-	components: {
-		topTitle,
-	},
+	// components: {
+	// 	topTitle,
+	// },
 	data() {
 		return {
 			titleName: '短信验证', //标题栏标题
@@ -50,7 +50,7 @@ export default {
 <style scoped="scoped" lang="less">
 	.verify-box{
 		width: 750px;
-		margin-top: 88px;
+		// margin-top: 88px;
 		.channel-information{
 			background: #fff;
 			width: 100%;

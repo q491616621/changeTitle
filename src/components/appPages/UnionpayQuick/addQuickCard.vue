@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar">
+	<!-- 	<div class="title-bar">
 			<top-title :titleName="titleName"></top-title>
-		</div>
+		</div> -->
 		<!-- 信息栏列表 -->
 		<div class="addCreditCard-bottom flx-c">
 			<van-cell-group class="addInfo-box">
@@ -26,7 +26,7 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
+	// import topTitle from '@/components/common/topTitle.vue';
 	import cardTips from '@/components/common/cardTips.vue';
 	import {
 		server
@@ -34,7 +34,7 @@
 	import tool from '../../../../public/tool/tool.js'
 	export default {
 		components: {
-			topTitle,
+			// topTitle,
 			cardTips
 		},
 		data() {
@@ -42,13 +42,13 @@
 				titleName: '添加快捷信用卡', //标题栏标题
 				tipsType:'',//提示盒子
 				cardInfo: {
-					cardNum: null, //卡号
-					cvn2: null, //cvv码
-					valid: null, //有效期
-					userName: null, //姓名
-					certificateNum: null, //身份证号码
-					mobile: null, //手机号
-					bankAgentId: null, //联行号（暂时写死）
+					cardNum: '', //卡号
+					cvn2: '', //cvv码
+					valid: '', //有效期
+					userName: '王金盛', //姓名
+					certificateNum: '123456', //身份证号码
+					mobile: '', //手机号
+					bankAgentId: '', //联行号（暂时写死）
 					cardType: '2', //卡类型
 					channelCode: '1000000001'
 				},
@@ -74,6 +74,10 @@
 			},
 			// 跳转到短信验证
 			goQuickVerify() {
+				this.$router.push({
+					name:'quickVerify'
+				})
+				return
 				let cardInfo = this.cardInfo;
 				let value = true;
 				let verifier = {
@@ -136,7 +140,7 @@
 <style scoped="scoped" lang="less">
 	// 信息栏列表
 	.addCreditCard-bottom {
-		margin-top: 88px;
+		// margin-top: 88px;
 		width: 100%;
 		box-sizing: border-box;
 		padding: 20px 30px;

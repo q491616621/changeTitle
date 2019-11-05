@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 // login //登陆页面
+//turnBackApp//提示返回app页面
 // addCreditCard //添加信用卡页面
 // contactServer //联系客服页面
 // cardManagement //信用卡管理页面
@@ -34,6 +35,7 @@ Vue.use(Router)
 //companyIntroduction //公司简介
 //videoTutorials //适配教程
 //reimbursementTutorial //还款教程
+//sdjBindChannel //盛迪佳通道绑定页面
 const router = new Router({
 	base: process.env.BASE_URL,
 	// mode: 'history',
@@ -49,6 +51,19 @@ const router = new Router({
 			component: resolve => require(['@/components/common/login.vue'], resolve)
 		},
 		{
+			path: '/turnBackApp',
+			name: 'turnBackApp', //turnBackApp 提示返回app页面
+			meta:{
+				title:'绑卡成功'
+			},
+			component: resolve => require(['@/components/common/turnBackApp.vue'], resolve)
+		},
+		{
+			path: '/commonError',
+			name: 'commonError', //commonError 统一处理错误页面
+			component: resolve => require(['@/components/common/commonError.vue'], resolve)
+		},
+		{
 			path: '/test',
 			name: 'test', //测试用的
 			meta:{
@@ -57,10 +72,10 @@ const router = new Router({
 			component: resolve => require(['@/components/common/test.vue'], resolve)
 		},
 		{
-			path: '/test2',
-			name: 'test2', //测试用的
+			path: '/sdjBindChannel',
+			name: 'sdjBindChannel', //盛迪佳通道绑定
 			
-			component: resolve => require(['@/components/common/test2.vue'], resolve)
+			component: resolve => require(['@/components/common/sdjBindChannel.vue'], resolve)
 		},
 		{
 			path: '/addCreditCard',
@@ -191,11 +206,6 @@ const router = new Router({
 			component: resolve => require(['@/components/appPages/payment/updateMember.vue'], resolve)
 		},
 		{
-			path: '/updateMember2',
-			name: 'updateMember2', // updateMember2 //购买升级会员
-			component: resolve => require(['@/components/appPages/payment/updateMember2.vue'], resolve)
-		},
-		{
 			path: '/registerProtocol',
 			name: 'registerProtocol', // registerProtocol //注册协议
 			meta: {
@@ -237,26 +247,41 @@ const router = new Router({
 		{
 			path: '/swipeCard',
 			name: 'swipeCard', // swipeCard //信用卡刷卡
+			meta:{
+				title:'信用卡刷卡'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/swipeCard.vue'], resolve)
 		},
 		{
 			path: '/quickVerify',
 			name: 'quickVerify', // quickVerify //快捷支付短信验证
+			meta:{
+				title:'短信验证'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/quickVerify.vue'], resolve)
 		},
 		{
 			path: '/channelIntroduce',
-			name: 'channelIntroduce', // channelIntroduce //信用卡刷卡
+			name: 'channelIntroduce', // channelIntroduce //通道介绍
+			meta:{
+				title:'通道介绍'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/channelIntroduce.vue'], resolve)
 		},
 		{
 			path: '/chooseQuickCard',
 			name: 'chooseQuickCard', // chooseQuickCard //选择快捷支付银行卡
+			meta:{
+				title:'选择支付银行'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/chooseQuickCard.vue'], resolve)
 		},
 		{
 			path: '/addQuickCard',
 			name: 'addQuickCard', // addQuickCard //添加快捷信用卡
+			meta: {
+				title: '添加快捷信用卡'
+			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/addQuickCard.vue'], resolve)
 		},
 		{

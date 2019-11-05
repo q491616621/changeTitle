@@ -45,8 +45,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="information-box box2" @click="goMerChantDetails(list[2].userLevel)">
-				<!-- <div class="title">累积服务商（人）：未知</div> -->
+<!-- 			<div class="information-box box2" @click="goMerChantDetails(list[2].userLevel)">
 				<div class="content flx-r">
 					<div class="box flx-c">
 						<div class="name">我的人脉</div>
@@ -61,7 +60,7 @@
 						<div class="num">{{list[2].authTotal}}</div>
 					</div>
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </template>
@@ -89,12 +88,12 @@
 						"authTotal": 0,
 						"userLevel": null
 					},
-					{
-						"subTotal": 0,
-						"memberTotal": 0,
-						"authTotal": 0,
-						"userLevel": null
-					}
+					// {
+					// 	"subTotal": 0,
+					// 	"memberTotal": 0,
+					// 	"authTotal": 0,
+					// 	"userLevel": null
+					// }
 				], //存放我的商户数据的数组
 			};
 		},
@@ -116,6 +115,7 @@
 				}
 				tool.setAppTitle('我的客户')
 				// -----------------------------
+				// 测试用的
 				// this.getData()
 			}
 		},
@@ -143,26 +143,23 @@
 						}else if(res.data.list.length !=0&&res.data.list.length == 2){
 							this.list[0] = res.data.list[0];
 							this.list[1] = res.data.list[1];
-						}else if(res.data.list.length !=0&&res.data.list.length == 3){
-							this.list = res.data.list;
 						}
-						// if (res.data.list.length != 0) {
+						// else if(res.data.list.length !=0&&res.data.list.length == 3){
 						// 	this.list = res.data.list;
 						// }
 						this.totalAccount = res.data.totalAccount;
 					})
 			},
 			// 返回上一个页面
-			returnBack() {
-				// 检查平台 0为安卓，1为ios，2为PC
-				let platFlag = tool.testPlat();
-				if (platFlag == 1) { //苹果调用苹果的返回方法
-					let aaa = '奥利奥，泡一泡';
-					window.webkit.messageHandlers.closeWeb.postMessage(aaa);
-				} else { //安卓调用安卓的返回方法
-					window.android.btnBack()
-				}
-			},
+			// returnBack() {
+			// 	// 检查平台 0为安卓，1为ios，2为PC
+			// 	let platFlag = tool.testPlat();
+			// 	if (platFlag == 1) { //苹果调用苹果的返回方法
+			// 		window.webkit.messageHandlers.closeWeb.postMessage('');
+			// 	} else { //安卓调用安卓的返回方法
+			// 		window.android.btnBack()
+			// 	}
+			// },
 			// 跳转我的商户详情页面
 			goMerChantDetails(userLevel) {
 				this.$router.push({

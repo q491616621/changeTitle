@@ -35,7 +35,7 @@
 					<div class="top flx-rs">
 						<div class="flx-rs">
 							<img src="../../assets/img/images/icon013.png">
-							<span>{{item.incomeType|type}}</span>
+							<span>{{item.incomeTypeDes}}</span>
 						</div>
 						<div class="time">{{item.createTime}}</div>
 					</div>
@@ -173,17 +173,6 @@
 				})
 			}
 		},
-		filters: {
-			type(value) {
-				let type = ''
-				if (value == 1) {
-					type = '推广奖励'
-				} else if (value == 2) {
-					type = '直推会员返现'
-				}
-				return type;
-			},
-		}
 	};
 </script>
 

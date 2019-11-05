@@ -58,7 +58,6 @@
 		},
 		methods: {
 			goTest(){
-				return;
 				this.$router.push({
 					name:'test'
 				})

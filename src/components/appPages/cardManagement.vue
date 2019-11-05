@@ -193,10 +193,11 @@
 					// 正式服务器
 					// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "36062219910910705X","userName": "黄国桥"}';
 					'{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "441823199308235917","userName": "何守卫"}';
+					// '{"repayChannelCode": "1000010002","sessionId": "d06c2071-829c-4bbd-bf3d-3bae11caf1b0","certificateNum": "33010019900530156X","userName": "伊丽莎白"}';
 				this.getCardList()
 				// 1000000001 1000010002 1000020002
 				this.$store.commit('setCardManagement', JSON.parse(appData))
-				// this.getAppData(appData)
+				this.getAppData(appData)
 				// // --------------------------------------------------------
 			}
 		},

@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<!-- 顶部标题栏 -->
-		<div class="title-bar flx-r">
+		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
-		</div>
-		<div class="container flx-cas">
+		</div> -->
+		<div class="container flx-cas" v-if="true">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<!-- <div>使用说明</div> -->
@@ -15,9 +15,9 @@
 					<span>(元)</span>
 				</div>
 				<div class="content flx-rs">
-					<span>￥</span>
-					<span v-if="amount.length>0">{{amount}}</span>
-					<span v-if="!(amount.length>0)">0.00</span>
+					<div>￥</div>
+					<div v-if="amount.length>0">{{amount}}</div>
+					<div v-if="!(amount.length>0)">0.00</div>
 					<!-- <span>0.00</span> -->
 				</div>
 				<div class="bottom flx-r">
@@ -64,34 +64,84 @@
 	</div>
 </template>
 <script>
-	import topTitle from '@/components/common/topTitle.vue';
-	// import tool from '../../../../public/tool/tool.js'
+	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../../public/tool/tool.js'
 	export default {
-		components: {
-			topTitle,
-		},
+		// components: {
+		// 	topTitle,
+		// },
 		data() {
 			return {
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
+				isRealName: true, //是否已经完善快捷资料
 			};
 		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#f6f6f6')
 		},
+		created() {
+			tool.setAppTitle('信用卡刷卡')
+			// let platFlag = tool.testPlat();
+			// this.$dialog.alert({
+			// 	message:'该功能正在开发中，敬请期待！',
+			// 	beforeClose:(action, done)=>{
+			// 		if (platFlag == 1) {
+			// 			// closeWeb ios定义的退回上一页，删除H5页面的方法
+			// 			window.webkit.messageHandlers.closeWeb.postMessage('');
+			// 			done()
+			// 		} else {
+			// 			// btnBack 安卓定义的退回上一页,删除H5页面的方法
+			// 			window.android.btnBack()
+			// 			done()
+			// 		}
+			// 	}
+			// })
+			this.amount = this.$store.state.unionpayQuickAmount;
+			// ----------------------------------
+			let me = this;
+			window['setSwipeCardData'] = (url) => {
+				me.setSwipeCardData(url)
+			}
+		},
 		methods: {
+			// 设置获取app传过来的数据
+			setSwipeCardData(data){
+				console.log('执行了')
+				let appData = JSON.parse(data)
+				let sessionId = appData.sessionId;
+				let faceStatus = appData.faceStatus;
+				let realName = appData.realName;
+				let certificateNumb = appData.certificateNumb;
+				this.$toast({
+					message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
+					duration:0
+				})
+			},
 			// 跳转选择信用卡页面
-			goChooseQuickCard(){
-				if(!this.amount||this.amount == 0){
+			goChooseQuickCard() {
+				if (!this.amount || this.amount == 0) {
 					this.$toast({
-						message:'请输入刷卡金额',
+						message: '请输入刷卡金额',
 					})
 					return;
 				}
-				this.$router.push({
-					name:'chooseQuickCard'
-				})
+				// 判断用户是否已经完善快捷资料？,未完善跳转app完善资料页面
+				if (this.isRealName) {
+					//调用vuex 设置银联快捷的金额
+					this.$store.commit('setUnionpayQuickAmount',parseFloat(this.amount).toString())
+					this.$router.push({
+						name: 'chooseQuickCard',
+					})
+				} else {
+					let platFlag = tool.testPlat();
+					if(platFlag == 1){
+						window.webkit.messageHandlers.closeWeb.openRealName('');
+					}else{
+						window.android.openRealName()
+					}
+				}
 			},
 			// 输入金额
 			setAmount(num) {
@@ -129,7 +179,7 @@
 					// amount = '0.'
 					return;
 				} else {
-				//如果不是，添加一个小数点
+					//如果不是，添加一个小数点
 					amount += '.'
 				}
 				this.amount = amount;
@@ -139,9 +189,9 @@
 			_handleDeleteKey() {
 				let amount = this.amount;
 				// 如果没有输入,直接返回
-				if(!amount.length)return;
+				if (!amount.length) return;
 				// 否则删除最后一个 
-				amount = amount.substring(0,amount.length-1);
+				amount = amount.substring(0, amount.length - 1);
 				this.amount = amount;
 				// console.log('删除')
 			},
@@ -149,17 +199,17 @@
 			_handleNumberKey(num) {
 				let amount = this.amount;
 				//如果有小数点且小数点位数不小于2
-				if(amount.indexOf('.')>-1&&amount.substring(amount.indexOf('.')+1).length<2){
-					amount += num; 
+				if (amount.indexOf('.') > -1 && amount.substring(amount.indexOf('.') + 1).length < 2) {
+					amount += num;
 				}
 				// 有小数点
-				if(!(amount.indexOf('.') > -1)){
-					if(num == 0&&amount.length == 0){
+				if (!(amount.indexOf('.') > -1)) {
+					if (num == 0 && amount.length == 0) {
 						// amount = '0.'
 						amount = '0'
 						// return;
-					}else{
-						if(amount.length && Number(amount.charAt(0))===0) return;
+					} else {
+						if (amount.length && Number(amount.charAt(0)) === 0) return;
 						amount += num;
 					}
 				}
@@ -182,7 +232,7 @@
 <style scoped="scoped" lang="less">
 	.container {
 		width: 100%;
-		margin-top: 88px;
+		// margin-top: 88px;
 
 		.instructions {
 			width: 690px;
@@ -226,10 +276,10 @@
 				height: 100px;
 				line-height: 100px;
 				padding-top: 60px;
-				border-bottom: 1px solid #e5e5e5;
-
-				span {
-					height: 80px;
+				// border-bottom: 1px solid #e5e5e5;
+				
+				div {
+					height: 100px;
 					line-height: 80px;
 					font-size: 60px;
 					color: #444;
@@ -241,6 +291,7 @@
 			}
 
 			.bottom {
+				border-top: 1px solid #e5e5e5;
 				padding-top: 20px;
 				width: 100%;
 				height: 100%;
@@ -299,8 +350,9 @@
 					height: 120px;
 					margin: 0 0 10px 10px;
 					border-radius: 5px;
-					line-height:0;
-					img{
+					line-height: 0;
+
+					img {
 						width: 34px;
 						height: 26px;
 					}
