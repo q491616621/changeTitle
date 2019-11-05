@@ -75,7 +75,7 @@
 					<!-- 默认日期/定制日期选择 -->
 					<div class="road flx-rs medium">
 						<!-- <div class="name">消费方式</div> -->
-						<van-radio-group v-model="radio3" class='radio-box flx-rs' @change='changeRadio3'>
+						<van-radio-group v-model="radio3" class='radio-box flx-rs'>
 							<van-radio :name="0">
 								默认日期顺序还款
 								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
@@ -129,11 +129,11 @@
 				<div class="cancel" @click="cancelDate">取消</div>
 				<div class="title">
 					<div class="name">制定还款日期</div>
-					<div class="day-num">
+					<!-- <div class="day-num">
 						<span>已选择天数：</span>
 						<span>0</span>
 						<span>天</span>
-					</div>
+					</div> -->
 				</div>
 				<div class="sure" @click="sureDate">确定</div>
 			</div>
@@ -331,36 +331,37 @@
 				}else{
 					strideMonth = false;
 				}
-				console.log(strideMonth)
+				// console.log(strideMonth)
 				for (let i = 0; i < 35; i++) {
 					if(i<curWeek||day>=dayCount){
 						arr1.push({dateNum:'',chooseable:false,checked:false});
 					}else{
 						day++
-						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){//账单日=还款日或者账单日-还款日=1；
+						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){//账单日=还款日或者还款日-账单日=1；
+							console.log(222)
 							arr1.push({dateNum:day,chooseable:false,checked:false});//全部不给选
-						}else if(billingDay-repaymentDay>1){//账单日>还款日(账单日大于还款日就一定是跨月了的)
-							if(day>billingDay&&day>todayDate){//日期大于账单日,且大于当前日
+						}else if(billingDay-repaymentDay>0){//账单日大于还款日
+							if(day>billingDay&&day>todayDate){//日期大于账单日,且大于今天的日期，变为可选，其他全部不可选
 								arr1.push({dateNum:day,chooseable:true,checked:false});
 							}else{
 								arr1.push({dateNum:day,chooseable:false,checked:false});
 							}
-						}else if(repaymentDay-billingDay>1){//还款日>账单日
-							if(repaymentDay>todayDate){//还款日大于当前日期(不需要跨月)		
-								if(day>billingDay&&day>todayDate&&day<repaymentDay){//日期大于账单日且大于当前日且小于还款日
+						}else if(repaymentDay-billingDay>1){//还款日大于账单日(需要大于1，因为等于1的时候全部不给选)
+							console.log(11)
+							if(repaymentDay-todayDate>1){//还款日大于今天的日期超过1天（即最少两数相减最少得是2）		
+								if(day>billingDay&&day>todayDate&&day<repaymentDay){//日期大于账单日且大于当前日且小于还款日，变为可选，其他全部不可选
 									arr1.push({dateNum:day,chooseable:true,checked:false});
 								}else{
 									arr1.push({dateNum:day,chooseable:false,checked:false});
 								}
-							}else{//还款日小于或等于当前日期(需要跨月)
-								if(day>repaymentDay&&day>todayDate){//日期大于账单日且大于当前日
+							}else{//还款日和今天只相差1天，或者还款日等于今天，或者还款日小于今天
+								if(day>repaymentDay&&day>todayDate){//日期大于还款日且大于今天，变为可选，其他全部不可选
 									arr1.push({dateNum:day,chooseable:true,checked:false});
 								}else{
 									arr1.push({dateNum:day,chooseable:false,checked:false});
 								}
 							}
 						}else{
-							console.log(1111)
 							arr1.push({dateNum:day,chooseable:false,checked:false});
 						}
 					}
@@ -370,20 +371,19 @@
 						arr2.push({dateNum:'',chooseable:false,checked:false});
 					}else{
 						day2++
-						// 判断还款日是否等于账单日或者还款日距离账单日只有1天，是的话所有的天数不可选
-						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){
-							arr2.push({dateNum:day2,chooseable:false,checked:false});
-						}else if(billingDay-repaymentDay>1){//账单日>还款日(账单日大于还款日就一定是跨月了的)
-							if(day2<repaymentDay){
+						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){//账单日=还款日或者还款日-账单日=1；
+							arr2.push({dateNum:day2,chooseable:false,checked:false});//全部不给选
+						}else if(billingDay-repaymentDay>0){//账单日大于还款日
+							if(day2<repaymentDay){//日期只要小于还款日就都可选，其他不可选
 								arr2.push({dateNum:day2,chooseable:true,checked:false});
 							}else{
 								arr2.push({dateNum:day2,chooseable:false,checked:false});
 							}
-						}else if(repaymentDay-billingDay>1){//还款日>账单日
-							if(repaymentDay>todayDate){//还款日大于当前日期(不需要跨月)
-								arr2.push({dateNum:day2,chooseable:false,checked:false});
-							}else{//还款日小于或等于当前日期(需要跨月)
-								if(day2<repaymentDay){//还款日前
+						}else if(repaymentDay-billingDay>1){//还款日大于账单日(需要大于1，因为等于1的时候全部不给选)
+							if(repaymentDay-todayDate>1){//还款日大于今天的日期超过1天（即最少两数相减最少得是2）
+								arr2.push({dateNum:day2,chooseable:false,checked:false});//全部设置为不可选
+							}else{//还款日和今天只相差1天，或者还款日等于今天，或者还款日小于今天
+								if(day2<repaymentDay){//小于还款日的，全部变成可选
 									arr2.push({dateNum:day2,chooseable:true,checked:false});
 								}else{
 									arr2.push({dateNum:day2,chooseable:false,checked:false});
@@ -445,10 +445,8 @@
 			},
 			// 取消设置日期
 			cancelDate(){
-				// 如果用户没有选择日期的话,重置为‘默认日期顺寻还款’
-				if(this.chooseDateArr.length == 0){
-					this.radio3 = 0;
-				}
+				//判断选择的数组长度是否为0，为0的话代表用户没选，把还款方式重置回去默认日期顺序还款
+				if(this.chooseDateArr.length == 0)this.radio3 = 0;
 				this.show = false;
 			},
 			// 确定设置日期
@@ -459,6 +457,8 @@
 				this.checkArr2 = checkArr2;
 				this.chooseDateArr = [...checkArr1,...checkArr2]
 				this.show = false;
+				//判断选择的数组长度是否为0，为0的话代表用户没选，把还款方式重置回去默认日期顺序还款
+				if(this.chooseDateArr.length == 0)this.radio3 = 0;
 			},
 			// ---------------------------------------------------------------
 			// 把上个页面传递过来的数据设置给这个页面
@@ -659,10 +659,10 @@
 				let name = e;
 				this.planInfo.repayMode = name;
 			},
-			changeRadio3(e) {
-				let name = e;
-				console.log(e)
-			},
+			// changeRadio3(e) {
+			// 	let name = e;
+			// 	console.log(e)
+			// },
 			// 调起省市选择框
 			showPicker() {
 				this.chooseCityBox = true;
@@ -708,12 +708,6 @@
 				if (planInfo.billingDay > days) planInfo.billingDay = days;
 				if (planInfo.repaymentDay > days) planInfo.repaymentDay = days;
 				if (planInfo.billingDay == planInfo.repaymentDay) return this.$toast('账单日和还款日不能是同一天哦!')
-				// 判断用户设置的账单日和还款日是否大于当前月分的天数,是的话提示用户进行修改
-				// if (planInfo.billingDay > days || planInfo.repaymentDay > days) {
-				// 	this.$toast('账单日或还款日不能大于当月最大天数，请修改后重试')
-				// 	return
-				// }
-				// ----------------------------------------------------------------
 				let repayDate = {};
 				if(this.radio3 == 1){
 					repayDate = {
@@ -730,7 +724,7 @@
 					let channelType = this.channelList[this.radio].channelType;
 					this.$toast.clear()
 					// ----------------------------------------------------------------------------
-					planInfo.manualDays = this.chooseDateArr.map(cur=>cur.dateNum).join(',');
+					planInfo.manualDays = this.chooseDateArr.map(cur=>cur.dateNum).join('、');
 					// -------------------------------------------------------------------------------
 					this.$router.push({
 						name: 'payPlanInfo',

@@ -29,9 +29,9 @@
 				</div>
 			</div>
 			<!-- 选择手动设置还款日期时已选择的日期表 -->
-			<div class="repay-date" v-if="showRepayDate">
+			<div class="repay-date" v-if="showRepayDate" @click="showAllDays">
 				<span>还款日期：</span>
-				<span>{{cardInfo.manualDays}}</span>
+				<span class="days">{{cardInfo.manualDays}}</span>
 			</div>
 			<!-- 还款信息列表 -->
 			<div :class="showRepayDate?'repayInfo-list flx-cas margin-top317':'repayInfo-list flx-cas margin-top245'">
@@ -41,7 +41,7 @@
 						<div>手续费：￥{{item.rateAmount}}</div>
 					</div>
 					<div class="li-bottom">
-					<!-- 	<div class="consume flx-rs">
+						<!-- 	<div class="consume flx-rs">
 							<div class="left flx-rs">
 								<img src="../../assets/img/payPlanInfo_consume.png" alt="消费">
 								<div class="flx-cs" style="padding-left: 16px;">
@@ -79,8 +79,8 @@
 		<!-- 任务栏 -->
 		<div class="payPlanInfo-taskBar flx-r medium">
 			<div class="taskBar-btn reset" @click="returnBack">重置计划</div>
-			<div class="taskBar-btn" @click="changePeriods('minus')">减少期数</div>
-			<div class="taskBar-btn" @click="changePeriods('add')">增加期数</div>
+			<div v-if="!showRepayDate" class="taskBar-btn" @click="changePeriods('minus')">减少期数</div>
+			<div v-if="!showRepayDate" class="taskBar-btn" @click="changePeriods('add')">增加期数</div>
 			<div class="taskBar-btn sumbit" @click="sumbitPlan">提交计划</div>
 		</div>
 	</div>
@@ -97,14 +97,14 @@
 		},
 		data() {
 			return {
-				isFirstEnter:false,//是否是第一次进入这个页面
+				isFirstEnter: false, //是否是第一次进入这个页面
 				titleName: '还款总金额(元)',
 				planInfo: null, //预览计划的信息
 				cardInfo: null, //上个页面用户填写的卡信息
 				commonLoading: true, //默认加载中，页面加载完成才消失
-				channelType:'',//上个页面传过来的用户选择的还款类型
-				repayDate:'',//上个页面传过来的手动选择还款日期的参数
-				showRepayDate:false,
+				channelType: '', //上个页面传过来的用户选择的还款类型
+				repayDate: '', //上个页面传过来的手动选择还款日期的参数
+				showRepayDate: false,
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -122,7 +122,7 @@
 		},
 		activated() {
 			tool.setAppTitle('还款总金额(元)')
-			if (!this.$route.meta.isBack||this.isFirstEnter) {
+			if (!this.$route.meta.isBack || this.isFirstEnter) {
 				this.getPlanInfo();
 			}
 			this.isFirstEnter = false;
@@ -131,6 +131,15 @@
 			// 重置计划，重新跳转回去上个页面
 			returnBack() {
 				this.$router.go(-1)
+			},
+			// 展示所有日期
+			showAllDays() {
+				this.$dialog.alert({
+					title:'已选择日期',
+					message:  this.cardInfo.manualDays,
+					messageAlign:'center',
+					
+				});
 			},
 			// 提交计划
 			sumbitPlan() {
@@ -172,42 +181,28 @@
 				this.channelType = this.$route.params.channelType;
 				//设置山歌页面传递过来的手动设置还款日期的参数repayDate
 				this.repayDate = this.$route.params.repayDate;
-				if(JSON.stringify(this.$route.params.repayDate) == '{}'){
+				if (JSON.stringify(this.$route.params.repayDate) == '{}') {
 					this.showRepayDate = false;
-				}else{
+				} else {
 					this.showRepayDate = true;
 				}
 			},
 			// 格式化数据
 			forMatInfo(planInfo) {
-				// 格式化数据,把数据转换成页面需要展示的样式
-				// planInfo.totalDeductMoney = tool.centTurnSmacker(planInfo.totalDeductMoney) //格式化总扣款金额
-				// planInfo.totalRepayMoney = tool.centTurnSmacker(planInfo.totalRepayMoney) //格式化总还款金额
-				// planInfo.totalRateMoney = tool.centTurnSmacker(planInfo.totalRateMoney) //格式总手续费
-				// planInfo.balanceMoney = tool.centTurnSmacker(planInfo.balanceMoney) //格式化卡内余额
-				// planInfo.itemList = planInfo.itemList.map(cur => {
-				// 	cur.tradeAmount = tool.centTurnSmacker(cur.tradeAmount) //格式化扣款金额
-				// 	cur.repayAmount = tool.centTurnSmacker(cur.repayAmount) //格式化还款金额
-				// 	cur.rateAmount = tool.centTurnSmacker(cur.rateAmount) //格式化手续费
-				// 	cur.dateTime = cur.tradeTime.substr(0, 10)
-				// 	cur.tradeTime = cur.tradeTime.substr(0, 16) //格式化扣款时间
-				// 	cur.transferTime = cur.transferTime.substr(0, 16) //格式化还款时间
-				// 	return cur
-				// })
-				planInfo.voList =  planInfo.voList.map(cur=>{
-					cur.dateTime = cur.dateTime.substr(0,10);
-					cur.itemList.map((item,index)=>{
-						item.tradeTime = item.tradeTime.substr(0,16);
-						if(cur.itemList.length-1 == index){
+				planInfo.voList = planInfo.voList.map(cur => {
+					cur.dateTime = cur.dateTime.substr(0, 10);
+					cur.itemList.map((item, index) => {
+						item.tradeTime = item.tradeTime.substr(0, 16);
+						if (cur.itemList.length - 1 == index) {
 							item.name = '还款';
 							item.bgPic = require('../../assets/img/payPlanInfo_repay.png');
-						}else{
+						} else {
 							item.name = '消费';
 							item.bgPic = require('../../assets/img/payPlanInfo_consume.png')
 						}
 						return item;
 					})
-					cur.tradeAmount = cur.itemList[cur.itemList.length-1].tradeAmount;//该笔交易的共还款
+					cur.tradeAmount = cur.itemList[cur.itemList.length - 1].tradeAmount; //该笔交易的共还款
 					return cur;
 				})
 				this.planInfo = planInfo;
@@ -249,7 +244,7 @@
 	// 还款总信息
 	.payPlanInfo {
 		position: fixed;
-		z-index: 9999;
+		z-index: 1999;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -283,18 +278,22 @@
 			}
 		}
 	}
-	.margin-top245{
+
+	.margin-top245 {
 		margin-top: 245px;
 	}
-	.margin-top317{
+
+	.margin-top317 {
 		margin-top: 317px;
 	}
+
 	// 还款信息列表
 	.repayInfo-list {
 		// margin-top: 293px;
 		// margin-top: 245px;
 		padding: 20px 0px;
 		margin-bottom: 100px;
+
 		.list-li {
 			width: 690px;
 			// height: 470px;
@@ -394,7 +393,8 @@
 		box-sizing: border-box;
 		padding: 20px 30px;
 		font-size: 26px;
-		justify-content: space-between;
+		// justify-content: space-between;
+		justify-content: space-around;
 
 		.taskBar-btn {
 			width: 160px;
@@ -418,8 +418,9 @@
 			border: none;
 		}
 	}
+
 	// 手动还款日期已选择的日期
-	.repay-date{
+	.repay-date {
 		position: fixed;
 		top: 245px;
 		left: 0;
@@ -429,5 +430,15 @@
 		padding: 20px;
 		border-bottom: 2px solid #f5f5f5;
 		text-align: left;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+
+		.days {
+			max-width: 550px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 	}
 </style>
