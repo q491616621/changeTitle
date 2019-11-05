@@ -19,7 +19,7 @@
 					<div>银行名称</div>
 					<div class="right" @click="chooseBankBox = true">
 						<div v-if="cardInfo.bankName ==''" class="default">请选择银行</div>
-						<div v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
+						<div class="bank-name" v-if="cardInfo.bankName !=''">{{ cardInfo.bankName }}</div>
 						<img src="../../../assets/img/addCreditCard_choose.png" />
 					</div>
 				</div>
@@ -878,5 +878,8 @@
 
 	.search {
 		max-height: 100%;
+	}
+	.bank-name{
+		min-width: 400px;
 	}
 </style>
