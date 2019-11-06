@@ -4,7 +4,7 @@
 		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
-		<div class="container flx-cas" v-if="true">
+		<div class="container flx-cas" v-if="false">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<!-- <div>使用说明</div> -->
@@ -75,7 +75,6 @@
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
-				isRealName: true, //是否已经完善快捷资料
 			};
 		},
 		beforeCreate() {
@@ -83,21 +82,21 @@
 		},
 		created() {
 			tool.setAppTitle('信用卡刷卡')
-			// let platFlag = tool.testPlat();
-			// this.$dialog.alert({
-			// 	message:'该功能正在开发中，敬请期待！',
-			// 	beforeClose:(action, done)=>{
-			// 		if (platFlag == 1) {
-			// 			// closeWeb ios定义的退回上一页，删除H5页面的方法
-			// 			window.webkit.messageHandlers.closeWeb.postMessage('');
-			// 			done()
-			// 		} else {
-			// 			// btnBack 安卓定义的退回上一页,删除H5页面的方法
-			// 			window.android.btnBack()
-			// 			done()
-			// 		}
-			// 	}
-			// })
+			let platFlag = tool.testPlat();
+			this.$dialog.alert({
+				message:'该功能正在开发中，敬请期待！',
+				beforeClose:(action, done)=>{
+					if (platFlag == 1) {
+						// closeWeb ios定义的退回上一页，删除H5页面的方法
+						window.webkit.messageHandlers.closeWeb.postMessage('');
+						done()
+					} else {
+						// btnBack 安卓定义的退回上一页,删除H5页面的方法
+						window.android.btnBack()
+						done()
+					}
+				}
+			})
 			this.amount = this.$store.state.unionpayQuickAmount;
 			// ----------------------------------
 			let me = this;
@@ -108,12 +107,12 @@
 		methods: {
 			// 设置获取app传过来的数据
 			setSwipeCardData(data){
-				console.log('执行了')
 				let appData = JSON.parse(data)
 				let sessionId = appData.sessionId;
 				let faceStatus = appData.faceStatus;
 				let realName = appData.realName;
 				let certificateNumb = appData.certificateNumb;
+				return
 				this.$toast({
 					message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
 					duration:0

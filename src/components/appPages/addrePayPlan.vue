@@ -75,7 +75,7 @@
 					<!-- 默认日期/定制日期选择 -->
 					<div class="road flx-rs medium">
 						<!-- <div class="name">消费方式</div> -->
-						<van-radio-group v-model="radio3" class='radio-box flx-rs'>
+						<van-radio-group v-model="radio3" class='radio-box flx-rs' style="justify-content: space-around;">
 							<van-radio :name="0">
 								默认日期顺序还款
 								<img slot="icon" slot-scope="props" :src="props.checked ? icon.active : icon.inactive">
@@ -89,7 +89,7 @@
 					<!-- 已经选择的日期 -->
 					<div class="road flx-rs medium" v-if="radio3 == 1&&chooseDateArr.length != 0&&show == false">
 						<div class="name2">还款日期</div>
-						<div class="days" @click="showAllDays">{{chooseDateArr|days}}</div>
+						<div class="days" @click="showPopup">{{chooseDateArr|days}}</div>
 					</div>
 					<!-- 选择落地城市 -->
 					<div class="city-picker flx-rs medium" v-if="isSupportLand == 1">
@@ -303,17 +303,41 @@
 					repayType: '', //还款方式
 					dayString: '', //手动选择的还款日期
 				};
+				// this.columns = [{
+				// 		// values: Object.keys(citys),
+				// 		values: [],
+				// 		className: 'column1'
+				// 	},
+				// 	{
+				// 		// values: citys['浙江'],
+				// 		values: [],
+				// 		className: 'column2',
+				// 		defaultIndex: 2
+				// 	}
+				// ];
+				// ------
+				// this.planList=[{ //方式列表
+				// 	planCode: 1,
+				// 	name: '消费1'
+				// }, {
+				// 	planCode: 2,
+				// 	name: '消费2'
+				// }, {
+				// 	planCode: 3,
+				// 	name: '消费3'
+				// }];
+				// ------
 				this.radioChange = false;
 				this.radio = 0; //还款通道
 				this.radio2 = 1;
 				// -------------------------
 				this.radio3 = 0;
 				this.arr1 = [], //日期数组1
-				this.arr2 = [], //日期数组2
-				this.checkArr1 = [], //已经选择的日期数组1
-				this.checkArr2 = [], //已经选择的日期数组2
-				this.chooseDateArr = [], //已经选择的日期总和
-				this.setCardInfo();
+					this.arr2 = [], //日期数组2
+					this.checkArr1 = [], //已经选择的日期数组1
+					this.checkArr2 = [], //已经选择的日期数组2
+					this.chooseDateArr = [], //已经选择的日期总和
+					this.setCardInfo();
 				this.getChannelList(); //执行获取代还通道请求
 			}
 			this.isFirstEnter = false;
@@ -718,6 +742,27 @@
 				let name = e;
 				// 选择通道时,设置通道id
 				this.planInfo.channelCode = this.channelList[name].channelCode;
+				// 当通道号等于1000000004时,关闭消费2 消费3选项
+				// if (this.channelList[name].channelCode == '1000000004') {
+				// 	this.planList = [{ //方式列表
+				// 		planCode: 1,
+				// 		name: '消费1'
+				// 	}]
+				// 	this.radio2 = 1;
+				// }else{
+				// 	this.planList = [
+				// 		{ //方式列表
+				// 			planCode: 1,
+				// 			name: '消费1'
+				// 		}, {
+				// 			planCode: 2,
+				// 			name: '消费2'
+				// 		}, {
+				// 			planCode: 3,
+				// 			name: '消费3'
+				// 		}
+				// 	]
+				// }
 				//选择通道时，设置是否支持选择落地城市
 				this.isSupportLand = this.channelList[name].isSupportLand;
 				if (this.channelList[name].isSupportLand == 1) {
@@ -831,14 +876,6 @@
 					})
 				})
 			},
-			// 展示所有已选择的日期
-			showAllDays() {
-				this.$dialog.alert({
-					title: '已选择日期',
-					message: this.chooseDateArr.map(cur => cur.dateNum).join('、'),
-					messageAlign: 'center',
-				});
-			}
 		},
 		filters: {
 			// 过滤账单日,还款日
@@ -1259,7 +1296,34 @@
 					}
 				}
 			}
+
+			.protocol {
+				font-size: 24px;
+
+				img {
+					width: 22px;
+					height: 22px;
+					flex-shrink: 0;
+					padding-right: 15px;
+				}
+
+				.protocol-li {
+					color: #1A82FF;
+				}
+			}
+
+			.repayPlan-btn {
+				margin-top: 88px;
+				width: 630px;
+				height: 90px;
+				background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
+				box-shadow: -1px 10px 24px 0px rgba(53, 133, 254, 0.5);
+				border-radius: 45px;
+				color: #fff;
+				font-size: 32px;
+			}
 		}
+
 		.repayPlan-btn {
 			margin-top: 58px;
 			width: 630px;
