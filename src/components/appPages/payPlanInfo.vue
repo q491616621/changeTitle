@@ -31,7 +31,7 @@
 			<!-- 选择手动设置还款日期时已选择的日期表 -->
 			<div class="repay-date" v-if="showRepayDate" @click="showAllDays">
 				<span>还款日期：</span>
-				<span class="days">{{cardInfo.manualDays}}</span>
+				<span class="days">{{repayDate.chooseDateArr|days}}</span>
 			</div>
 			<!-- 还款信息列表 -->
 			<div :class="showRepayDate?'repayInfo-list flx-cas margin-top317':'repayInfo-list flx-cas margin-top245'">
@@ -136,9 +136,8 @@
 			showAllDays() {
 				this.$dialog.alert({
 					title:'已选择日期',
-					message:  this.cardInfo.manualDays,
+					message:  this.repayDate.chooseDateArr.map(cur => cur.dateNum).join('、'),
 					messageAlign:'center',
-					
 				});
 			},
 			// 提交计划
@@ -207,6 +206,14 @@
 				})
 				this.planInfo = planInfo;
 				this.commonLoading = false;
+			}
+		},
+		filters: {
+			//过滤已选择的日期
+			days: (value) => {
+				let days = value.map(cur => cur.dateNum).join('、')
+				// console.log(value)
+				return days
 			}
 		}
 	};

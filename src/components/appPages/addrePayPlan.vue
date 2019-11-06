@@ -86,6 +86,12 @@
 							</van-radio>
 						</van-radio-group>
 					</div>
+					<!-- 已经选择的日期 -->
+					<div class="road flx-rs medium" v-if="radio3 == 1&&chooseDateArr.length != 0&&show == false">
+						<div class="name2">还款日期</div>
+						<div class="days" @click="showAllDays">{{chooseDateArr|days}}</div>
+					</div>
+					<!-- 选择落地城市 -->
 					<div class="city-picker flx-rs medium" v-if="isSupportLand == 1">
 						<div class="pick-title">落地城市</div>
 						<div class="pick-content flx-rs" @click="showPicker">
@@ -98,8 +104,8 @@
 						</div>
 					</div>
 				</van-cell-group>
-				<button class="repayPlan-btn bold" @click="PreviewRepayment">预览还款计划</button>
 			</div>
+			<button class="repayPlan-btn bold" @click="PreviewRepayment">预览还款计划</button>
 		</div>
 		<!-- 输入金额框 -->
 		<van-dialog v-model="setCardQuotaBox" title="卡片额度" show-cancel-button closeOnClickOverlay @confirm='setCardQuo'
@@ -124,7 +130,7 @@
 			</van-popup>
 		</div>
 		<!-- 日期选择器 -->
-		<van-popup class="date-box" v-model="show" position='bottom' style="height: 80%;" :close-on-click-overlay='false'>
+		<van-popup class="date-box" v-model="show" position='bottom' style="height: 85%;" :close-on-click-overlay='false'>
 			<div class="date-title flx-r">
 				<div class="cancel" @click="cancelDate">取消</div>
 				<div class="title">
@@ -138,7 +144,7 @@
 				<div class="sure" @click="sureDate">确定</div>
 			</div>
 			<div class="date-table">
-<!-- 				<div class="title flx-r">
+				<!-- 				<div class="title flx-r">
 					<img src="../../assets/img/addrePayPlan/left.png">
 					<div class="time">
 						<span>2019</span>
@@ -154,11 +160,12 @@
 					</ul>
 					<ul class="title flx-rs">
 						<!-- <li v-for="(item,index) in arr1" :key='index' class="li-choose">{{item.dateNum}}</li> -->
-						<li v-for="(item,index) in arr1" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'" @click="chooseDate(item,'arr1')">
+						<li v-for="(item,index) in arr1" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'"
+						 @click="chooseDate(item,'arr1')">
 							<div :class="item.checked?'li-has-choose':'li-not-choose'">
-							{{item.dateNum}}
-							<div>账单日</div>
-							<div>还款日</div>
+								{{item.dateNum}}
+								<div class="bill" v-if="item.dateNum == planInfo.billingDay&&item.checked == false">账单日</div>
+								<div class="repay" v-if="item.dateNum == planInfo.repaymentDay&&item.checked == false">还款日</div>
 							</div>
 						</li>
 					</ul>
@@ -168,8 +175,13 @@
 						<li v-for="(item,index) in ['日','一','二','三','四','五','六']" :key='index'>{{item}}</li>
 					</ul>
 					<ul class="title flx-rs">
-						<li v-for="(item,index) in arr2" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'" @click="chooseDate(item,'arr2')">
-							<div :class="item.checked?'li-has-choose':''">{{item.dateNum}}</div>
+						<li v-for="(item,index) in arr2" :key='index' :class="item.chooseable?'li-choose flx-r':'li-no-choose flx-r'"
+						 @click="chooseDate(item,'arr2')">
+							<div :class="item.checked?'li-has-choose':'li-not-choose'">
+								{{item.dateNum}}
+								<div class="bill" v-if="item.dateNum == planInfo.billingDay&&item.checked == false">账单日</div>
+								<div class="repay" v-if="item.dateNum == planInfo.repaymentDay&&item.checked == false">还款日</div>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -222,6 +234,7 @@
 					cardQuota: null, //卡额度
 					repayMode: 1, //默认扣1还1
 					repayType: '', //还款方式，1：完美还款，2:智能还款，3:0余额还款
+					dayString: '', //手动选择的还款日期
 				},
 				inputCodefocus: false, //自动聚焦
 				icon: {
@@ -252,12 +265,12 @@
 				isSupportLand: '', //是否支持选择落地城市，1支持，非1不支持
 				radioChange: false, //判断刚开始是否触发通道改变的方法
 				// --------------------------------------------------------------------------
-				show: false,
-				arr1:[],//日期数组1
-				arr2:[],//日期数组2
-				checkArr1:[],//已经选择的日期数组1
-				checkArr2:[],//已经选择的日期数组2
-				chooseDateArr:[],//已经选择的日期总和
+				show: false, //是否展示手动日期选择
+				arr1: [], //日期数组1
+				arr2: [], //日期数组2
+				checkArr1: [], //已经选择的日期数组1
+				checkArr2: [], //已经选择的日期数组2
+				chooseDateArr: [], //已经选择的日期总和
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -288,10 +301,18 @@
 					cardQuota: null, //卡额度
 					repayMode: 1, //默认扣1还1
 					repayType: '', //还款方式
+					dayString: '', //手动选择的还款日期
 				};
 				this.radioChange = false;
 				this.radio = 0; //还款通道
 				this.radio2 = 1;
+				// -------------------------
+				this.radio3 = 0;
+				this.arr1 = [], //日期数组1
+				this.arr2 = [], //日期数组2
+				this.checkArr1 = [], //已经选择的日期数组1
+				this.checkArr2 = [], //已经选择的日期数组2
+				this.chooseDateArr = [], //已经选择的日期总和
 				this.setCardInfo();
 				this.getChannelList(); //执行获取代还通道请求
 			}
@@ -301,108 +322,172 @@
 			// --------------------------------------------------------------
 			// 调起日期选择框
 			showPopup() {
-				if(this.planInfo.billingDay==null||this.planInfo.repaymentDay == null){
+				if (this.planInfo.billingDay == null || this.planInfo.repaymentDay == null) {
 					this.$toast({
-						message:'请先选择好‘账单日’和‘还款日’',
-						duration:1500,
+						message: '请先选择好‘账单日’和‘还款日’',
+						duration: 1500,
 					})
 					this.radio3 = 0;
 					return;
 				}
-				// let billingDay = this.planInfo.billingDay;//账单日
-				// let repaymentDay = this.planInfo.repaymentDay;//还款日
-				let billingDay = this.planInfo.billingDay;//账单日
-				let repaymentDay = this.planInfo.repaymentDay;//还款日
-				let strideMonth;//是否跨月
-				
-				let todayDate = new Date().getDate();//今天日期
+				let billingDay = this.planInfo.billingDay; //账单日
+				let repaymentDay = this.planInfo.repaymentDay; //还款日
+
+				let todayDate = new Date().getDate(); //今天日期
 				// -------------------------
-				let dayCount = tool.days();//获取当前月份的天数
-				let nextDaysCount = tool.nextDays();//获取下个月份的天数
-				let curWeek = tool.getWeek('current');//获取当前月份第一天是星期几
-				let nextWeek = tool.getWeek('next');//获取下个月第一天是星期几
+				let dayCount = tool.days(); //获取当前月份的天数
+				let nextDaysCount = tool.nextDays(); //获取下个月份的天数
+				let curWeek = tool.getWeek('current'); //获取当前月份第一天是星期几
+				let nextWeek = tool.getWeek('next'); //获取下个月第一天是星期几
 				let arr1 = [];
 				let arr2 = [];
 				// let arr3 = [];
 				let day = 0;
 				let day2 = 0;
-				
-				
-				// 确认该计划是否跨月了
-				if(billingDay >= repaymentDay||repaymentDay<=todayDate){
-					// 账单日大于等于还款日或者还款日小于等于当天日期
-					strideMonth = true;
-				}else{
-					strideMonth = false;
-				}
-				// console.log(strideMonth)
+
+				// let strideMonth; //是否跨月
+				// // 确认该计划是否跨月了
+				// if (billingDay >= repaymentDay || repaymentDay <= todayDate) {
+				// 	// 账单日大于等于还款日或者还款日小于等于当天日期
+				// 	strideMonth = true;
+				// } else {
+				// 	strideMonth = false;
+				// }
 				for (let i = 0; i < 35; i++) {
-					if(i<curWeek||day>=dayCount){
-						arr1.push({dateNum:'',chooseable:false,checked:false});
-					}else{
+					if (i < curWeek || day >= dayCount) {
+						arr1.push({
+							dateNum: '',
+							chooseable: false,
+							checked: false
+						});
+					} else {
 						day++
-						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){//账单日=还款日或者还款日-账单日=1；
-							console.log(222)
-							arr1.push({dateNum:day,chooseable:false,checked:false});//全部不给选
-						}else if(billingDay-repaymentDay>0){//账单日大于还款日
-							if(day>billingDay&&day>todayDate){//日期大于账单日,且大于今天的日期，变为可选，其他全部不可选
-								arr1.push({dateNum:day,chooseable:true,checked:false});
-							}else{
-								arr1.push({dateNum:day,chooseable:false,checked:false});
+						if (repaymentDay == billingDay || repaymentDay - billingDay == 1) { //账单日=还款日或者还款日-账单日=1；
+							// console.log(222)
+							arr1.push({
+								dateNum: day,
+								chooseable: false,
+								checked: false
+							}); //全部不给选
+						} else if (billingDay - repaymentDay > 0) { //账单日大于还款日
+							if (day > billingDay && day > todayDate) { //日期大于账单日,且大于今天的日期，变为可选，其他全部不可选
+								arr1.push({
+									dateNum: day,
+									chooseable: true,
+									checked: false
+								});
+							} else {
+								arr1.push({
+									dateNum: day,
+									chooseable: false,
+									checked: false
+								});
 							}
-						}else if(repaymentDay-billingDay>1){//还款日大于账单日(需要大于1，因为等于1的时候全部不给选)
-							console.log(11)
-							if(repaymentDay-todayDate>1){//还款日大于今天的日期超过1天（即最少两数相减最少得是2）		
-								if(day>billingDay&&day>todayDate&&day<repaymentDay){//日期大于账单日且大于当前日且小于还款日，变为可选，其他全部不可选
-									arr1.push({dateNum:day,chooseable:true,checked:false});
-								}else{
-									arr1.push({dateNum:day,chooseable:false,checked:false});
+						} else if (repaymentDay - billingDay > 1) { //还款日大于账单日(需要大于1，因为等于1的时候全部不给选)
+							// console.log(11)
+							if (repaymentDay - todayDate > 1) { //还款日大于今天的日期超过1天（即最少两数相减最少得是2）		
+								if (day > billingDay && day > todayDate && day < repaymentDay) { //日期大于账单日且大于当前日且小于还款日，变为可选，其他全部不可选
+									arr1.push({
+										dateNum: day,
+										chooseable: true,
+										checked: false
+									});
+								} else {
+									arr1.push({
+										dateNum: day,
+										chooseable: false,
+										checked: false
+									});
 								}
-							}else{//还款日和今天只相差1天，或者还款日等于今天，或者还款日小于今天
-								if(day>repaymentDay&&day>todayDate){//日期大于还款日且大于今天，变为可选，其他全部不可选
-									arr1.push({dateNum:day,chooseable:true,checked:false});
-								}else{
-									arr1.push({dateNum:day,chooseable:false,checked:false});
+							} else { //还款日和今天只相差1天，或者还款日等于今天，或者还款日小于今天
+								if (day > repaymentDay && day > todayDate) { //日期大于还款日且大于今天，变为可选，其他全部不可选
+									arr1.push({
+										dateNum: day,
+										chooseable: true,
+										checked: false
+									});
+								} else {
+									arr1.push({
+										dateNum: day,
+										chooseable: false,
+										checked: false
+									});
 								}
 							}
-						}else{
-							arr1.push({dateNum:day,chooseable:false,checked:false});
+						} else {
+							arr1.push({
+								dateNum: day,
+								chooseable: false,
+								checked: false
+							});
 						}
 					}
 				}
 				for (let i = 0; i < 35; i++) {
-					if(i<nextWeek||day2>=nextDaysCount){
-						arr2.push({dateNum:'',chooseable:false,checked:false});
-					}else{
+					if (i < nextWeek || day2 >= nextDaysCount) {
+						arr2.push({
+							dateNum: '',
+							chooseable: false,
+							checked: false
+						});
+					} else {
 						day2++
-						if(repaymentDay == billingDay||repaymentDay-billingDay == 1){//账单日=还款日或者还款日-账单日=1；
-							arr2.push({dateNum:day2,chooseable:false,checked:false});//全部不给选
-						}else if(billingDay-repaymentDay>0){//账单日大于还款日
-							if(day2<repaymentDay){//日期只要小于还款日就都可选，其他不可选
-								arr2.push({dateNum:day2,chooseable:true,checked:false});
-							}else{
-								arr2.push({dateNum:day2,chooseable:false,checked:false});
+						if (repaymentDay == billingDay || repaymentDay - billingDay == 1) { //账单日=还款日或者还款日-账单日=1；
+							arr2.push({
+								dateNum: day2,
+								chooseable: false,
+								checked: false
+							}); //全部不给选
+						} else if (billingDay - repaymentDay > 0) { //账单日大于还款日
+							if (day2 < repaymentDay) { //日期只要小于还款日就都可选，其他不可选
+								arr2.push({
+									dateNum: day2,
+									chooseable: true,
+									checked: false
+								});
+							} else {
+								arr2.push({
+									dateNum: day2,
+									chooseable: false,
+									checked: false
+								});
 							}
-						}else if(repaymentDay-billingDay>1){//还款日大于账单日(需要大于1，因为等于1的时候全部不给选)
-							if(repaymentDay-todayDate>1){//还款日大于今天的日期超过1天（即最少两数相减最少得是2）
-								arr2.push({dateNum:day2,chooseable:false,checked:false});//全部设置为不可选
-							}else{//还款日和今天只相差1天，或者还款日等于今天，或者还款日小于今天
-								if(day2<repaymentDay){//小于还款日的，全部变成可选
-									arr2.push({dateNum:day2,chooseable:true,checked:false});
-								}else{
-									arr2.push({dateNum:day2,chooseable:false,checked:false});
+						} else if (repaymentDay - billingDay > 1) { //还款日大于账单日(需要大于1，因为等于1的时候全部不给选)
+							if (repaymentDay - todayDate > 1) { //还款日大于今天的日期超过1天（即最少两数相减最少得是2）
+								arr2.push({
+									dateNum: day2,
+									chooseable: false,
+									checked: false
+								}); //全部设置为不可选
+							} else { //还款日和今天只相差1天，或者还款日等于今天，或者还款日小于今天
+								if (day2 < repaymentDay) { //小于还款日的，全部变成可选
+									arr2.push({
+										dateNum: day2,
+										chooseable: true,
+										checked: false
+									});
+								} else {
+									arr2.push({
+										dateNum: day2,
+										chooseable: false,
+										checked: false
+									});
 								}
 							}
-						}else{
-							arr2.push({dateNum:day2,chooseable:false,checked:false});
+						} else {
+							arr2.push({
+								dateNum: day2,
+								chooseable: false,
+								checked: false
+							});
 						}
 					}
 				}
 				// 判断用户在这个月是否选择了,选择了的话把已经选择了的,标上颜色
-				if(this.checkArr1.length != 0){
-					arr1 = arr1.map(cur=>{
-						this.checkArr1.forEach(item=>{
-							if(item.dateNum == cur.dateNum){
+				if (this.checkArr1.length != 0) {
+					arr1 = arr1.map(cur => {
+						this.checkArr1.forEach(item => {
+							if (item.dateNum == cur.dateNum) {
 								cur = item
 							}
 						})
@@ -410,10 +495,10 @@
 					})
 				}
 				// 判断用户在下个月是否选择了,选择了的话把已经选择了的,标上颜色
-				if(this.checkArr2.length != 0){
-					arr2 = arr2.map(cur=>{
-						this.checkArr2.forEach(item=>{
-							if(item.dateNum == cur.dateNum){
+				if (this.checkArr2.length != 0) {
+					arr2 = arr2.map(cur => {
+						this.checkArr2.forEach(item => {
+							if (item.dateNum == cur.dateNum) {
 								cur = item
 							}
 						})
@@ -422,24 +507,24 @@
 				}
 				this.arr1 = arr1;
 				this.arr2 = arr2;
-				this.$nextTick(()=>{
+				this.$nextTick(() => {
 					this.show = true;
 				})
 			},
 			// 选择日期
-			chooseDate(item,type){
-				if(!item.chooseable)return;
-				if(type == 'arr1'){
-					let arr1 = this.arr1.map(cur=>{
-						if(cur == item){
+			chooseDate(item, type) {
+				if (!item.chooseable) return;
+				if (type == 'arr1') {
+					let arr1 = this.arr1.map(cur => {
+						if (cur == item) {
 							cur.checked = !cur.checked;
 						}
 						return cur;
 					})
 					this.arr1 = arr1;
-				}else{
-					let arr2 = this.arr2.map(cur=>{
-						if(cur == item){
+				} else {
+					let arr2 = this.arr2.map(cur => {
+						if (cur == item) {
 							cur.checked = !cur.checked;
 						}
 						return cur;
@@ -448,21 +533,21 @@
 				}
 			},
 			// 取消设置日期
-			cancelDate(){
+			cancelDate() {
 				//判断选择的数组长度是否为0，为0的话代表用户没选，把还款方式重置回去默认日期顺序还款
-				if(this.chooseDateArr.length == 0)this.radio3 = 0;
+				if (this.chooseDateArr.length == 0) this.radio3 = 0;
 				this.show = false;
 			},
 			// 确定设置日期
-			sureDate(){
-				let checkArr1 = this.arr1.filter(cur=>cur.checked == true);
-				let checkArr2 = this.arr2.filter(cur=>cur.checked == true);
+			sureDate() {
+				let checkArr1 = this.arr1.filter(cur => cur.checked == true);
+				let checkArr2 = this.arr2.filter(cur => cur.checked == true);
 				this.checkArr1 = checkArr1;
 				this.checkArr2 = checkArr2;
-				this.chooseDateArr = [...checkArr1,...checkArr2]
+				this.chooseDateArr = [...checkArr1, ...checkArr2]
 				this.show = false;
 				//判断选择的数组长度是否为0，为0的话代表用户没选，把还款方式重置回去默认日期顺序还款
-				if(this.chooseDateArr.length == 0)this.radio3 = 0;
+				if (this.chooseDateArr.length == 0) this.radio3 = 0;
 			},
 			// ---------------------------------------------------------------
 			// 把上个页面传递过来的数据设置给这个页面
@@ -594,7 +679,7 @@
 									this.$refs.cityPicker.setColumnIndex(1, 2);
 								}
 							})
-					}else{
+					} else {
 						this.radioChange = true;
 					}
 				})
@@ -702,7 +787,7 @@
 				} else if (!planInfo.cardQuota) {
 					this.$toast('请设置卡片额度');
 					return
-				}else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
+				} else if (this.isSupportLand == 1 && planInfo.provinceName == '' && planInfo.cityName == '') {
 					// 判断当前通道是否有落地城市,如果有的话必须填落地省市
 					this.$toast('请选择落地城市');
 					return
@@ -713,23 +798,27 @@
 				if (planInfo.repaymentDay > days) planInfo.repaymentDay = days;
 				if (planInfo.billingDay == planInfo.repaymentDay) return this.$toast('账单日和还款日不能是同一天哦!')
 				let repayDate = {};
-				if(this.radio3 == 1){
+				if (this.radio3 == 1) {
 					repayDate = {
-						arr1:this.arr1,
-						arr2:this.arr2,
-						chooseDateArr:this.chooseDateArr,
+						arr1: this.arr1,
+						arr2: this.arr2,
+						chooseDateArr: this.chooseDateArr,
 					}
 				}
 				// ----------------------------------------------------------------
+				// ----------------------------------------------------------------------------
+				if (this.radio3 == 1) {
+					planInfo.dayString = this.chooseDateArr.map(cur => cur.dateNum).join(',');
+				} else {
+					planInfo.dayString = ''
+				}
+				// -------------------------------------------------------------------------------
 				// 弹窗加载中
 				tool.toastLoading();
 				server.preCreatePlan(planInfo).then(res => {
 					if (res == null) return;
 					let channelType = this.channelList[this.radio].channelType;
 					this.$toast.clear()
-					// ----------------------------------------------------------------------------
-					planInfo.manualDays = this.chooseDateArr.map(cur=>cur.dateNum).join('、');
-					// -------------------------------------------------------------------------------
 					this.$router.push({
 						name: 'payPlanInfo',
 						params: {
@@ -742,6 +831,14 @@
 					})
 				})
 			},
+			// 展示所有已选择的日期
+			showAllDays() {
+				this.$dialog.alert({
+					title: '已选择日期',
+					message: this.chooseDateArr.map(cur => cur.dateNum).join('、'),
+					messageAlign: 'center',
+				});
+			}
 		},
 		filters: {
 			// 过滤账单日,还款日
@@ -762,6 +859,12 @@
 					value = tool.centTurnSmacker(value);
 				}
 				return value;
+			},
+			//过滤已选择的日期
+			days: (value) => {
+				let days = value.map(cur => cur.dateNum).join('、')
+				// console.log(value)
+				return days
 			}
 		}
 	};
@@ -1060,7 +1163,7 @@
 
 		.repayPlan {
 			width: 690px;
-			height: 640px;
+			// height: 740px;
 			background: rgba(255, 255, 255, 1);
 			box-shadow: 0px 3px 12px 0px rgba(212, 212, 212, 0.5);
 			border-radius: 14px;
@@ -1102,6 +1205,21 @@
 					width: 27px;
 					height: 27px;
 				}
+
+				.name2 {
+					width: 170px;
+					text-align: left;
+				}
+
+				.days {
+					// width: 100%;
+					text-align: left;
+					width: 400px;
+					max-width: 400px;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
 			}
 
 			.city-picker {
@@ -1141,17 +1259,16 @@
 					}
 				}
 			}
-
-			.repayPlan-btn {
-				margin-top: 88px;
-				width: 630px;
-				height: 90px;
-				background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
-				box-shadow: -1px 10px 24px 0px rgba(53, 133, 254, 0.5);
-				border-radius: 45px;
-				color: #fff;
-				font-size: 32px;
-			}
+		}
+		.repayPlan-btn {
+			margin-top: 58px;
+			width: 630px;
+			height: 90px;
+			background: linear-gradient(90deg, rgba(110, 191, 255, 1), rgba(26, 130, 255, 1));
+			box-shadow: -1px 10px 24px 0px rgba(53, 133, 254, 0.5);
+			border-radius: 45px;
+			color: #fff;
+			font-size: 32px;
 		}
 	}
 
@@ -1197,46 +1314,79 @@
 				line-height: 80px;
 			}
 		}
-		.date-table{
-			.title{
+
+		.date-table {
+			.title {
 				padding-top: 20px;
 				font-size: 26px;
-				.time{
+
+				.time {
 					margin: 0 20px;
 					color: #333;
 					font-weight: bold;
 				}
-				img{
+
+				img {
 					width: 40px;
 					height: 40px;
 				}
 			}
-			.date-list{
+
+			.date-list {
 				border-bottom: 20px solid #e0e0e0;
-				.title{
+
+				.title {
 					justify-content: space-around;
 					flex-wrap: wrap;
-					.li-choose{
+
+					.li-choose {
 						width: 107px;
 						height: 60px;
 						font-weight: bold;
 						color: #333;
 						line-height: 60px;
 					}
-					.li-no-choose{
+
+					.li-no-choose {
 						width: 107px;
-						height: 60px;
+						height: 85px;
 						font-weight: bold;
 						color: #999;
 						line-height: 60px;
 					}
-					.li-has-choose{
+
+					.li-has-choose {
 						width: 55px;
 						height: 55px;
 						border-radius: 50%;
 						background: #6abcff;
 						line-height: 55px;
 						color: #fff;
+						position: relative;
+					}
+
+					.li-not-choose {
+						position: relative;
+					}
+
+					.bill {
+						position: absolute;
+						left: 50%;
+						margin-left: -54px;
+						width: 107px;
+						bottom: -30px;
+						font-size: 20px;
+						color: #548ed3;
+					}
+
+					.repay {
+						position: absolute;
+						left: 50%;
+						margin-left: -54px;
+						width: 107px;
+						bottom: -30px;
+						font-size: 20px;
+						color: #d1824e;
 					}
 				}
 			}
