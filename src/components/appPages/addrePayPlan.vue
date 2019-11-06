@@ -141,7 +141,7 @@
 						<span>天</span>
 					</div> -->
 				</div>
-				<div class="sure" @click="sureDate">确定</div>
+				<div class="sure" style="color: #2b8eff;" @click="sureDate">确定</div>
 			</div>
 			<div class="date-table">
 				<!-- 				<div class="title flx-r">
@@ -1310,7 +1310,9 @@
 			.sure {
 				width: 80px;
 				height: 80px;
-				background: pink;
+				// background: pink;
+				color: #666;
+				font-weight: bold;
 				line-height: 80px;
 			}
 		}
@@ -1376,7 +1378,7 @@
 						width: 107px;
 						bottom: -30px;
 						font-size: 20px;
-						color: #548ed3;
+						color: #2b8eff;
 					}
 
 					.repay {
@@ -1386,7 +1388,7 @@
 						width: 107px;
 						bottom: -30px;
 						font-size: 20px;
-						color: #d1824e;
+						color: #fb4c0b;
 					}
 				}
 			}
