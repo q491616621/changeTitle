@@ -232,16 +232,18 @@
 				// 		defaultIndex: 2
 				// 	}
 				// ];
-				this.planList=[{ //方式列表
-					planCode: 1,
-					name: '消费1'
-				}, {
-					planCode: 2,
-					name: '消费2'
-				}, {
-					planCode: 3,
-					name: '消费3'
-				}];
+				// ------
+				// this.planList=[{ //方式列表
+				// 	planCode: 1,
+				// 	name: '消费1'
+				// }, {
+				// 	planCode: 2,
+				// 	name: '消费2'
+				// }, {
+				// 	planCode: 3,
+				// 	name: '消费3'
+				// }];
+				// ------
 				this.radioChange = false;
 				this.radio = 0; //还款通道
 				this.radio2 = 1;
@@ -411,26 +413,26 @@
 				// 选择通道时,设置通道id
 				this.planInfo.channelCode = this.channelList[name].channelCode;
 				// 当通道号等于1000000004时,关闭消费2 消费3选项
-				if (this.channelList[name].channelCode == '1000000004') {
-					this.planList = [{ //方式列表
-						planCode: 1,
-						name: '消费1'
-					}]
-					this.radio2 = 1;
-				}else{
-					this.planList = [
-						{ //方式列表
-							planCode: 1,
-							name: '消费1'
-						}, {
-							planCode: 2,
-							name: '消费2'
-						}, {
-							planCode: 3,
-							name: '消费3'
-						}
-					]
-				}
+				// if (this.channelList[name].channelCode == '1000000004') {
+				// 	this.planList = [{ //方式列表
+				// 		planCode: 1,
+				// 		name: '消费1'
+				// 	}]
+				// 	this.radio2 = 1;
+				// }else{
+				// 	this.planList = [
+				// 		{ //方式列表
+				// 			planCode: 1,
+				// 			name: '消费1'
+				// 		}, {
+				// 			planCode: 2,
+				// 			name: '消费2'
+				// 		}, {
+				// 			planCode: 3,
+				// 			name: '消费3'
+				// 		}
+				// 	]
+				// }
 
 			//选择通道时，设置是否支持选择落地城市
 			this.isSupportLand = this.channelList[name].isSupportLand;
