@@ -9,6 +9,7 @@
 			<van-cell-group class="addInfo-box">
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cardNum" clearable label="卡号"
 				 placeholder="请输入卡号" @blur='checkCardBank' @input="changeCode" />
+				 <div @click="aa">按钮</div>
 				 <van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.valid" clearable label="有效期"
 				  placeholder="有效期（月/年），如0123" right-icon='question-o' @click-right-icon='showTips("valid")'/>
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cvn2" clearable label="CVN2"
@@ -130,8 +131,31 @@
 		created() {
 			this.getUserInfo(); //获取用户身份信息函数
 			tool.setAppTitle('添加信用卡');
+			// --------------------
+			let me = this;
+			window['setBankNum'] = (url) => {
+				me.setBankNum(url)
+			}
 		},
 		methods: {
+			aa(){
+				let platFlag = tool.testPlat();
+				if (platFlag == 1) {
+					// closeWeb ios定义的退回上一页，删除H5页面的方法
+					window.webkit.messageHandlers.closeWeb.getBankNum('');
+				} else {
+					// btnBack 安卓定义的退回上一页,删除H5页面的方法
+					window.android.getBankNum()
+				}
+			},
+			setBankNum(e){
+				let appData = JSON.parse(e);
+				let bankNum = appData.bankNum;
+				this.$toast({
+					message:bankNum,
+					duration:0
+				})
+			},
 			// aaa(){
 			// 	let res = {};
 			// 	res.data = {

@@ -14,6 +14,7 @@
 				<!-- 银行卡号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardNumb" clearable
 				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' />
+				 <div @click="aa">按钮</div>
 				<!-- 银行名称 -->
 				<div class="addPicker-li flx-rs">
 					<div>银行名称</div>
@@ -253,8 +254,31 @@
 			}
 			this.setColums();
 			this.setbankColumns();
+			// --------------------
+			let me = this;
+			window['setBankNum'] = (url) => {
+				me.setBankNum(url)
+			}
 		},
 		methods: {
+			aa(){
+				let platFlag = tool.testPlat();
+				if (platFlag == 1) {
+					// closeWeb ios定义的退回上一页，删除H5页面的方法
+					window.webkit.messageHandlers.closeWeb.getBankNum('');
+				} else {
+					// btnBack 安卓定义的退回上一页,删除H5页面的方法
+					window.android.getBankNum()
+				}
+			},
+			setBankNum(e){
+				let appData = JSON.parse(e);
+				let bankNum = appData.bankNum;
+				this.$toast({
+					message:bankNum,
+					duration:0
+				})
+			},
 			// 设置省市列表
 			setColums() {
 				tool.toastLoading();

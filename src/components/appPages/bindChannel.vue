@@ -22,6 +22,7 @@
 		</div>
 		<!-- 未绑定通道卡列表 -->
 		<div class="card-list">
+			<div @click="go" style="margin-top: 50px;">跳转绑定结算卡页面</div>
 			<div class="card flx-rs" v-for="(item,index) in cardList" :key='index'>
 				<div class="right flx-c">
 					<img :src="item.logo">
@@ -147,6 +148,12 @@
 			// let cardInfo = this.$route.params
 			// this.cardInfo = cardInfo; 
 			// this.getChannelList()
+			
+			// --------------------
+			let me = this;
+			window['setBankNum'] = (url) => {
+				me.setBankNum(url)
+			}
 		},
 		mounted() {
 			// 监控安卓回退按钮,设置返回事件
@@ -160,6 +167,11 @@
 			// window.removeEventListener('popstate', this.goBack, false)
 		},
 		methods: {
+			go(){
+				this.$router.push({
+					name: 'bindAtmCard',
+				})
+			},
 			// 从App端进入该页面
 			appEnter(e) {
 				// 获取app传过来的sessionId并设置给cookie,再执行getChannelList函数

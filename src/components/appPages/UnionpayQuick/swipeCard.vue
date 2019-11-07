@@ -4,6 +4,7 @@
 		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
+		<div @click="aa">按钮</div>
 		<div class="container flx-cas" v-if="false">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
@@ -82,29 +83,52 @@
 		},
 		created() {
 			tool.setAppTitle('信用卡刷卡')
-			let platFlag = tool.testPlat();
-			this.$dialog.alert({
-				message:'该功能正在开发中，敬请期待！',
-				beforeClose:(action, done)=>{
-					if (platFlag == 1) {
-						// closeWeb ios定义的退回上一页，删除H5页面的方法
-						window.webkit.messageHandlers.closeWeb.postMessage('');
-						done()
-					} else {
-						// btnBack 安卓定义的退回上一页,删除H5页面的方法
-						window.android.btnBack()
-						done()
-					}
-				}
-			})
+			// let platFlag = tool.testPlat();
+			// this.$dialog.alert({
+			// 	message:'该功能正在开发中，敬请期待！',
+			// 	beforeClose:(action, done)=>{
+			// 		if (platFlag == 1) {
+			// 			// closeWeb ios定义的退回上一页，删除H5页面的方法
+			// 			window.webkit.messageHandlers.closeWeb.postMessage('');
+			// 			done()
+			// 		} else {
+			// 			// btnBack 安卓定义的退回上一页,删除H5页面的方法
+			// 			window.android.btnBack()
+			// 			done()
+			// 		}
+			// 	}
+			// })
 			this.amount = this.$store.state.unionpayQuickAmount;
 			// ----------------------------------
 			let me = this;
 			window['setSwipeCardData'] = (url) => {
 				me.setSwipeCardData(url)
 			}
+			
+			// --------------------
+			window['setBankNum'] = (url) => {
+				me.setBankNum(url)
+			}
 		},
 		methods: {
+			aa(){
+				let platFlag = tool.testPlat();
+				if (platFlag == 1) {
+					// closeWeb ios定义的退回上一页，删除H5页面的方法
+					window.webkit.messageHandlers.closeWeb.getBankNum('');
+				} else {
+					// btnBack 安卓定义的退回上一页,删除H5页面的方法
+					window.android.getBankNum()
+				}
+			},
+			setBankNum(e){
+				let appData = JSON.parse(e);
+				let bankNum = appData.bankNum;
+				this.$toast({
+					message:bankNum,
+					duration:0
+				})
+			},
 			// 设置获取app传过来的数据
 			setSwipeCardData(data){
 				let appData = JSON.parse(data)
