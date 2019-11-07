@@ -164,8 +164,8 @@
 						 @click="chooseDate(item,'arr1')">
 							<div :class="item.checked?'li-has-choose':'li-not-choose'">
 								{{item.dateNum}}
-								<div class="bill" v-if="item.dateNum == planInfo.billingDay&&item.checked == false">账单日</div>
-								<div class="repay" v-if="item.dateNum == planInfo.repaymentDay&&item.checked == false">还款日</div>
+								<div class="bill" v-if="item.dateNum == planInfo.billingDay&&item.checked == false&&planInfo.billingDay != planInfo.repaymentDay">账单日</div>
+								<div class="repay" v-if="item.dateNum == planInfo.repaymentDay&&item.checked == false&&planInfo.billingDay != planInfo.repaymentDay">还款日</div>
 							</div>
 						</li>
 					</ul>
@@ -179,8 +179,8 @@
 						 @click="chooseDate(item,'arr2')">
 							<div :class="item.checked?'li-has-choose':'li-not-choose'">
 								{{item.dateNum}}
-								<div class="bill" v-if="item.dateNum == planInfo.billingDay&&item.checked == false">账单日</div>
-								<div class="repay" v-if="item.dateNum == planInfo.repaymentDay&&item.checked == false">还款日</div>
+								<div class="bill" v-if="item.dateNum == planInfo.billingDay&&item.checked == false&&planInfo.billingDay != planInfo.repaymentDay">账单日</div>
+								<div class="repay" v-if="item.dateNum == planInfo.repaymentDay&&item.checked == false&&planInfo.billingDay != planInfo.repaymentDay">还款日</div>
 							</div>
 						</li>
 					</ul>
