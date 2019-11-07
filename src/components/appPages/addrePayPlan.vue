@@ -702,11 +702,45 @@
 									this.$refs.cityPicker.setColumnIndex(0, 0);
 									this.$refs.cityPicker.setColumnIndex(1, 2);
 								}
+								// 判断是否有默认还款的地址,有的话执行设置默认还款地址方法
+								if(this.cardInfo.planCity != null&&this.cardInfo.planProvince != null)this.setDefaultCitys(res)
 							})
 					} else {
 						this.radioChange = true;
 					}
 				})
+			},
+			//设置默认还款地址
+			setDefaultCitys(res){
+				let planProvince = this.cardInfo.planProvince;
+				let planCity = this.cardInfo.planCity;
+				
+				// let a = '上海市';
+				// let b = '上海下属县';
+				let province = false;
+				let city = false;
+				for (let item in res.data) {
+					if(item == planProvince){
+						province = true;
+						for (let i = 0; i < res.data[item].length; i++) {
+							if(res.data[item][i] == planCity){
+								city = true
+							}
+							// console.log(res.data[item][i])
+						}
+					}
+					// console.log(item)
+				}
+				console.log(province)
+				console.log(city)
+				if(province&&city){
+					this.planInfo.provinceName = planProvince;
+					this.planInfo.cityName = planCity;
+					console.log('正确的')
+				}else{
+					this.planInfo.provinceName = '';
+					this.planInfo.cityName = '';
+				}
 			},
 			// 确定设置额度
 			setCardQuo() {
@@ -784,6 +818,8 @@
 								this.$refs.cityPicker.setColumnIndex(0, 0);
 								this.$refs.cityPicker.setColumnIndex(1, 2);
 							}
+							// 判断是否有默认还款的地址,有的话执行设置默认还款地址方法
+							if(this.cardInfo.planCity != null&&this.cardInfo.planProvince != null)this.setDefaultCitys(res)
 						})
 				}
 
@@ -809,8 +845,13 @@
 			},
 			// 点击确定
 			onConfirm(value) {
-				this.planInfo.provinceName = value[0]
-				this.planInfo.cityName = value[1]
+				this.planInfo.provinceName = value[0];
+				this.planInfo.cityName = value[1];
+				// ----------------------------
+				// 把选择的省市设置给默认地址
+				this.cardInfo.planProvince = value[0];
+				this.cardInfo.planCity = value[1];
+				// ----------------------------
 				this.chooseCityBox = false;
 			},
 			// 预览还款计划

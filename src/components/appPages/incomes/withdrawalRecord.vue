@@ -55,22 +55,27 @@
 							this.finished = true;
 							return;
 						}
-						let status = [
-							{status:1,statusName:'付款成功'},
-							{status:2,statusName:'付款失败'},
-							{status:3,statusName:'处理中'},
-							{status:4,statusName:'退票'},
-							{status:5,statusName:'待审核'},
-							{status:6,statusName:'审核通过'},
-							{status:7,statusName:'审核不通过'},
-						];//1-付款成功，2-付款失败，3-处理中，4-退票，5-待审核，6-审核通过，7-审核不通过'
+						// let status = [
+						// 	{status:1,statusName:'付款成功'},
+						// 	{status:2,statusName:'付款失败'},
+						// 	{status:3,statusName:'处理中'},
+						// 	{status:4,statusName:'退票'},
+						// 	{status:5,statusName:'待审核'},
+						// 	{status:6,statusName:'审核通过'},
+						// 	{status:7,statusName:'审核不通过'},
+						// ];//1-付款成功，2-付款失败，3-处理中，4-退票，5-待审核，6-审核通过，7-审核不通过'
 						let arr = res.data.map(cur=>{
 							cur.withdrawAmount = tool.centTurnSmacker(cur.withdrawAmount/100)
-							status.forEach(item=>{
-								if(cur.applyStatus == item.status){
-									cur.statusName = item.statusName
-								}
-							})
+							if(cur.applyStatus == 1){
+								cur.statusName = '付款成功'
+							}else{
+								cur.statusName = '手动提现中'
+							}
+							// status.forEach(item=>{
+							// 	if(cur.applyStatus == item.status){
+							// 		cur.statusName = item.statusName
+							// 	}
+							// })
 							return cur;
 						});
 						this.list = this.list.concat(arr);
