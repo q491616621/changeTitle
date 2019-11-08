@@ -265,7 +265,7 @@
 				let platFlag = tool.testPlat();
 				if (platFlag == 1) {
 					// closeWeb ios定义的退回上一页，删除H5页面的方法
-					window.webkit.messageHandlers.closeWeb.getBankNum('');
+					window.webkit.messageHandlers.getBankNum.postMessage('');
 				} else {
 					// btnBack 安卓定义的退回上一页,删除H5页面的方法
 					window.android.getBankNum()
