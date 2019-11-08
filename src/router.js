@@ -336,9 +336,9 @@ const router = new Router({
 		},
 		{
 			path: '/promotionRewards',
-			name: 'promotionRewards', // reimbursementTutorial //还款教程
+			name: 'promotionRewards', // promotionRewards //推广奖励
 			meta: {
-				title: '还款教程'
+				title: '推广奖励'
 			},
 			component: resolve => require(['@/components/appPages/promotionRewards/promotionRewards.vue'], resolve)
 		},
