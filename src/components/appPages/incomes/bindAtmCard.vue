@@ -13,8 +13,8 @@
 				 placeholder="请输入身份证号码" /> -->
 				<!-- 银行卡号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardNumb" clearable
-				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' />
-				 <div @click="aa">按钮</div>
+				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' right-icon="photograph"  @click-right-icon="useOCR"/>
+				<!-- <img src="../../../assets/img/camera.png" @click="useOCR"> -->
 				<!-- 银行名称 -->
 				<div class="addPicker-li flx-rs">
 					<div>银行名称</div>
@@ -185,7 +185,7 @@
 				chooseCityBox: false, //控制省市的picker盒子显示与否
 				regionBox: false, //控制区的picker盒子显示与否
 				citys: '',
-				regionList:[],
+				regionList: [],
 				columns: [{
 						// values: Object.keys(citys),
 						values: [],
@@ -198,7 +198,7 @@
 						defaultIndex: 2
 					}
 				],
-				columns2:[],//区列表
+				columns2: [], //区列表
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -222,7 +222,7 @@
 			// 判断上个页面是否传值过来了,传了的话把值设置给相对的值
 			let arr = Object.keys(this.$route.params)
 			if (arr.length > 0) {
-				if (this.$route.params.bankBranchCode) {//判断用户的bankBranchCode（支行联行号）是否存在，存在的话代表用户是已经完善过数据了的，把传过来的数据设置进去
+				if (this.$route.params.bankBranchCode) { //判断用户的bankBranchCode（支行联行号）是否存在，存在的话代表用户是已经完善过数据了的，把传过来的数据设置进去
 					this.cardInfo.bankBranchCode = this.$route.params.bankBranchCode;
 					this.cardInfo.bankNameBranch = this.$route.params.bankNameBranch;
 					this.cardInfo.province = this.$route.params.province;
@@ -231,7 +231,7 @@
 					this.cardInfo.cityCode = this.$route.params.cityCode;
 					this.cardInfo.dist = this.$route.params.dist;
 					this.cardInfo.distCode = this.$route.params.distCode;
-				} else {//未完善数据的把数据设置为''
+				} else { //未完善数据的把数据设置为''
 					this.cardInfo.bankBranchCode = '';
 					this.cardInfo.bankNameBranch = '';
 					this.cardInfo.province = '';
@@ -261,7 +261,8 @@
 			}
 		},
 		methods: {
-			aa(){
+			// 调用app的ocr识别银行卡号
+			useOCR() {
 				let platFlag = tool.testPlat();
 				if (platFlag == 1) {
 					// closeWeb ios定义的退回上一页，删除H5页面的方法
@@ -271,34 +272,36 @@
 					window.android.getBankNum()
 				}
 			},
-			setBankNum(e){
+			setBankNum(e) {
 				let appData = JSON.parse(e);
 				let bankNum = appData.bankNum;
-				this.$toast({
-					message:bankNum,
-					duration:0
-				})
+				// this.$toast({
+				// 	message: bankNum,
+				// 	duration: 0
+				// })
+				this.cardInfo.bankCardNumb = bankNum;
+				this.getBankName();
 			},
 			// 设置省市列表
 			setColums() {
 				tool.toastLoading();
 				server.querySdjPronAndCityList()
-				.then(res=>{
-					if (res == null) return;
-					// 把本地的省市json设置给页面
-					this.citys = res.data;
-					let arr = [];
-					let arr2 = [];
-					res.data.forEach(cur => {
-						arr.push(cur.name)
+					.then(res => {
+						if (res == null) return;
+						// 把本地的省市json设置给页面
+						this.citys = res.data;
+						let arr = [];
+						let arr2 = [];
+						res.data.forEach(cur => {
+							arr.push(cur.name)
+						})
+						res.data[0].cities.forEach(cur => {
+							arr2.push(cur.name)
+						})
+						// 把省市设置给选择器
+						this.columns[0].values = arr;
+						this.columns[1].values = arr2;
 					})
-					res.data[0].cities.forEach(cur => {
-						arr2.push(cur.name)
-					})
-					// 把省市设置给选择器
-					this.columns[0].values = arr;
-					this.columns[1].values = arr2;
-				})
 				// // 把本地的省市json设置给页面
 				// this.citys = citys.provinces;
 				// let arr = [];
@@ -349,7 +352,7 @@
 							// 	this.cardInfo.provinceCode = arr2[0].code;
 							// 	this.cardInfo.cityCode = arr3[0].code;
 							// }
-							
+
 							// else {
 							// 	console.log('aa')
 							// 	this.cardInfo.province = '';
@@ -360,6 +363,7 @@
 						}
 					})
 			},
+			// 储蓄卡输入框失去焦点时,获取银行卡名称
 			getBankName() {
 				tool.toastLoading()
 				server.queryBankcardInfo({
@@ -522,8 +526,8 @@
 				this.chooseCityBox = false;
 			},
 			// 获取区列表,调起区选择picker
-			getRegion(){
-				if(this.cardInfo.province == ''||this.cardInfo.city == ''){
+			getRegion() {
+				if (this.cardInfo.province == '' || this.cardInfo.city == '') {
 					this.$toast({
 						message: '请先选择省市',
 						duration: 1500
@@ -531,22 +535,24 @@
 					return
 				}
 				tool.toastLoading()
-				server.querySdjDistList({parentCode:this.cardInfo.cityCode})
-				.then(res=>{
-					if (res == null) return;
-					let arr = [];
-					res.data.forEach(cur => {
-						arr.push(cur.name)
+				server.querySdjDistList({
+						parentCode: this.cardInfo.cityCode
 					})
-					this.columns2 = arr;
-					this.regionBox = true;
-					this.regionList = res.data;
-				})
+					.then(res => {
+						if (res == null) return;
+						let arr = [];
+						res.data.forEach(cur => {
+							arr.push(cur.name)
+						})
+						this.columns2 = arr;
+						this.regionBox = true;
+						this.regionList = res.data;
+					})
 			},
 			//确认所选的区的选项
-			setRegion(value,index){
+			setRegion(value, index) {
 				this.cardInfo.dist = value;
-				this.cardInfo.distCode = this.regionList[index].code; 
+				this.cardInfo.distCode = this.regionList[index].code;
 				this.regionBox = false;
 			},
 			// 提交资料绑定银行卡
@@ -556,7 +562,7 @@
 				let verifier = {
 					'bankCardNumb': '请填写储蓄卡号码', //储蓄卡号码
 					'province': '请选择开户行省市', //省份名称
-					'dist':'请选择开户行所在区',//区名称
+					'dist': '请选择开户行所在区', //区名称
 					'bankName': '请选择银行', //开户行
 					'bankNameBranch': '请选择支行', //支行
 					'bankCardMobile': '请填写预留银行手机号', //预留银行的手机号
@@ -598,7 +604,7 @@
 										params: {
 											channelCode: '1000000004',
 											page: 'bindAtmCard',
-											type:'ok'
+											type: 'ok'
 										}
 									})
 								}, 2000)
@@ -620,6 +626,13 @@
 	};
 </script>
 <style lang="less">
+	.addInput-li{
+				.van-icon-photograph{
+					font-size: 40px;
+					color: #adadad;
+				}
+				
+			}
 	.addCreditCard-choose-picker {
 		.van-picker__toolbar {
 			height: 70px;
@@ -709,7 +722,6 @@
 				box-sizing: border-box;
 				border-bottom: 1px solid #ededed;
 			}
-
 			.addPicker-li {
 				width: 100%;
 				height: 100px;
@@ -903,7 +915,8 @@
 	.search {
 		max-height: 100%;
 	}
-	.bank-name{
+
+	.bank-name {
 		min-width: 400px;
 	}
 </style>

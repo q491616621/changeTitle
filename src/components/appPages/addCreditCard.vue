@@ -8,8 +8,7 @@
 		<div class="addCreditCard-bottom flx-c">
 			<van-cell-group class="addInfo-box">
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cardNum" clearable label="卡号"
-				 placeholder="请输入卡号" @blur='checkCardBank' @input="changeCode" />
-				 <div @click="aa">按钮</div>
+				 placeholder="请输入卡号" @blur='checkCardBank' @input="changeCode" right-icon="photograph"  @click-right-icon="useOCR"/>
 				 <van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.valid" clearable label="有效期"
 				  placeholder="有效期（月/年），如0123" right-icon='question-o' @click-right-icon='showTips("valid")'/>
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cvn2" clearable label="CVN2"
@@ -138,7 +137,7 @@
 			}
 		},
 		methods: {
-			aa(){
+			useOCR(){
 				let platFlag = tool.testPlat();
 				if (platFlag == 1) {
 					// closeWeb ios定义的退回上一页，删除H5页面的方法
@@ -151,10 +150,12 @@
 			setBankNum(e){
 				let appData = JSON.parse(e);
 				let bankNum = appData.bankNum;
-				this.$toast({
-					message:bankNum,
-					duration:0
-				})
+				// this.$toast({
+				// 	message:bankNum,
+				// 	duration:0
+				// })
+				this.cardInfo.cardNum = bankNum;
+				this.checkCardBank();
 			},
 			// aaa(){
 			// 	let res = {};
@@ -548,6 +549,13 @@
 	};
 </script>
 <style lang="less">
+	.addInput-li{
+				.van-icon-photograph{
+					font-size: 40px;
+					color: #adadad;
+				}
+				
+			}
 	.addCreditCard-choose-picker {
 		.van-picker__toolbar {
 			height: 70px;

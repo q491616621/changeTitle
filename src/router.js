@@ -36,6 +36,8 @@ Vue.use(Router)
 //videoTutorials //适配教程
 //reimbursementTutorial //还款教程
 //sdjBindChannel //盛迪佳通道绑定页面
+//promotionRewards//推广奖励页面
+
 const router = new Router({
 	base: process.env.BASE_URL,
 	// mode: 'history',
@@ -332,9 +334,16 @@ const router = new Router({
 			},
 			component: resolve => require(['@/components/appPages/videoTutorials/reimbursementTutorial.vue'], resolve)
 		},
+		{
+			path: '/promotionRewards',
+			name: 'promotionRewards', // promotionRewards //推广奖励
+			meta: {
+				title: '推广奖励'
+			},
+			component: resolve => require(['@/components/appPages/promotionRewards/promotionRewards.vue'], resolve)
+		},
 	]
 })
-
 // router.beforeEach((to, from, next) => {
 // 	if(!to.query.name){
 // 		let query = to.query;
