@@ -16,6 +16,7 @@
 						<div class="yes flx-c" v-show="item.checked">
 							<img src="../../assets/img/right.png">
 						</div>
+						<img v-if="item.channelCode =='1000000004'" class="new-img" src="../../assets/img/new1.png">
 					</div>
 				</div>
 			</div>
@@ -176,7 +177,8 @@
 						let channelList = [];
 						let channelCode = '';
 						if (data && data.channelCode) { //判断data.channeCode是否有值，有值的话说明是surePlan或者bindAtm页面过来的
-							channelList = res.data.reverse().map(cur => {
+							// channelList = res.data.reverse().map(cur => {
+							channelList = res.data.map(cur => {
 								// surePlan页面过来的,把用户当前要绑定的通道作为默认选择的通道
 								if (cur.channelCode == data.channelCode) {
 									cur.checked = true;
@@ -189,7 +191,8 @@
 							channelCode = data.channelCode;
 						} else {
 							// 非surePlan页面过来的,把第一个通道作为默认选择的通道
-							channelList = res.data.reverse().map((cur, index) => {
+							// channelList = res.data.reverse().map((cur, index) => {
+							channelList = res.data.map((cur, index) => {
 								if (index == 0) {
 									cur.checked = true;
 								} else {
@@ -658,7 +661,14 @@
 					margin-right: 20px;
 					margin-bottom: 20px;
 				}
-
+				.new-img{
+					position: absolute;
+					top: -30px;
+					right: -40px;
+					width: 50px;
+					height: 50px;
+					z-index: 100;
+				}
 				.yes {
 					position: absolute;
 					bottom: -5px;

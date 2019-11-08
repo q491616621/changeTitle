@@ -603,7 +603,7 @@
 					// 返回和用户选择的通道类型相同的通道
 					let channelList = res.data.filter(cur => {
 						return cur.channelType == this.planInfo.repayType;
-					}).reverse();
+					})
 					// ---------------------------------
 					// channelList = [
 					// 	{
