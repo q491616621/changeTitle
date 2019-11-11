@@ -49,8 +49,7 @@
 					certificateNum: '123456', //身份证号码
 					mobile: '', //手机号
 					bankAgentId: '', //联行号（暂时写死）
-					cardType: '2', //卡类型
-					channelCode: '1000000001'
+					channelCode:''
 				},
 				// chooseBankBox: false,//选择银行的picker弹窗
 				verify: null, //验证银行卡绑卡需要的信息
@@ -59,6 +58,9 @@
 			};
 		},
 		created() {},
+		activated() {
+			document.querySelector('body').setAttribute('style', 'background-color:#FFFFFF')
+		},
 		methods: {
 			// 提示弹窗
 			showTips(type){

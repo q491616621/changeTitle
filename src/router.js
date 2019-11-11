@@ -274,7 +274,9 @@ const router = new Router({
 			path: '/chooseQuickCard',
 			name: 'chooseQuickCard', // chooseQuickCard //选择快捷支付银行卡
 			meta:{
-				title:'选择支付银行'
+				title:'选择支付银行',
+				keepAlive: true, //该字段表示该页面需要缓存
+				isBack: true
 			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/chooseQuickCard.vue'], resolve)
 		},
@@ -282,7 +284,9 @@ const router = new Router({
 			path: '/addQuickCard',
 			name: 'addQuickCard', // addQuickCard //添加快捷信用卡
 			meta: {
-				title: '添加快捷信用卡'
+				title: '添加快捷信用卡',
+				keepAlive: true, //该字段表示该页面需要缓存
+				isBack: true
 			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/addQuickCard.vue'], resolve)
 		},

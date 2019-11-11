@@ -4,7 +4,8 @@
 		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
-		<div class="container flx-cas" v-if="false">
+		<!-- <div class="container flx-cas" v-if="false"> -->
+		<div class="container flx-cas">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<!-- <div>使用说明</div> -->
@@ -76,6 +77,7 @@
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
+				// userInfo:'',
 			};
 		},
 		beforeCreate() {
@@ -84,20 +86,20 @@
 		created() {
 			tool.setAppTitle('信用卡刷卡')
 			let platFlag = tool.testPlat();
-			this.$dialog.alert({
-				message:'该功能正在开发中，敬请期待！',
-				beforeClose:(action, done)=>{
-					if (platFlag == 1) {
-						// closeWeb ios定义的退回上一页，关闭H5页面的方法
-						window.webkit.messageHandlers.closeWeb.postMessage('');
-						done()
-					} else {
-						// btnBack 安卓定义的退回上一页,关闭H5页面的方法
-						window.android.btnBack()
-						done()
-					}
-				}
-			})
+			// this.$dialog.alert({
+			// 	message:'该功能正在开发中，敬请期待！',
+			// 	beforeClose:(action, done)=>{
+			// 		if (platFlag == 1) {
+			// 			// closeWeb ios定义的退回上一页，关闭H5页面的方法
+			// 			window.webkit.messageHandlers.closeWeb.postMessage('');
+			// 			done()
+			// 		} else {
+			// 			// btnBack 安卓定义的退回上一页,关闭H5页面的方法
+			// 			window.android.btnBack()
+			// 			done()
+			// 		}
+			// 	}
+			// })
 			this.amount = this.$store.state.unionpayQuickAmount;
 			// ----------------------------------
 			let me = this;
@@ -109,21 +111,25 @@
 			window['setBankNum'] = (url) => {
 				me.setBankNum(url)
 			}
+			// --------------------------------
+			// this.$store.commit('setQuickCardInfo',{realName:'王金盛',certificateNumb:'445122199010122716'})
+			// --------------------------------
 		},
 		methods: {
 			// 设置获取app传过来的数据
 			setSwipeCardData(data){
 				let appData = JSON.parse(data)
 				let sessionId = appData.sessionId;//app传过来的sessionId
-				let faceStatus = appData.faceStatus;//app传过来的faceStatus（实名认证状态）
-				let realName = appData.realName;//app传过来的用户姓名
-				let certificateNumb = appData.certificateNumb;//app传过来的用户身份证号码
+				// let faceStatus = appData.faceStatus;//app传过来的faceStatus（实名认证状态）
+				// let realName = appData.realName;//app传过来的用户姓名
+				// let certificateNumb = appData.certificateNumb;//app传过来的用户身份证号码
 				return //功能暂时不放开
 				// this.$toast({
 				// 	message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
 				// 	duration:0
 				// })
 				switchServer.setCookie(sessionId);//调用switchServer的setCookie方法设置cookie
+				this.$store.commit('setQuickCardInfo', appData)
 			},
 			// 跳转选择信用卡页面
 			goChooseQuickCard() {
@@ -133,6 +139,12 @@
 					})
 					return;
 				}
+				//调用vuex 设置银联快捷的金额
+				this.$store.commit('setUnionpayQuickAmount',parseFloat(this.amount).toString())
+				// 跳转选择快捷信用卡页面
+				this.$router.push({
+					name: 'chooseQuickCard',
+				})
 			},
 			// 输入金额
 			setAmount(num) {

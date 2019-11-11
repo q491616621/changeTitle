@@ -703,7 +703,7 @@
 									this.$refs.cityPicker.setColumnIndex(1, 2);
 								}
 								// 判断是否有默认还款的地址,有的话执行设置默认还款地址方法
-								if(this.cardInfo.planCity != null&&this.cardInfo.planProvince != null)this.setDefaultCitys(res)
+								if (this.cardInfo.planCity != null && this.cardInfo.planProvince != null) this.setDefaultCitys(res)
 							})
 					} else {
 						this.radioChange = true;
@@ -711,19 +711,19 @@
 				})
 			},
 			//设置默认还款地址
-			setDefaultCitys(res){
+			setDefaultCitys(res) {
 				let planProvince = this.cardInfo.planProvince;
 				let planCity = this.cardInfo.planCity;
-				
+
 				// let a = '上海市';
 				// let b = '上海下属县';
 				let province = false;
 				let city = false;
 				for (let item in res.data) {
-					if(item == planProvince){
+					if (item == planProvince) {
 						province = true;
 						for (let i = 0; i < res.data[item].length; i++) {
-							if(res.data[item][i] == planCity){
+							if (res.data[item][i] == planCity) {
 								city = true
 							}
 							// console.log(res.data[item][i])
@@ -733,11 +733,11 @@
 				}
 				console.log(province)
 				console.log(city)
-				if(province&&city){
+				if (province && city) {
 					this.planInfo.provinceName = planProvince;
 					this.planInfo.cityName = planCity;
 					console.log('正确的')
-				}else{
+				} else {
 					this.planInfo.provinceName = '';
 					this.planInfo.cityName = '';
 				}
@@ -819,7 +819,7 @@
 								this.$refs.cityPicker.setColumnIndex(1, 2);
 							}
 							// 判断是否有默认还款的地址,有的话执行设置默认还款地址方法
-							if(this.cardInfo.planCity != null&&this.cardInfo.planProvince != null)this.setDefaultCitys(res)
+							if (this.cardInfo.planCity != null && this.cardInfo.planProvince != null) this.setDefaultCitys(res)
 						})
 				}
 

@@ -8,6 +8,7 @@ const state = {
 	userName:null,//用户实名认证姓名
 	certificateNum:null,//用户实名认证身份证号码
 	withdrawalType:'app',//判断点击右上角返回按钮应该返回h5页面还是app，默认app
+	unionpayQuickAmount:'',//银联快捷的金额
 }
 // 修改state仓库数据的方法合集
 const mutations = {
@@ -23,6 +24,17 @@ const mutations = {
 	setWithdrawalType(state){
 		state.withdrawalType = 'h5' 
 	},
+	// 设置银联快捷的金额
+	setUnionpayQuickAmount(state,amount){
+		state.unionpayQuickAmount = amount
+	},
+	// 设置用户的相关信息
+	setQuickCardInfo(state,appData){
+		state.sessionId = appData.sessionId;
+		state.userName = appData.userName;
+		state.certificateNum = appData.certificateNum;
+	}
+	
 }
 //异步掉用mutations里面的方法修改state里面的数据的方法合集
 const actions = {
