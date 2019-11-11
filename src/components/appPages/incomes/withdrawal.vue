@@ -103,8 +103,7 @@
 		methods: {
 			getSessionId(e) {
 				let sessionId = JSON.parse(e).sessionId;
-				switchServer.setCookie(sessionId);
-				// document.cookie = `productSessionId=${sessionId};path=/;domain=47.112.10.80;`;
+				switchServer.setCookie(sessionId);//调用switchServer的setCookie方法设置cookie
 				this.getBankCard()
 			},
 			// 查询用户绑定了的银行卡信息

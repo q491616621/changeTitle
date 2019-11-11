@@ -230,10 +230,7 @@
 				// 获取到app端传过来的数据
 				let appData = JSON.parse(e);
 				let sessionId = appData.sessionId;
-				switchServer.setCookie(sessionId)
-				// 测试服务器
-				// document.cookie = `productSessionId=${sessionId};path=/;domain=47.112.10.80;`
-				// localStorage.setItem('productSessionId', sessionId)
+				switchServer.setCookie(sessionId)//调用switchServer的setCookie方法设置cookie
 				this.$store.commit('setCardManagement', appData)
 				this.getCardList() //执行获取已绑定卡列表
 			},

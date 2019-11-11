@@ -65,7 +65,8 @@
 </template>
 <script>
 	// import topTitle from '@/components/common/topTitle.vue';
-	import tool from '../../../../public/tool/tool.js'
+	import tool from '../../../../public/tool/tool.js';
+	import switchServer from '../../../../public/tool/switchServer.js';
 	export default {
 		// components: {
 		// 	topTitle,
@@ -87,11 +88,11 @@
 				message:'该功能正在开发中，敬请期待！',
 				beforeClose:(action, done)=>{
 					if (platFlag == 1) {
-						// closeWeb ios定义的退回上一页，删除H5页面的方法
+						// closeWeb ios定义的退回上一页，关闭H5页面的方法
 						window.webkit.messageHandlers.closeWeb.postMessage('');
 						done()
 					} else {
-						// btnBack 安卓定义的退回上一页,删除H5页面的方法
+						// btnBack 安卓定义的退回上一页,关闭H5页面的方法
 						window.android.btnBack()
 						done()
 					}
@@ -110,37 +111,19 @@
 			}
 		},
 		methods: {
-			// 调用ocr
-			// useOCR(){
-			// 	let platFlag = tool.testPlat();
-			// 	if (platFlag == 1) {
-			// 		// closeWeb ios定义的退回上一页，删除H5页面的方法
-			// 		window.webkit.messageHandlers.getBankNum.postMessage('');
-			// 	} else {
-			// 		// btnBack 安卓定义的退回上一页,删除H5页面的方法
-			// 		window.android.getBankNum()
-			// 	}
-			// },
-			// setBankNum(e){
-			// 	let appData = JSON.parse(e);
-			// 	let bankNum = appData.bankNum;
-			// 	this.$toast({
-			// 		message:bankNum,
-			// 		duration:0
-			// 	})
-			// },
 			// 设置获取app传过来的数据
 			setSwipeCardData(data){
 				let appData = JSON.parse(data)
-				let sessionId = appData.sessionId;
-				let faceStatus = appData.faceStatus;
-				let realName = appData.realName;
-				let certificateNumb = appData.certificateNumb;
-				return
-				this.$toast({
-					message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
-					duration:0
-				})
+				let sessionId = appData.sessionId;//app传过来的sessionId
+				let faceStatus = appData.faceStatus;//app传过来的faceStatus（实名认证状态）
+				let realName = appData.realName;//app传过来的用户姓名
+				let certificateNumb = appData.certificateNumb;//app传过来的用户身份证号码
+				return //功能暂时不放开
+				// this.$toast({
+				// 	message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
+				// 	duration:0
+				// })
+				switchServer.setCookie(sessionId);//调用switchServer的setCookie方法设置cookie
 			},
 			// 跳转选择信用卡页面
 			goChooseQuickCard() {
@@ -149,21 +132,6 @@
 						message: '请输入刷卡金额',
 					})
 					return;
-				}
-				// 判断用户是否已经完善快捷资料？,未完善跳转app完善资料页面
-				if (this.isRealName) {
-					//调用vuex 设置银联快捷的金额
-					this.$store.commit('setUnionpayQuickAmount',parseFloat(this.amount).toString())
-					this.$router.push({
-						name: 'chooseQuickCard',
-					})
-				} else {
-					let platFlag = tool.testPlat();
-					if(platFlag == 1){
-						window.webkit.messageHandlers.closeWeb.openRealName('');
-					}else{
-						window.android.openRealName()
-					}
 				}
 			},
 			// 输入金额
@@ -183,14 +151,6 @@
 						this._handleNumberKey(num);
 						break;
 				}
-				// let amount = this.amount;
-				// amount = Number(amount);
-				// if(amount == 0){
-				// 	this.amount = num;
-				// 	console.log(this.amount)
-				// }else{
-				// 	console.log(amount)
-				// }
 			},
 			// 小数点
 			_handleDecimalPoint() {
@@ -240,16 +200,6 @@
 				// console.log('数字')
 			}
 		},
-		// watch:{
-		// 	// 限制用户输入的金额只能是小数点后2位
-		// 	amount(value,oldValue){
-		// 		value = value.toString()
-		// 		let aaa = tool.centTurnSmacker((value.match(/^\d*(\.?\d{0,2})/g)[0]))
-		// 		console.log(aaa)
-		// 		// this.amount = tool.centTurnSmacker((value.match(/^\d*(\.?\d{0,2})/g)[0]))
-		// 		this.amount = aaa;
-		// 	}
-		// }
 	};
 </script>
 <style scoped="scoped" lang="less">

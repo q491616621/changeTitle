@@ -99,7 +99,7 @@
 				// 这行代码用来判断用户是否是从app端进来当前页面的,如果不是的app端进来的或者处于非incomeDetails页面,不执行下面的操作(这个是为了优化安卓不多次调用接口)
 				if (this.$route.name != 'incomeDetails' || this.$route.params.page == 'withdrawal') return;
 				let sessionId = JSON.parse(e).sessionId;
-				switchServer.setCookie(sessionId)
+				switchServer.setCookie(sessionId)//调用switchServer的setCookie方法设置cookie
 				this.getAllIncome();
 				this.onLoad();
 			},
@@ -143,24 +143,6 @@
 							return
 						}
 						this.page += 1;
-						// if(this.page > 3){
-						// 	this.loading = false;
-						// 	this.finished = true;
-						// 	return;
-						// }
-						// let b = {
-						// 	"payAcountId": "1159207707",
-						// 	"incomeType": 1,
-						// 	"profitAmount": 22,
-						// 	"createTime": "2019-07-24 15:19:23"
-						// };
-						// for (let i = 0; i < 20; i++) {
-						// 	this.incomeList.push(b)
-						// }
-						// this.loading = false;
-						// this.page += 1;
-						// 
-						// console.log(res)
 					})
 			},
 			// 跳转提现页面
