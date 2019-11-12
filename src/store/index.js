@@ -27,14 +27,7 @@ const mutations = {
 	// 设置银联快捷的金额
 	setUnionpayQuickAmount(state,amount){
 		state.unionpayQuickAmount = amount
-	},
-	// 设置用户的相关信息
-	setQuickCardInfo(state,appData){
-		state.sessionId = appData.sessionId;
-		state.userName = appData.userName;
-		state.certificateNum = appData.certificateNum;
-	}
-	
+	},	
 }
 //异步掉用mutations里面的方法修改state里面的数据的方法合集
 const actions = {
