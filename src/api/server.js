@@ -32,4 +32,9 @@ export const server = {
   querySettleBankBranchList:(data)=>{return post('/insettle/querySettleBankBranchList.do',data)},//查询结算卡银行支行列表
   querySdjPronAndCityList:(data)=>{return post('/insettle/querySdjPronAndCityList.do',data)},//查询结算卡省份城市列表 
   querySdjDistList:(data)=>{return post('/insettle/querySdjDistList.do',data)},//查询结算卡指定城市下的区县列表 
+  quickVerifyBindcardSm:(data)=>{return post('/quick/bindcard/verifyBindcardSm.do',data)},//快捷验证快捷绑定信用卡的短验  
+  quickGetBindcardList:(data)=>{return post('/quick/bindcard/getBindcardList.do',data)},//快捷获取快捷绑卡列表  
+  quickGetBindcardSm:(data)=>{return post('/quick/bindcard/getBindcardSm.do',data)},//获取快捷绑定信用卡的短验
+  queryQuickChannelList:(data)=>{return post('/quick/order/queryQuickChannelList.do',data)},//获取快捷通道列表 
+  untiedBindcard:(data)=>{return post('/quick/bindcard/untiedBindcard.do',data)},//解绑快捷绑定的卡 
 }

@@ -8,7 +8,7 @@
 		<div class="addCreditCard-bottom flx-c">
 			<van-cell-group class="addInfo-box">
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cardNum" clearable label="卡号"
-				 placeholder="请输入卡号" />
+				 placeholder="请输入卡号" right-icon="photograph"  @click-right-icon="useOCR" @blur='checkCardBank' />
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cvn2" clearable label="cvn2"
 				 placeholder="信用卡背面后三位，如853" right-icon='question-o' @click-right-icon='showTips("cvn2")'/>
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.valid" clearable label="有效期"
@@ -17,6 +17,8 @@
 				 placeholder="请输入姓名" />
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.certificateNum" disabled clearable label="身份证号"
 				 placeholder="请输入身份证号码" />
+				 <van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.bankName" clearable label="开户行"
+				  placeholder="例如:建设银行" />
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.mobile" clearable label="手机号码"
 				 placeholder="请输入银行预留手机号" />
 				<button class="sure-btn bold" @click="goQuickVerify">下一步</button>
@@ -27,10 +29,10 @@
 </template>
 <script>
 	// import topTitle from '@/components/common/topTitle.vue';
-	import cardTips from '@/components/common/cardTips.vue';
 	import {
 		server
 	} from '@/api/server.js';
+	import cardTips from '@/components/common/cardTips.vue';
 	import tool from '../../../../public/tool/tool.js'
 	export default {
 		components: {
@@ -39,29 +41,83 @@
 		},
 		data() {
 			return {
-				titleName: '添加快捷信用卡', //标题栏标题
+				isFirstEnter: false, //是否是第一次进入这个页面
+				// titleName: '添加快捷信用卡', //标题栏标题
 				tipsType:'',//提示盒子
 				cardInfo: {
 					cardNum: '', //卡号
+					userName: '', //姓名
+					certificateNum: '', //身份证号码
+					mobile: '', //手机号
 					cvn2: '', //cvv码
 					valid: '', //有效期
-					userName: '王金盛', //姓名
-					certificateNum: '123456', //身份证号码
-					mobile: '', //手机号
-					bankAgentId: '', //联行号（暂时写死）
-					channelCode:''
+					bankName:'',//银行名称
+					channelCode:'2000000001'//通道编号
 				},
 				// chooseBankBox: false,//选择银行的picker弹窗
-				verify: null, //验证银行卡绑卡需要的信息
+				// verify: null, //验证银行卡绑卡需要的信息
 				// countDown: 10000, //倒计时
-				countDown: 59000, //倒计时
 			};
 		},
-		created() {},
+		beforeRouteEnter(to, from, next) {
+			// 当时从cardManagement页面进入进来的,而且有传值的话,把isBack设为false 否则设为true
+			if (from.name == 'chooseQuickCard') {
+				to.meta.isBack = false;
+			} else {
+				to.meta.isBack = true;
+			}
+			next();
+		},
+		created() {
+			this.isFirstEnter = true;
+		},
 		activated() {
+			console.log(this.$route)
+			// 定义app端需要调用的setBankNum方法
+			let me = this;
+			window['setBankNum'] = (url) => {
+				me.setBankNum(url)
+			}
+			// 设置背景颜色为白色,以防止被其他页面影响了
 			document.querySelector('body').setAttribute('style', 'background-color:#FFFFFF')
+			// 判断isBack为false(非后退)或者是第一次进入这个页面
+			if (!this.$route.meta.isBack || this.isFirstEnter) {
+				this.cardInfo = {
+					cardNum: '', //卡号
+					cvn2: '', //cvv码
+					valid: '', //有效期
+					userName:this.$route.params.userInfo.realName, //姓名
+					certificateNum: this.$route.params.userInfo.certificateNumb, //身份证号码
+					mobile: '', //手机号
+					bankName:'',//银行名称
+					channelCode:'2000000001'
+				}
+			}
+			this.isFirstEnter = false;
 		},
 		methods: {
+			//用户调用ocr识别卡号
+			useOCR(){
+				let platFlag = tool.testPlat();
+				if (platFlag == 1) {
+					// 调用苹果的ocr方法获取用户卡号
+					window.webkit.messageHandlers.getBankNum.postMessage('');
+				} else {
+					// 调用调用安卓的ocr方法获取用户卡号
+					window.android.getBankNum()
+				}
+			},
+			//安卓或者苹果APP端调用该方法把ocr识别获取的卡号设置进来
+			setBankNum(e){
+				let appData = JSON.parse(e);
+				let bankNum = appData.bankNum;
+				// this.$toast({
+				// 	message:bankNum,
+				// 	duration:0
+				// })
+				this.cardInfo.cardNum = bankNum;
+				this.checkCardBank();
+			},
 			// 提示弹窗
 			showTips(type){
 				if(type == 'cvn2'){
@@ -74,12 +130,22 @@
 			resetTipsType(){
 				this.tipsType = '';
 			},
+			// 输入框失去焦点时查询开户行
+			checkCardBank(){
+				tool.toastLoading()
+				server.queryBankcardInfo({bankcardNumb:this.cardInfo.cardNum})
+				.then(res=>{
+					// 判断返回的数据是null或者是{},不执行下面的操作
+					if(res == null||JSON.stringify(res.data) == '{}')return;
+					this.cardInfo.bankName = res.data.bankName;
+				})
+			},
 			// 跳转到短信验证
 			goQuickVerify() {
-				this.$router.push({
-					name:'quickVerify'
-				})
-				return
+				// this.$router.push({
+				// 	name:'quickVerify'
+				// })
+				// return
 				let cardInfo = this.cardInfo;
 				let value = true;
 				let verifier = {
@@ -89,6 +155,7 @@
 					'userName': '姓名',
 					'certificateNum': '身份证号码',
 					'mobile': '银行预留手机号',
+					'bankName':'银行名称'
 				}
 				// 判读cardInfo 里面哪个值没填写,返回对应提示文字
 				for (let it in cardInfo) {
@@ -104,7 +171,7 @@
 				if (value === true) {
 					// 提示加载中
 					tool.toastLoading()
-					server.getBindcardSm(cardInfo)
+					server.quickGetBindcardSm(cardInfo)
 						.then(res => {
 							if (res == null) return;
 							let status = res.data.status; //绑卡状态，0-处理中，1-绑卡成功，2-绑卡失败,3-已解绑，4-需短验
@@ -117,10 +184,76 @@
 					})
 				}
 			},
+			// 检查绑卡状态函数
+			checkCardStatus(status,res){
+				//绑卡状态，0-处理中，1-绑卡成功，2-绑卡失败,3-已解绑，4-需短验
+				if(status == 0){
+					this.$toast({
+						message:'您的绑卡正在处理中，请耐心等待！',
+						forbidClick: true,
+						duration:2000
+					})
+					setTimeout(()=>{
+						this.$router.replace({
+							name:'chooseQuickCard',
+						})
+					},2000)
+					return;
+				}else if(status == 1){
+					this.$toast({
+						message:'您的卡已经绑定成功',
+						forbidClick: true,
+						duration:2000
+					})
+					setTimeout(()=>{
+						this.$router.replace({
+							name:'chooseQuickCard',
+						})
+					},2000)
+					return;
+				}else if(status == 2){
+					this.$toast({
+						message:'卡片绑定失败',
+						forbidClick: true,
+						duration:2000
+					})
+					return;
+				}else if(status == 3){
+					this.$toast({
+						message:'该卡已解绑',
+						forbidClick: true,
+						duration:2000
+					})
+					setTimeout(()=>{
+						this.$router.replace({
+							name:'chooseQuickCard',
+						})
+					},2000)
+					return;
+				}else if(status == 4){
+					this.$toast({
+						message:'验证短信已发送,请留意接收',
+						forbidClick: true,
+						duration:2000
+					})
+					this.$router.push({
+						name:'quickVerify',
+						params:{orderInfo:res.data}
+					})
+					return;
+				}
+			}
 		}
 	};
 </script>
 <style lang="less">
+	.addInput-li{
+				.van-icon-photograph{
+					font-size: 40px;
+					color: #adadad;
+				}
+				
+			}
 	.addCreditCard-choose-picker {
 		.van-picker__toolbar {
 			height: 70px;

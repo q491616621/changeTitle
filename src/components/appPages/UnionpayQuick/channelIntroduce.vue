@@ -31,7 +31,7 @@
 					{bankName: '农业银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
 					{bankName: '工商银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
 					{bankName: '邮储银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
-					{bankName: '光大银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
+					{bankName: '光大银行',cardAmount:'5000.00',intradayAmount:'50000.00'},
 					{bankName: '兴业银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
 					{bankName: '招商银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
 					{bankName: '中国银行',cardAmount:'20000.00',intradayAmount:'50000.00'},

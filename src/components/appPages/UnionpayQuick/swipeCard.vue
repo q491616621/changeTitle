@@ -4,8 +4,8 @@
 		<!-- 		<div class="title-bar flx-r">
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
-		<div class="container flx-cas" v-if="false">
-		<!-- <div class="container flx-cas"> -->
+		<!-- <div class="container flx-cas" v-if="false"> -->
+		<div class="container flx-cas">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<!-- <div>使用说明</div> -->
@@ -79,8 +79,8 @@
 				amount: '', //提现金额
 				// userInfo:'',
 				userInfo:{
-					realName:'王金盛',
-					certificateNumb:'445122199010122716'
+					realName:'于洪申',
+					certificateNumb:'210423198801023053'
 				}
 			};
 		},
@@ -90,20 +90,20 @@
 		created() {
 			tool.setAppTitle('信用卡刷卡')
 			let platFlag = tool.testPlat();
-			this.$dialog.alert({
-				message:'该功能正在开发中，敬请期待！',
-				beforeClose:(action, done)=>{
-					if (platFlag == 1) {
-						// closeWeb ios定义的退回上一页，关闭H5页面的方法
-						window.webkit.messageHandlers.closeWeb.postMessage('');
-						done()
-					} else {
-						// btnBack 安卓定义的退回上一页,关闭H5页面的方法
-						window.android.btnBack()
-						done()
-					}
-				}
-			})
+			// this.$dialog.alert({
+			// 	message:'该功能正在开发中，敬请期待！',
+			// 	beforeClose:(action, done)=>{
+			// 		if (platFlag == 1) {
+			// 			// closeWeb ios定义的退回上一页，关闭H5页面的方法
+			// 			window.webkit.messageHandlers.closeWeb.postMessage('');
+			// 			done()
+			// 		} else {
+			// 			// btnBack 安卓定义的退回上一页,关闭H5页面的方法
+			// 			window.android.btnBack()
+			// 			done()
+			// 		}
+			// 	}
+			// })
 			this.amount = this.$store.state.unionpayQuickAmount;
 			// ----------------------------------
 			let me = this;
@@ -134,6 +134,9 @@
 				// })
 				switchServer.setCookie(sessionId);//调用switchServer的setCookie方法设置cookie
 				this.userInfo = {realName,certificateNumb}
+				//只要是从app进来的，就把vuex的方法把输入的金额设置为''
+				this.$store.commit('setUnionpayQuickAmount', '')
+				this.amount = '';
 			},
 			// 跳转选择信用卡页面
 			goChooseQuickCard() {

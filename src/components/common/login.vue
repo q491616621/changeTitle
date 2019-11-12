@@ -51,11 +51,11 @@
         //   userName: 13610144601,
         //   passWord: '123456'
         // }
-		//  let init = {
-		//   agentId: 1986738797,
-		//   userName: 17665271721,
-		//   passWord: 'hgq123456'
-		// }
+		 let init = {
+		  agentId: 1986738797,
+		  userName: 17665271721,
+		  passWord: '88888888'
+		}
 		//  let init = {
 		//   agentId: 1986738797,
 		//   userName: 13590386972,
@@ -87,11 +87,11 @@
 		// 	passWord:'123456'
 		// }
 		//老于
-		let init = {
-			agentId:1908141437,
-			userName:18682001955,
-			passWord:'woaini'
-		}
+		// let init = {
+		// 	agentId:1908141437,
+		// 	userName:18682001955,
+		// 	passWord:'woaini'
+		// }
 		//不知名测试号
 		// let init = {
 		// 	agentId:1908141437,
