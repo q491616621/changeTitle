@@ -37,7 +37,8 @@ Vue.use(Router)
 //reimbursementTutorial //还款教程
 //sdjBindChannel //盛迪佳通道绑定页面
 //promotionRewards//推广奖励页面
-
+//orderList//快捷订单列表
+//orderDetails//快捷订单详情
 const router = new Router({
 	base: process.env.BASE_URL,
 	// mode: 'history',
@@ -291,6 +292,22 @@ const router = new Router({
 			component: resolve => require(['@/components/appPages/UnionpayQuick/addQuickCard.vue'], resolve)
 		},
 		{
+			path: '/orderList',
+			name: 'orderList', // orderList //快捷订单列表
+			meta: {
+				title: '订单列表'
+			},
+			component: resolve => require(['@/components/appPages/UnionpayQuick/orderList.vue'], resolve)
+		},
+		{
+			path: '/orderDetails',
+			name: 'orderDetails', // orderDetails //快捷订单详情
+			meta: {
+				title: '订单详情'
+			},
+			component: resolve => require(['@/components/appPages/UnionpayQuick/orderDetails.vue'], resolve)
+		},
+		{
 			path: '/bindChannel',
 			name: 'bindChannel', // bindChannel //绑定通道
 			meta: {
@@ -346,6 +363,7 @@ const router = new Router({
 			},
 			component: resolve => require(['@/components/appPages/promotionRewards/promotionRewards.vue'], resolve)
 		},
+		
 	]
 })
 // router.beforeEach((to, from, next) => {

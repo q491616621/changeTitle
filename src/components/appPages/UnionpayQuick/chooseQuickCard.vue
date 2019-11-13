@@ -43,22 +43,22 @@
 				<span class="tips">(温馨提示:若支付失败,请更换其他支付通道支付)</span>
 			</div>
 			<div class="channel-list">
-				<div class="channel-li flx-rs" @click="goAddQuickCard">
+				<div class="channel-li flx-rs" v-for="(item,index) in quickChannelList" :key='index' @click="goAddQuickCard(item.channelCode)">
 					<img src="../../../assets/img/cardManagement/Unionpay.png">
 					<div style="text-align: left;">
-						<div>银联快捷-积分通道B</div>
+						<div>{{item.channelName}}</div>
 						<div class="channel-info flx-ras">
-							<div>额度:200-20000</div>
+							<div>金额:{{item.minAmount/100}}-{{item.maxAmount/100}}</div>
 							<div>结算:10秒到账</div>
-							<div>时间:07:00-21:55</div>
-							<div>费率:0.65%+2元/笔</div>
+							<div>时间:{{item.startTime}}-{{item.endTime}}</div>
+							<div>费率:{{item.userRate/100}}%+3元/笔</div>
 						</div>
 						<div class="tip">
 							<span style="color: #FF3535;">提示:</span>
-							<span>暂不支持交通、浦发银行信用卡</span>
+							<span>{{item.tipMessage}}</span>
 						</div>
 					</div>
-					<img src="../../../assets/img/UnionpayQuick/intro.png" class="tip2" @click.stop="goChannelIntroduce">
+					<img src="../../../assets/img/UnionpayQuick/intro.png" class="tip2" @click.stop="goChannelIntroduce(item.channelName)">
 					<!-- <img  class="tip2" @click="goChannelIntroduce"></img> -->
 				</div>
 			</div>
@@ -70,6 +70,7 @@
 	import {
 		server
 	} from '@/api/server.js';
+	import tool from '../../../../public/tool/tool.js'
 	export default {
 		// components: {
 		// 	topTitle,
@@ -83,7 +84,7 @@
 				quickChannelList: [],
 				amount: '',
 				addChecked: false,
-				userInfo:'',
+				userInfo: '',
 			};
 		},
 		beforeRouteEnter(to, from, next) {
@@ -100,13 +101,13 @@
 		},
 		activated() {
 			console.log(this.$route)
-			
+			tool.setAppTitle('确认支付')
 			// 判断isBack为false(非后退)或者是第一次进入这个页面
 			if (!this.$route.meta.isBack || this.isFirstEnter) {
 				this.addChecked = false;
 				this.amount = this.$store.state.unionpayQuickAmount;
 				this.getQuickCardList(); //调用获取已经绑定的快捷信用卡列表方法
-				this.getChannelList();//调用获取快捷通道列表方法
+				this.getChannelList(); //调用获取快捷通道列表方法
 				this.userInfo = this.$route.params.userInfo;
 			}
 			this.isFirstEnter = false;
@@ -115,48 +116,48 @@
 			//获取已绑定快捷信用卡列表
 			getQuickCardList() {
 				server.quickGetBindcardList()
-				.then(res=>{
-					if (res == null) return;
-					let bankLogo = {
-						'工商银行': require('../../../assets/img/bankLogo/bank1.png'),
-						'光大银行': require('../../../assets/img/bankLogo/bank2.png'),
-						'广发银行': require('../../../assets/img/bankLogo/bank3.png'),
-						'华夏银行': require('../../../assets/img/bankLogo/bank4.png'),
-						'建设银行': require('../../../assets/img/bankLogo/bank5.png'),
-						'交通银行': require('../../../assets/img/bankLogo/bank6.png'),
-						'民生银行': require('../../../assets/img/bankLogo/bank7.png'),
-						'平安银行': require('../../../assets/img/bankLogo/bank8.png'),
-						'浦发银行': require('../../../assets/img/bankLogo/bank9.png'),
-						'兴业银行': require('../../../assets/img/bankLogo/bank10.png'),
-						'邮政银行': require('../../../assets/img/bankLogo/bank11.png'),
-						'招商银行': require('../../../assets/img/bankLogo/bank12.png'),
-						'中国银行': require('../../../assets/img/bankLogo/bank13.png'),
-						'中信银行': require('../../../assets/img/bankLogo/bank14.png'),
-						'上海银行': require('../../../assets/img/bankLogo/bank16.png'),
-					};
-					let cardList = res.data.map(cur=>{
-						cur.logo = require('../../../assets/img/bankLogo/bank15.png');
-						cur.checked = false;
-						for (let item in bankLogo) {
-							if (cur.bankName == item) {
-								cur.logo = bankLogo[item];
+					.then(res => {
+						if (res == null) return;
+						let bankLogo = {
+							'工商银行': require('../../../assets/img/bankLogo/bank1.png'),
+							'光大银行': require('../../../assets/img/bankLogo/bank2.png'),
+							'广发银行': require('../../../assets/img/bankLogo/bank3.png'),
+							'华夏银行': require('../../../assets/img/bankLogo/bank4.png'),
+							'建设银行': require('../../../assets/img/bankLogo/bank5.png'),
+							'交通银行': require('../../../assets/img/bankLogo/bank6.png'),
+							'民生银行': require('../../../assets/img/bankLogo/bank7.png'),
+							'平安银行': require('../../../assets/img/bankLogo/bank8.png'),
+							'浦发银行': require('../../../assets/img/bankLogo/bank9.png'),
+							'兴业银行': require('../../../assets/img/bankLogo/bank10.png'),
+							'邮政银行': require('../../../assets/img/bankLogo/bank11.png'),
+							'招商银行': require('../../../assets/img/bankLogo/bank12.png'),
+							'中国银行': require('../../../assets/img/bankLogo/bank13.png'),
+							'中信银行': require('../../../assets/img/bankLogo/bank14.png'),
+							'上海银行': require('../../../assets/img/bankLogo/bank16.png'),
+						};
+						let cardList = res.data.map(cur => {
+							cur.logo = require('../../../assets/img/bankLogo/bank15.png');
+							cur.checked = false;
+							for (let item in bankLogo) {
+								if (cur.bankName == item) {
+									cur.logo = bankLogo[item];
+								}
 							}
-						}
-						return cur;
+							return cur;
+						})
+						cardList[0].checked = true;
+						this.cardList = cardList;
+						this.addChecked = false;
 					})
-					cardList[0].checked = true;
-					this.cardList = cardList;
-					this.addChecked = false;
-				})
 			},
 			// 获取快捷通道列表
-			getChannelList(){
+			getChannelList() {
 				server.queryQuickChannelList()
-				.then(res=>{
-					if(res == null)return;
-					this.quickChannelList = res.data;
-					console.log(res)
-				})
+					.then(res => {
+						if (res == null) return;
+						this.quickChannelList = res.data;
+						console.log(res)
+					})
 			},
 			checkCard(index) {
 				// 判断用户选择的是否是添加信用卡按钮,是的话把上面选择的都变成false,并且不执行下面的语句了
@@ -177,18 +178,76 @@
 				this.addChecked = false;
 			},
 			// 跳转绑定快捷信用卡页面
-			goAddQuickCard() {
-				this.$router.push({
-					'name': 'addQuickCard',
-					params: {
-						userInfo: this.userInfo
+			goAddQuickCard(channelCode) {
+				let channelInfo = this.quickChannelList.filter(cur=>cur.channelCode == channelCode)[0];
+				this.$store.commit('setQuickChannelInfo', channelInfo)
+				// 判断当前选中的是不是'添加信用卡按钮',是的话跳转到添加信用卡页面
+				if (this.addChecked) {
+					this.$router.push({
+						'name': 'addQuickCard',
+						params: {
+							userInfo: this.userInfo,
+							channelCode
+						}
+					})
+				} else { //不是的话调用获取快捷支付短验接口
+					let card = this.cardList.filter(cur => cur.checked == true);
+					let init = {
+						channelCode,
+						cardUniqueId: card[0].uniqueId,
+						deductMoney: this.amount * 100,
+						bankCode: card[0].bankCode
 					}
-				})
+					tool.toastLoading()
+					server.getQuickPaySms(init)
+					.then(res=>{
+						if(res == null)return;
+						if(res.data.status == 1){
+							this.$toast({
+								message:'验证短信已发送,请留意接收',
+								forbidClick: true,
+								duration:2000
+							})
+							this.$router.push({
+								'name': 'quickVerify',
+								params: {
+									orderInfo: {
+										quickOrderId: res.data.quickOrderId,
+										channelCode
+									},
+									from: 'chooseQuickCard'
+								}
+							})
+						}else if(res.data.status == 2){
+							this.$toast({
+								message: '订单扣款中，请勿重复操作',
+								forbidClick: true,
+								duration: 2000
+							})
+						}else if(res.data.status == 3){
+							this.$toast({
+								message: '扣款失败',
+								forbidClick: true,
+								duration: 2000
+							})
+						}else if(res.data.status == 4){
+							this.$dialog.alert({
+								title: '扣款成功',
+								message: '该笔扣款已经成功，详情可在订单明细查看'
+							}).then(() => {
+								this.$router.replace({
+									name:'swipeCard'
+								})
+							})
+						}
+					})
+				}
 			},
 			// 跳转通道介绍页面
-			goChannelIntroduce() {
+			goChannelIntroduce(channelName) {
 				this.$router.push({
 					name: 'channelIntroduce',
+					params:{channelName}
 				})
 			}
 		},

@@ -52,7 +52,7 @@
 					cvn2: '', //cvv码
 					valid: '', //有效期
 					bankName:'',//银行名称
-					channelCode:'2000000001'//通道编号
+					channelCode:''//通道编号
 				},
 				// chooseBankBox: false,//选择银行的picker弹窗
 				// verify: null, //验证银行卡绑卡需要的信息
@@ -72,6 +72,7 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
+			tool.setAppTitle('绑定信用卡')
 			console.log(this.$route)
 			// 定义app端需要调用的setBankNum方法
 			let me = this;
@@ -90,7 +91,7 @@
 					certificateNum: this.$route.params.userInfo.certificateNumb, //身份证号码
 					mobile: '', //手机号
 					bankName:'',//银行名称
-					channelCode:'2000000001'
+					channelCode:this.$route.params.channelCode //快捷通道编码
 				}
 			}
 			this.isFirstEnter = false;

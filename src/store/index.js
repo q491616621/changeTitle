@@ -9,6 +9,7 @@ const state = {
 	certificateNum:null,//用户实名认证身份证号码
 	withdrawalType:'app',//判断点击右上角返回按钮应该返回h5页面还是app，默认app
 	unionpayQuickAmount:'',//银联快捷的金额
+	quickChannelInfo:'',//当前选择的银联快捷通道的信息
 }
 // 修改state仓库数据的方法合集
 const mutations = {
@@ -27,7 +28,11 @@ const mutations = {
 	// 设置银联快捷的金额
 	setUnionpayQuickAmount(state,amount){
 		state.unionpayQuickAmount = amount
-	},	
+	},
+	// 设置银卡选择通道信息
+	setQuickChannelInfo(state,channelInfo){
+		state.quickChannelInfo = channelInfo
+	}
 }
 //异步掉用mutations里面的方法修改state里面的数据的方法合集
 const actions = {

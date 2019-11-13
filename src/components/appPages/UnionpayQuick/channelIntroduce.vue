@@ -20,13 +20,14 @@
 </template>
 <script>
 	// import topTitle from '@/components/common/topTitle.vue';
+	import tool from '../../../../public/tool/tool.js'
 	export default {
 		// components: {
 		// 	topTitle,
 		// },
 		data() {
 			return {
-				titleName: '银联快捷-积分通道A', //标题栏标题
+				// titleName: '银联快捷-积分通道A', //标题栏标题
 				introListA: [
 					{bankName: '农业银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
 					{bankName: '工商银行',cardAmount:'20000.00',intradayAmount:'50000.00'},
@@ -52,6 +53,11 @@
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
+		created() {
+			let channelName = this.$route.params.channelName;
+			console.log(channelName)
+			tool.setAppTitle(channelName)
+		}
 	};
 </script>
 
