@@ -54,9 +54,9 @@
 			document.querySelector('body').setAttribute('style', 'background-color:#fff')
 		},
 		created() {
-			let channelName = this.$route.params.channelName;
-			console.log(channelName)
-			tool.setAppTitle(channelName)
+			// let channelName = this.$route.params.channelName;
+			// console.log(channelName)
+			tool.setAppTitle('银行限额')
 		}
 	};
 </script>

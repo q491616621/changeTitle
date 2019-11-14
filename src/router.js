@@ -267,7 +267,7 @@ const router = new Router({
 			path: '/channelIntroduce',
 			name: 'channelIntroduce', // channelIntroduce //通道介绍
 			meta:{
-				title:'通道介绍'
+				title:'银行限额'
 			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/channelIntroduce.vue'], resolve)
 		},
@@ -275,7 +275,7 @@ const router = new Router({
 			path: '/chooseQuickCard',
 			name: 'chooseQuickCard', // chooseQuickCard //选择快捷支付银行卡
 			meta:{
-				title:'选择支付银行',
+				title:'确认支付',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -285,7 +285,7 @@ const router = new Router({
 			path: '/addQuickCard',
 			name: 'addQuickCard', // addQuickCard //添加快捷信用卡
 			meta: {
-				title: '添加快捷信用卡',
+				title: '绑定信用卡',
 				keepAlive: true, //该字段表示该页面需要缓存
 				isBack: true
 			},
@@ -295,7 +295,7 @@ const router = new Router({
 			path: '/orderList',
 			name: 'orderList', // orderList //快捷订单列表
 			meta: {
-				title: '订单列表'
+				title: '全部'
 			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/orderList.vue'], resolve)
 		},
@@ -303,7 +303,7 @@ const router = new Router({
 			path: '/orderDetails',
 			name: 'orderDetails', // orderDetails //快捷订单详情
 			meta: {
-				title: '订单详情'
+				title: '订单明细'
 			},
 			component: resolve => require(['@/components/appPages/UnionpayQuick/orderDetails.vue'], resolve)
 		},

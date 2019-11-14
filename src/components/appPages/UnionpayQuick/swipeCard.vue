@@ -8,7 +8,7 @@
 		<div class="container flx-cas">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
-				<!-- <div>使用说明</div> -->
+				<div style="font-weight: bold;" @click="goOrderList">订单详情</div>
 			</div>
 			<div class="amount-box flx-cas">
 				<div class="title">
@@ -77,19 +77,26 @@
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
-				// userInfo:'',
-				userInfo:{
-					realName:'于洪申',
-					certificateNumb:'210423198801023053'
-				}
+				userInfo:'',
+				// userInfo:{
+				// 	realName:'于洪申',
+				// 	certificateNumb:'210423198801023053'
+				// }
 			};
+		},
+		beforeRouteEnter(to, from, next) {
+			let name = from.name;
+			if (name == 'chooseQuickCard' || name == 'orderList') {
+				to.params.type = 'next'
+			}
+			next();
 		},
 		beforeCreate() {
 			document.querySelector('body').setAttribute('style', 'background-color:#f6f6f6')
 		},
 		created() {
 			tool.setAppTitle('信用卡刷卡')
-			let platFlag = tool.testPlat();
+			// let platFlag = tool.testPlat();
 			// this.$dialog.alert({
 			// 	message:'该功能正在开发中，敬请期待！',
 			// 	beforeClose:(action, done)=>{
@@ -110,14 +117,6 @@
 			window['setSwipeCardData'] = (url) => {
 				me.setSwipeCardData(url)
 			}
-			
-			// --------------------
-			window['setBankNum'] = (url) => {
-				me.setBankNum(url)
-			}
-			// --------------------------------
-			// this.$store.commit('setQuickCardInfo',{realName:'王金盛',certificateNumb:'445122199010122716'})
-			// --------------------------------
 		},
 		methods: {
 			// 设置获取app传过来的数据
@@ -127,13 +126,15 @@
 				// let faceStatus = appData.faceStatus;//app传过来的faceStatus（实名认证状态）
 				let realName = appData.realName;//app传过来的用户姓名
 				let certificateNumb = appData.certificateNumb;//app传过来的用户身份证号码
-				return //功能暂时不放开
+				// return //功能暂时不放开
 				// this.$toast({
 				// 	message:`sessionId:${sessionId},faceStatus:${faceStatus},realName:${realName},certificateNumb:${certificateNumb}`,
 				// 	duration:0
 				// })
 				switchServer.setCookie(sessionId);//调用switchServer的setCookie方法设置cookie
 				this.userInfo = {realName,certificateNumb}
+				// 这行代码用来判断用户是否是从app端进来当前页面的,如果不是的app端进来的或者处于非swipeCard页面,不执行下面的操作(这个是为了优化安卓不多次去设置金额)
+				if(this.$route.name != 'swipeCard'||this.$route.params.type == 'next')return;
 				//只要是从app进来的，就把vuex的方法把输入的金额设置为''
 				this.$store.commit('setUnionpayQuickAmount', '')
 				this.amount = '';
@@ -152,6 +153,12 @@
 				this.$router.push({
 					name: 'chooseQuickCard',
 					params:{userInfo:this.userInfo}
+				})
+			},
+			// 跳转订单列表页面
+			goOrderList(){
+				this.$router.push({
+					name:'orderList'
 				})
 			},
 			// 输入金额

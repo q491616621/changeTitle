@@ -84,7 +84,7 @@
 							})
 						}else if(res.data.status == 3){
 							this.$toast({
-								message: '扣款失败',
+								message: `扣款失败,${res.data.message}`,
 								forbidClick: true,
 								duration: 2000
 							})
@@ -93,6 +93,7 @@
 								title: '扣款成功',
 								message: '该笔扣款已经成功，详情可在订单明细查看'
 							}).then(() => {
+								this.$store.commit('setUnionpayQuickAmount', '')
 								this.$router.replace({
 									name:'swipeCard'
 								})
@@ -125,11 +126,12 @@
 									forbidClick: true,
 									duration: 2000
 								})
-								// setTimeout(()=>{
-								// 	this.$router.replace({
-								// 		name:'chooseQuickCard',
-								// 	})
-								// },2000)
+								setTimeout(()=>{
+									this.$router.replace({
+										name:'chooseQuickCard',
+										params:{status:'success'}
+									})
+								},2000)
 								return;
 							} else if (res.data.status == 2) {
 								this.$toast({

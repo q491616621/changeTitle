@@ -3,19 +3,19 @@
 	<div class="orderDetails flx-c">
 		<van-cell-group class="details-box">
 			<van-field class="addInput-li" clearable readonly label="订单编号"
-				v-model="orderInfo.orderNum" />
+				v-model="orderInfo.quickOrderId" />
 			<van-field class="addInput-li" clearable readonly label="商品名称"
-				v-model="orderInfo.orderName" />
-			<van-field class="addInput-li" clearable readonly label="支付金额"
-				v-model="orderInfo.orderAmount" />
+				v-model="orderName" />
+			<van-field class="addInput-li" clearable readonly label="交易金额"
+				v-model="orderInfo.tradeAmount" />
 			<van-field class="addInput-li" clearable readonly label="手续费"
-				v-model="orderInfo.orderCost" />
+				v-model="orderInfo.rateAmount" />
 			<van-field class="addInput-li" clearable readonly label="订单状态"
-				v-model="orderInfo.orderStatus" />
-			<van-field class="addInput-li" clearable readonly label="订单生成时间"
-				v-model="orderInfo.orderGenerateTime" />
-			<van-field class="addInput-li" clearable readonly label="付款时间"
-				v-model="orderInfo.orderPaymentTime" />
+				v-model="orderInfo.tips" />
+			<van-field class="addInput-li" clearable readonly label="订单创建时间"
+				v-model="orderInfo.createTime" />
+			<van-field class="addInput-li" clearable readonly label="订单交易时间"
+				v-model="orderInfo.tradeTime" />
 		</van-cell-group>
 	</div>
 </template>
@@ -32,19 +32,22 @@
 			return {
 				titleName: '订单明细', //标题栏标题
 				orderInfo: {
-					orderNum: '', //订单编号
-					orderName: '', //订单名称
-					orderAmount: '', //支付金额
-					orderCost: '', //手续费
-					orderStatus: '', //订单状态
-					orderGenerateTime: '', //订单生成时间
-					orderPaymentTime: ''//付款时间
+					createTime:'',
+					quickOrderId:'',
+					rateAmount:'',
+					status:'',
+					tips:'',
+					tradeAmount:'',
+					tradeTime:'',
 				},
+				orderName: '银联快捷', //订单名称
 			};
 		},
 		created() {
 			this.onLoad();
+			console.log(this.$route.params)
 			tool.setAppTitle('订单明细')
+			this.orderInfo = this.$route.params.details
 		},
 		methods: {
 			// 加载订单明细

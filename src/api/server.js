@@ -39,4 +39,5 @@ export const server = {
   untiedBindcard:(data)=>{return post('/quick/bindcard/untiedBindcard.do',data)},//解绑快捷绑定的卡 
   getQuickPaySms:(data)=>{return post('/quick/order/getQuickPaySms.do',data)},//获取快捷支付短验 
   verifyQuickPaySms:(data)=>{return post('/quick/order/verifyQuickPaySms.do',data)},//校验快捷支付短验
+  queryQuickOrderList:(data)=>{return post('/quick/order/queryQuickOrderList.do',data)},//查询快捷订单列表 
 }

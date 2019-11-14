@@ -51,14 +51,14 @@
 							<div>金额:{{item.minAmount/100}}-{{item.maxAmount/100}}</div>
 							<div>结算:10秒到账</div>
 							<div>时间:{{item.startTime}}-{{item.endTime}}</div>
-							<div>费率:{{item.userRate/100}}%+3元/笔</div>
+							<div>费率:{{item.userRate/100}}%+{{item.userCost/100}}元/笔</div>
 						</div>
 						<div class="tip">
 							<span style="color: #FF3535;">提示:</span>
 							<span>{{item.tipMessage}}</span>
 						</div>
 					</div>
-					<img src="../../../assets/img/UnionpayQuick/intro.png" class="tip2" @click.stop="goChannelIntroduce(item.channelName)">
+					<img src="../../../assets/img/UnionpayQuick/intro.png" class="tip2" @click.stop="goChannelIntroduce">
 					<!-- <img  class="tip2" @click="goChannelIntroduce"></img> -->
 				</div>
 			</div>
@@ -100,7 +100,6 @@
 			this.isFirstEnter = true;
 		},
 		activated() {
-			console.log(this.$route)
 			tool.setAppTitle('确认支付')
 			// 判断isBack为false(非后退)或者是第一次进入这个页面
 			if (!this.$route.meta.isBack || this.isFirstEnter) {
@@ -109,6 +108,9 @@
 				this.getQuickCardList(); //调用获取已经绑定的快捷信用卡列表方法
 				this.getChannelList(); //调用获取快捷通道列表方法
 				this.userInfo = this.$route.params.userInfo;
+			}else if(this.$route.params.status == 'success'){//判断用户是否是从验证短信页面绑定成功状态跳转过来的
+				this.addChecked = false;
+				this.getQuickCardList(); //调用获取已经绑定的快捷信用卡列表方法
 			}
 			this.isFirstEnter = false;
 		},
@@ -118,6 +120,7 @@
 				server.quickGetBindcardList()
 					.then(res => {
 						if (res == null) return;
+						if(res.data.length == 0)return this.addChecked = true;
 						let bankLogo = {
 							'工商银行': require('../../../assets/img/bankLogo/bank1.png'),
 							'光大银行': require('../../../assets/img/bankLogo/bank2.png'),
@@ -156,7 +159,6 @@
 					.then(res => {
 						if (res == null) return;
 						this.quickChannelList = res.data;
-						console.log(res)
 					})
 			},
 			checkCard(index) {
@@ -244,10 +246,9 @@
 				}
 			},
 			// 跳转通道介绍页面
-			goChannelIntroduce(channelName) {
+			goChannelIntroduce() {
 				this.$router.push({
 					name: 'channelIntroduce',
-					params:{channelName}
 				})
 			}
 		},
@@ -365,7 +366,7 @@
 				padding: 20px 0;
 				font-size: 28px;
 				color: #333;
-				border-bottom: 1px solid #E5E5E5;
+				// border-bottom: 1px solid #E5E5E5;
 
 				img {
 					width: 50px;

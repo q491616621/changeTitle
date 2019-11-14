@@ -1,4 +1,6 @@
-import { Toast } from 'vant';
+import {
+	Toast
+} from 'vant';
 let tool = {
 	// -------------------------------------------------------------------------------
 	// 把数字转换为金额格式
@@ -64,40 +66,40 @@ let tool = {
 	},
 	//-----------------------------------------------------------------------------------------------------
 	// 检查当前月份的天数
-	days(){
+	days() {
 		let date = new Date();
 		let year = date.getFullYear();
-		let month = date.getMonth()+1;
-		let now = new Date(year,month,0);
+		let month = date.getMonth() + 1;
+		let now = new Date(year, month, 0);
 		let dayCount = now.getDate();
 		return dayCount;
 	},
 	//-----------------------------------------------------------------------------------------------------
 	// 检查下个月的天数
-	nextDays(){
+	nextDays() {
 		let date = new Date();
 		let year = date.getFullYear();
-		let month = date.getMonth()+2;
-		if(month>12){
+		let month = date.getMonth() + 2;
+		if (month > 12) {
 			year += 1;
 			month = 1;
 		}
-		let now = new Date(year,month,0);
+		let now = new Date(year, month, 0);
 		let dayCount = now.getDate();
 		return dayCount;
 	},
 	//-----------------------------------------------------------------------------------------------------
 	// 检查下个月的天数
-	getWeek(type){
+	getWeek(type) {
 		let date = new Date();
 		let year = date.getFullYear();
-		let month = date.getMonth()+1;
+		let month = date.getMonth() + 1;
 		let week;
-		if(type == 'current'){
+		if (type == 'current') {
 			week = new Date(`${year},${month},01`).getDay();
-		}else{
+		} else {
 			month++;
-			if(month>12){
+			if (month > 12) {
 				year += 1;
 				month = 1;
 			}
@@ -107,24 +109,88 @@ let tool = {
 	},
 	//-----------------------------------------------------------------------------------------------------
 	// 加载中弹窗
-	toastLoading(){
+	toastLoading() {
 		Toast.loading({
-			message:'加载中...',
-			duration:0,
-			forbidClick:true
+			message: '加载中...',
+			duration: 0,
+			forbidClick: true
 		})
 	},
 	// ---------------------------------------------------------------------------------------------------------
 	// 设置app的title的方法
-	setAppTitle(navTittle){
+	setAppTitle(navTittle) {
 		// return
 		// 检查平台 0为安卓，1为ios，2为PC
 		let platFlag = this.testPlat();
 		let init = {};
-		init.navTittle = navTittle||'安安卡管家'
-		if(platFlag == 1){
+		init.navTittle = navTittle || '安安卡管家'
+		if (platFlag == 1) {
 			window.webkit.messageHandlers.changeTittle.postMessage(init);
 		}
+	},
+	// ---------------------------------------------------------------------------------------------------------
+	// 获取输入的日期,前monthNum个月的日期
+	/**
+	 *获取几个月前的输入日期
+	 *{param:DateTime} date 输入日期(YYYY-MM-DD)
+	 *{param:number } monthNum 月数
+	 */
+	GetPreMonthDay(date, monthNum) {
+		let dateArr = date.split('-');
+		let year = dateArr[0]; //获取当前日期的年份
+		let month = dateArr[1]; //获取当前日期的月份
+		let day = dateArr[2]; //获取当前日期的日
+		let days = new Date(year, month, 0);
+		days = days.getDate(); //获取当前日期中月的天数
+		let year2 = year;
+		let month2 = parseInt(month) - monthNum;
+		if (month2 <= 0) {
+			year2 = parseInt(year2) - parseInt(month2 / 12 == 0 ? 1 : parseInt(month2) / 12);
+			month2 = 12 - (Math.abs(month2) % 12);
+		}
+		let day2 = day;
+		let days2 = new Date(year2, month2, 0);
+		days2 = days2.getDate();
+		if (day2 > days2) {
+			day2 = days2;
+		}
+		if (month2 < 10) {
+			month2 = '0' + month2;
+		}
+		let t2 = year2 + '-' + month2 + '-' + day2;
+		return t2;
+	},
+	// 获取输入的日期,后monthNum个月的日期
+	/**
+	 *获取下一个月的输入日期
+	 *{param:DateTime} date 输入日期(YYYY-MM-DD)
+	 *{param:number } monthNum 月数
+	 */
+	GetNextMonthDay(date, monthNum) {
+		let dateArr = date.split('-');
+		let year = dateArr[0]; //获取当前日期的年份
+		let month = dateArr[1]; //获取当前日期的月份
+		let day = dateArr[2]; //获取当前日期的日
+		let days = new Date(year, month, 0);
+		days = days.getDate(); //获取当前日期中的月的天数
+		let year2 = year;
+		let month2 = parseInt(month) + parseInt(monthNum);
+		if (month2 > 12) {
+			year2 = parseInt(year2) + parseInt((parseInt(month2) / 12 == 0 ? 1 : parseInt(month2) / 12));
+			month2 = parseInt(month2) % 12;
+		}
+		let day2 = day;
+		let days2 = new Date(year2, month2, 0);
+		days2 = days2.getDate();
+		if (day2 > days2) {
+			day2 = days2;
+		}
+		if (month2 < 10) {
+			month2 = '0' + month2;
+		}
+
+		let t2 = year2 + '-' + month2 + '-' + day2;
+		return t2;
 	}
 }
 export default tool;
