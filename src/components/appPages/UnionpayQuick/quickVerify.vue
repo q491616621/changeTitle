@@ -9,7 +9,7 @@
 				<img src="../../../assets/img/unionpay.png">
 				<div class="right flx-cs">
 					<div class="medium">{{quickChannelInfo.channelName}}(到账:{{quickChannelInfo.startTime}}-{{quickChannelInfo.endTime}})</div>
-					<div>费率:{{quickChannelInfo.userRate/100}}%+3元/笔</div>
+					<div>费率:{{quickChannelInfo.userRate/100}}%+{{quickChannelInfo.userCost/100}}元/笔</div>
 				</div>
 			</div>
 			<van-cell-group class="sms-input">

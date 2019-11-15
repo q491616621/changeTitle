@@ -28,7 +28,7 @@
 					</div>
 					<div class="bottom-li flx-c">
 						<div>费率</div>
-						<div>0.60%+2元/笔</div>
+						<div>0.55%+3元/笔</div>
 					</div>
 					<div class="bottom-li flx-c">
 						<div>结算</div>
