@@ -9,10 +9,10 @@
 			<van-cell-group class="addInfo-box">
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cardNum" clearable label="卡号"
 				 placeholder="请输入卡号" right-icon="photograph"  @click-right-icon="useOCR" @blur='checkCardBank' />
-				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cvn2" clearable label="cvn2"
-				 placeholder="信用卡背面后三位，如853" right-icon='question-o' @click-right-icon='showTips("cvn2")'/>
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.valid" clearable label="有效期"
 				 placeholder="有效期（月/年），如0123" right-icon='question-o' @click-right-icon='showTips("valid")'/>
+				 <van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.cvn2" clearable label="cvn2"
+				  placeholder="信用卡背面后三位，如853" right-icon='question-o' @click-right-icon='showTips("cvn2")'/>
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.userName" disabled clearable label="姓名"
 				 placeholder="请输入姓名" />
 				<van-field class="addInput-li" label-width="2.373333rem" v-model="cardInfo.certificateNum" disabled clearable label="身份证号"
@@ -289,7 +289,28 @@
 			background: #fff;
 			box-shadow: 0px 3px 12px 0px rgba(212, 212, 212, 0.5);
 			border-radius: 14px;
-
+			// ---------------------------
+			::-webkit-input-placeholder {
+			    /* WebKit browsers */
+			    // font-size: 12px;
+			    color: #999!important;
+			}
+			　　:-moz-placeholder {
+			    /* Mozilla Firefox 4 to 18 */
+			    // font-size: 12px;
+			    color: #999!important;
+			}
+			　　::-moz-placeholder {
+			    /* Mozilla Firefox 19+ */
+			    // font-size: 12px;
+			    color: #999!important;
+			}
+			　　:-ms-input-placeholder {
+			    /* Internet Explorer 10+ */
+			    // font-size: 12px;
+			    color: #999!important;
+			}
+			// -------------------------------------
 			.addInput-li {
 				width: 100%;
 				// height: 100px;
@@ -297,7 +318,8 @@
 				font-weight: 500;
 				padding: 25px 0;
 				text-align: left;
-				color: #888;
+				// color: #888;
+				color: #212121;
 				// line-height: 100px;
 				box-sizing: border-box;
 				border-bottom: 1px solid #ededed;

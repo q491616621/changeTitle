@@ -5,7 +5,7 @@
 			<top-title :titleName="titleName" :pageType='pageType'></top-title>
 		</div> -->
 		<!-- <div class="container flx-cas" v-if="false"> -->
-		<div class="container flx-cas">
+		<div class="container flx-cas" v-if="show">
 			<div class="instructions flx-r">
 				<!-- <img src="../../../assets/img/UnionpayQuick/explain.png"> -->
 				<div style="font-weight: bold;" @click="goOrderList">订单详情</div>
@@ -74,6 +74,9 @@
 		// },
 		data() {
 			return {
+				// -------
+				show:false,
+				// -------
 				titleName: '信用卡刷卡', //标题栏标题
 				pageType: 'app',
 				amount: '', //提现金额
@@ -112,6 +115,7 @@
 			// 	}
 			// })
 			this.amount = this.$store.state.unionpayQuickAmount;
+			this.show = this.$store.state.show;
 			// ----------------------------------
 			let me = this;
 			window['setSwipeCardData'] = (url) => {
@@ -133,6 +137,41 @@
 				// })
 				switchServer.setCookie(sessionId);//调用switchServer的setCookie方法设置cookie
 				this.userInfo = {realName,certificateNumb}
+				// -----------------------------------
+				let nameArr = [
+					{name:'孙兆国'},
+					{name:'于洪申'},
+					{name:'杨海军'},
+					{name:'杜洋洋'},
+					{name:'李俊鹏'},
+					]
+				let a = false;
+				for (let i = 0; i < nameArr.length; i++) {
+					if(nameArr[i].name == realName){
+						a = true;
+					}
+				}
+				if(a){
+					this.$store.commit('setShow')
+					this.show = true
+				}else{
+					let platFlag = tool.testPlat();
+					this.$dialog.alert({
+						message:'该功能正在开发中，敬请期待！',
+						beforeClose:(action, done)=>{
+							if (platFlag == 1) {
+								// closeWeb ios定义的退回上一页，关闭H5页面的方法
+								window.webkit.messageHandlers.closeWeb.postMessage('');
+								done()
+							} else {
+								// btnBack 安卓定义的退回上一页,关闭H5页面的方法
+								window.android.btnBack()
+								done()
+							}
+						}
+					})
+				}
+				// -----------------------------------
 				// 这行代码用来判断用户是否是从app端进来当前页面的,如果不是的app端进来的或者处于非swipeCard页面,不执行下面的操作(这个是为了优化安卓不多次去设置金额)
 				if(this.$route.name != 'swipeCard'||this.$route.params.type == 'next')return;
 				//只要是从app进来的，就把vuex的方法把输入的金额设置为''
