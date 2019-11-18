@@ -13,7 +13,7 @@
 				 placeholder="请输入身份证号码" /> -->
 				<!-- 银行卡号 -->
 				<van-field class="addInput-li" label-width="2.373333rem" type="number" v-model="cardInfo.bankCardNumb" clearable
-				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' right-icon="photograph"  @click-right-icon="useOCR"/>
+				 label="储蓄卡" placeholder="请输入储蓄卡卡号" @blur='getBankName' right-icon="photograph" @click-right-icon="useOCR" />
 				<!-- <img src="../../../assets/img/camera.png" @click="useOCR"> -->
 				<!-- 银行名称 -->
 				<div class="addPicker-li flx-rs">
@@ -111,6 +111,7 @@
 				<van-search v-model="searchValue" placeholder="请输入搜索关键词" show-action shape="round" @search="onSearch" @input='list=[]'>
 					<div slot="action" @click="onSearch">搜索</div>
 				</van-search>
+				<div class="tips">提示：如未搜索到相关支行,请选择所在省内支行即可！</div>
 				<div class="search-list">
 					<van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
 						<van-cell v-for="(item,index) in list" :key="index" :title="item.key" @click='setBranchBank(item)' />
@@ -626,13 +627,14 @@
 	};
 </script>
 <style lang="less">
-	.addInput-li{
-				.van-icon-photograph{
-					font-size: 40px;
-					color: #adadad;
-				}
-				
-			}
+	.addInput-li {
+		.van-icon-photograph {
+			font-size: 40px;
+			color: #adadad;
+		}
+
+	}
+
 	.addCreditCard-choose-picker {
 		.van-picker__toolbar {
 			height: 70px;
@@ -675,16 +677,27 @@
 			top: 86px;
 			left: 0;
 		}
-
+		.tips{
+			color: #d00110;
+			font-size: 24px;
+			position: fixed;
+			width: 100%;
+			top: 185px;
+			left: 50px;
+			text-align: left;
+		}
 		.search-list {
 			// margin-top: 194px;
 			position: fixed;
 			width: 100%;
 			// height: 100%;
-			top: 194px;
+			// top: 194px;
+			top: 220px;
 			bottom: 10px;
 			left: 0;
 			overflow-y: scroll;
+			text-align: left;
+			padding-left: 24px;
 		}
 
 		.van-cell {
@@ -722,6 +735,7 @@
 				box-sizing: border-box;
 				border-bottom: 1px solid #ededed;
 			}
+
 			.addPicker-li {
 				width: 100%;
 				height: 100px;
