@@ -73,7 +73,6 @@
 		},
 		activated() {
 			tool.setAppTitle('绑定信用卡')
-			console.log(this.$route)
 			// 定义app端需要调用的setBankNum方法
 			let me = this;
 			window['setBankNum'] = (url) => {

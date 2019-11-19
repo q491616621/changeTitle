@@ -135,7 +135,6 @@
 							this.finished = true;
 							return;
 						}
-						console.log(res.data)
 						// return
 						let arr = res.data.map(cur => {
 							cur.tradeAmount = tool.centTurnSmacker(cur.tradeAmount / 100);

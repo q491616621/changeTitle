@@ -45,7 +45,6 @@
 		},
 		created() {
 			this.onLoad();
-			console.log(this.$route.params)
 			tool.setAppTitle('订单明细')
 			this.orderInfo = this.$route.params.details
 		},

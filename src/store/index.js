@@ -36,9 +36,9 @@ const mutations = {
 		state.quickChannelInfo = channelInfo
 	},
 	//设置快捷开关
-	setShow(state){
-		state.show = true;
-	}
+	// setShow(state){
+	// 	state.show = true;
+	// }
 }
 //异步掉用mutations里面的方法修改state里面的数据的方法合集
 const actions = {
